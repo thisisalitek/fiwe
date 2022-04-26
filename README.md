@@ -16,6 +16,8 @@ frd[Financial Raw Data]
 bld[Balances Raw Data]
 
 KAP --> dc
+FMP -->dc
+JPX -->dc
 dc --> mdb
 
 ra -->mdb
