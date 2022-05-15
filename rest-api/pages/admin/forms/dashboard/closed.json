@@ -1,0 +1,15 @@
+{
+	"index": [{
+			"type":"form",
+			"fields": {
+				"closedModule": {
+					"type": "html",
+					"value": "<div class=\"mt-5 text-center\"><i class=\"fas fa-lock fa-4x text-success my-3\"></i><h3>Modül kapalıdır.</h3></div>",
+					"noGroup": false,
+					"col":12,
+					"class":"text-center"
+				}
+			}
+		}
+	]
+}

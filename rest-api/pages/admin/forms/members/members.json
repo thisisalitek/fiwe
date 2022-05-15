@@ -1,0 +1,55 @@
+{
+	"index": [{
+		"type": "grid",
+		"fields": {
+			
+			"username": { "text": "Username", "type": "string", "html": "<span class=\"bold ${role=='admin'?'text-primary':''}\">${username}</span><br>${name} ${lastName}" },
+			"role": {
+				"text": "Role",
+				"type": "lookup",
+				"staticValues": "memberRoles",
+				"html": "<small class=\"${role=='admin'?'bold text-primary':''}\">${role=='admin'?'<i class=\"fa-solid fa-user-secret\"></i>':'<i class=\"fa-solid fa-user\"></i>'} ${valueText}</small>"
+			},
+			"lastOnline": { "text": "Son Giriş", "type": "datetime", "width": "80px", "filter": false },
+			"createdDate": { "text": "Oluşturulma", "type": "datetime", "width": "80px", "filter": false },
+			"db.integrationCode": { "text": "Entegrasyon Kodu", "type": "string","filterField":"integrationCode" },
+			"db.partyName": { "text": "Cari Ünvan", "type": "string","filterField":"partyName" },
+			"approved": { "text": "Onaylı?", "type": "boolean" },
+			"approvedBy": { "text": "Onaylayan", "type": "string" },
+			"passive": { "text": "Pasif?", "type": "boolean" }
+		},
+		"options": {
+			"selection": true,
+			"filter": true,
+			"buttons": {
+				"add": true,
+				"edit": true,
+				"delete": true,
+				"view": false,
+				"print": false,
+				"copy": true
+			}
+		},
+		"dataSource": { "url": "/api/members" }
+	}],
+	"form": [{
+		"type": "form",
+		"fields": {
+			"username": { "text": "Username", "type": "string", "col": 8 },
+			"role": { "text": "Role", "type": "lookup", "staticValues": "memberRoles", "col": 4 },
+			"name": { "text": "İsim", "type": "string" , "col": 5},
+			"lastName": { "text": "Soyad", "type": "string", "col": 5 },
+			"gender": { "text": "Cinsiyet", "type": "lookup", "staticValues": "genderList" , "col": 2},
+			"db.allDatabases": { "text": "Tüm Veri Ambarlarında Yetkili", "type": "boolean" },
+			"db.integrationCode": { "text": "Entegrasyon Kodu", "type": "string" },
+			"db.partyName": { "text": "Cari Ünvan", "type": "string" },
+			"passive": { "text": "Pasif?", "type": "boolean" },
+			"lastOnline": { "text": "lastOnline", "type": "datetime", "readonly": true, "col":2 },
+			"createdDate": { "text": "Oluşturulma", "type": "datetime", "readonly": true, "col":2  },
+			"verified": { "text": "verified?", "type": "boolean", "readonly": true, "col":2 },
+			"approved": { "text": "Onaylı?", "type": "boolean", "readonly": true, "col":2 },
+			"approvedBy": { "text": "Onaylayan", "type": "boolean", "readonly": true, "col":4 }
+		},
+		"dataSource": { "url": "/api/members" }
+	}]
+}

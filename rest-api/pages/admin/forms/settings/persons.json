@@ -1,0 +1,113 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"firstName.value":{"text":"Adı", "type":"string"},
+				"familyName.value":{"text":"Soyadı", "type":"string"},
+				"postalAddress.cityName.value":{"text":"Şehir", "type":"string"},
+				"postalAddress.district.value":{"text":"Semt/İlçe", "type":"string"},
+				"bloodGroup":{"text":"Kan Grubu", "type":"lookup", "staticValues":"bloodGroups"},
+				"monthlyCost":{"text":"Aylık Maliyeti", "type":"money"},
+				"shift":{"text":"Vardiya", "type":"remoteLookup", 
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/shifts"
+					}
+				},
+				"station":{"text":"Üretim İstasyonu", "type":"remoteLookup", 
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/mrp-stations"
+					}
+				},
+				"passive":{"text":"Pasif?", "type":"boolean"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"/dbapi/persons"
+			}
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"firstName.value":{"text":"Adı", "type":"string", "col":3, "required":true},
+				"middleName.value":{"text":"İkinci Adı", "type":"string", "col":3},
+				"familyName.value":{"text":"Soyadı", "type":"string", "col":3},
+				"nameSuffix.value":{"text":"Ünvan/title", "type":"string", "col":3},
+				"bloodGroup":{"text":"Kan Grubu", "type":"lookup", "staticValues":"bloodGroups", "col":3, "required":true},
+				"account":{"text":"Muhasebe Hesabı", "type":"remoteLookup", 
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					}, "col":6
+				},
+				"passive":{"text":"Pasif?", "type":"boolean"   },
+				
+				"adres":{
+					"text":"Adres",
+					"collapsed":true,
+					"help":"https://www.google.com",
+					"fields":{
+						"postalAddress.streetName.value"				:{"text":"Cadde/Sokak", "type":"string", 	"col":6},
+						"postalAddress.buildingNumber.value"		:{"text":"Bina No", "type":"string", 	"col":3},
+						"postalAddress.buildingName.value"			:{"text":"Bina/Site adı", "type":"string", 	"col":3},
+						"postalAddress.blockName.value"					:{"text":"Blok adı", "type":"string", 	"col":3},
+						"postalAddress.room.value"							:{"text":"Daire", "type":"string", 	"col":3},
+						"postalAddress.citySubdivisionName.value":{"text":"Mahalle/Semt", "type":"string", 	"col":3},
+						"postalAddress.district.value"					:{"text":"İlçe", "type":"string", 	"col":3},
+						"postalAddress.cityName.value"					:{"text":"Şehir", "type":"string", 	"col":3},
+						"postalAddress.region.value"						:{"text":"Bölge", "type":"string", 	"col":3},
+						"postalAddress.country.name.value"			:{"text":"Ülke", "type":"string", 	"col":3},
+						"postalAddress.postbox.value"						:{"text":"Posta Kutusu", "type":"string", 	"col":3},
+						"websiteURI.value"											:{"text":"Web sitesi", "type":"string", 	"col":3}
+					}
+				},
+				"diger":{
+					"text":"Diğer bilgiler",
+					"collapsed":true,
+					"fields":{
+						"monthlyCost":{"text":"Maliyeti", "type":"money", "col":3},
+						"shift":{"text":"Vardiya", "type":"remoteLookup", 
+							"dataSource":{
+								"type":"remote",
+								"method":"GET",
+								"url":"/dbapi/shifts"
+							}, "col":3
+						},
+						"station":{"text":"Üretim İstasyonu", "type":"remoteLookup", 
+							"dataSource":{
+								"type":"remote",
+								"method":"GET",
+								"url":"/dbapi/mrp-stations"
+							}, "col":3
+						}
+					}
+				}
+			},
+			"dataSource": {
+				"method":"GET",
+				"url":"/dbapi/persons"
+			}
+		}
+	]
+}

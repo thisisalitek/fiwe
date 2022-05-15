@@ -1,0 +1,73 @@
+{
+	"name": "fiwerobo",
+	"version": "1.0.0",
+	"description": "FiweRobo Artificial Intelligence on Big Data Analyzing",
+	"redis": {
+		"url": "redis://localhost:6379"
+	},
+	"httpserver": {
+		"port": 4501
+	},
+	"mongodb": {
+		"newUserDbSyntax":"fw${_id}",
+		"master": "mongodb://localhost:27017/fiweRobo",
+		"server1": "mongodb://localhost:27017/",
+		"server2": "",
+		"server3": ""
+	},
+	"parasiteApi": {
+		"socketCorsDomainList": [],
+		"pingInterval": 10000
+	},
+	"token": {
+		"phrase": "helloSecretWorld",
+		"expiresIn": 86400
+	},
+	"mail": {
+		"host": "smtp.yandex.com",
+		"port": 587,
+		"secure": false,
+		"auth": {
+			"user": "keloglan@tr216.com",
+			"pass": "atabar18"
+		}
+	},
+	"smsSender": {
+		"url": "https://sms.verimor.com.tr/v2/send.json",
+		"method": "POST",
+		"user": "902167060842",
+		"pass": "atabar18"
+	},
+	"errorMail": {
+		"host": "smtp.yandex.com",
+		"port": 587,
+		"secure": false,
+		"auth": {
+			"user": "keloglan@tr216.com",
+			"pass": "atabar18"
+		},
+		"to": "alitek@gmail.com"
+	},
+	"senderTemplates": {
+		"sendAuthCode": {
+			"mail": {
+				"subject": "FiweRobo Onay Kodu",
+				"body": "FiweRobo Onay Kodunuz : <b>${authCode}</b><br><small>Kullanıcı: ${username}</small>"
+			},
+			"sms": {
+				"body": "${authCode} FiweRobo Onay Kodunuz. Kullanıcı: ${username}   "
+			}
+		},
+		"sendForgotPassword": {
+			"mail": {
+				"subject": "Parola Sıfırla",
+				"body": "Parola Sıfırlama Linkiniz : <a href='http://localhost:4500/login?resetCode=${resetPassCode}#reset' target='_blank'>TIKLAYINIZ</a> <br><br><small>Kullanıcı: ${username}</small>"
+			},
+			"sms": {
+				"body": "FiweRobo Sifreniz: ${password}     "
+			}
+		}
+	},
+	"tmpDir": "c:/arge/temp",
+	"status": "development"
+}

@@ -1,0 +1,28 @@
+{
+	"type": "widget",
+	"name": "customerParty",
+	"fields": {
+		"${prefix}_id": {
+			"text": "Şirket/Firma",
+			"type": "remoteLookup",
+			"col": 6,
+			"dataSource": {
+				"type": "remote",
+				"method": "GET",
+				"url": "/dbapi/vendors",
+				"label": "{partyName.name.value}"
+			},
+			"lookupTextField": "${prefix}partyName.name.value",
+			"onchange": "cariKart_changed('${prefix}')"
+		},
+		"${prefix}person.firstName.value": { "text": "Şahıs Adı", "type": "string", "col": 3 },
+		"${prefix}person.familyName.value": { "text": "Şahıs Soyadı", "type": "string", "col": 3 },
+		"${prefix}partyIdentification.0.ID.attr.schemeID": { "text": "Tür", "type": "lookup", "lookup": { "VKN": "VKN", "TCKN": "TCKN" }, "col": 2 },
+		"${prefix}partyIdentification.0.ID.value": { "text": "Vergi No/Tckn", "type": "string", "col": 3 },
+		"${prefix}partyTaxScheme.taxScheme.name.value": {"text": "Vergi Dairesi",	"type": "string",	"col": 4},
+		"${prefix}websiteURI.value": { "text": "Web sitesi", "type": "string", "col": 3 },
+		"adresBilgileri": { "text": "Adres bilgisi", "type": "widget", "widget": "postalAddress", "grouped":true, "collapsed": true, "prefix": "${prefix}postalAddress.", "col": 12 },
+		"iletisim": { "text": "İletişim", "type": "widget", "widget": "contact", "grouped":true, "collapsed": true, "prefix": "${prefix}contact.", "col": 12 }
+	}
+}
+

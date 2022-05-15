@@ -1,0 +1,25 @@
+{
+	"dashboard": { "text": "Ana Sayfa", "path": "/dashboard/main", "icon": "fas fa-tachometer-alt" },
+	"members-approving": { "text": "Onay Bekleyen Kullanıcılar", "path": "/members/approving", "icon": "fas fa-user-check" },
+	"members": { "text": "Kullanıcılar", "path": "/members/members", "icon": "fas fa-users" },
+	"orders": { "text": "Siparişler", "path": "/order/order-list", "icon": "fas fa-list" },
+	"inventory": {
+		"text": "Stok", "icon":"fas fa-boxes-stacked",
+		"fields": {
+			"items": { "text": "Ürünler", "path": "/inventory/items", "icon": "fas fa-dolly-flatbed" }
+		}
+	},
+	"settings":{"text":"Ayarlar",  "icon":"fas fa-wrench",
+		"fields":{
+			"extensions":{"text":"Extensions",	"path":"/settings/programs",	"icon":"fa-brands fa-node-js"},
+			"databases":{"text":"Veri Ambarları",	"path":"/settings/databases",	"icon":"fas fa-database"}
+		}
+	},
+	"me": {
+		"fields": {
+			"profile": { "text": "Profilim", "path": "/me/profile", "icon": "fas fa-user" },
+			"balances": { "text": "Bildirimler", "path": "/me/notifications", "icon": "fas fa-bell" }
+		},
+		"visible": false
+	}
+}

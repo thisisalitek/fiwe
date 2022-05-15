@@ -1,0 +1,14 @@
+{
+	"type": "widget",
+	"name": "orderTitle",
+	"fields": {
+		"eIntegrator": { "text": "Entegratör", "type": "remoteLookup", "dataSource": { "method": "GET", "url": "/dbapi/integrators", "label": "${name}" }, "col": "col-sm-6 col-md-3", "lastRecord": true },
+		"ID.value": { "text": "Belge No(Boş ise otomatik)", "type": "string", "col": "col-sm-6 col-md-3" },
+		"uuid.value": { "text": "ETTN(uuid)", "type": "string", "readonly": true, "col": "col-sm-6 col-md-3" },
+		"divsor1": { "type": "w-100" },
+		"issueDate.value": { "text": "Tarih", "type": "date", "col": 3 },
+		"issueTime.value": { "text": "Saat", "type": "time", "col": 3 },
+		"profileId.value": { "text": "Senaryo", "type": "lookup", "staticValues": "orderProfileIdList", "lastRecord": true, "col": 3 },
+		"orderTypeCode.value": { "text": "Tipi", "type": "lookup", "staticValues": "orderTypeCodeList", "lastRecord": true, "col": 3 }
+	}
+}

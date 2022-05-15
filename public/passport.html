@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title config-ui="title"></title>
+	<link id="favicon" href="img/web-icon.png" rel="shortcut icon" type="image/png">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+	<script src="//cdn.socket.io/4.5.0/socket.io.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+	<script src="js/config.js"></script>
+	<script src="js/hahamjs/utils.js"></script>
+	<script src="js/hahamjs/modals.js"></script>
+	<script src="js/hahamjs/helper.js"></script>
+	<!-- <script src="js/hahamjs/form-elements.js"></script> -->
+	<!-- <script src="js/hahamjs/grid-elements.js"></script> -->
+	<!-- <script src="js/hahamjs/haham.js"></script> -->
+	<!-- <script src="js/page.js"></script> -->
+	<link rel="stylesheet" href="css/main.css">
+</head>
+
+<body class="">
+	<div class="vh-100 d-flex justify-content-center">
+		<div class="my-auto d-flex flex-column justify-content-center align-items-center">
+			<form id="login-form" name="login-form" autocomplete="off" class="border rounded shadow">
+				<div config-ui="logo" class="login-logo">Business Logo</div>
+				<div class="login-warning d-flex text-danger mb-2"></div>
+				<div id="content">
+					Yukleniyor...
+				</div>
+			</form>
+		</div>
+	</div>
+	<script src="//cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="js/script.js"></script>
+	
+<script type="text/javascript">
+// var data = {}
+// data.status ='development'
+
+// if((localStorage.getItem('global') || '') == '') {
+// 	localStorage.removeItem('global')
+// }
+
+// if(data.token) {
+	// global = Object.assign({}, global, (data || {}))
+	// localStorage.setItem('global', JSON.stringify(global || {}))
+
+	setTimeout(() => {
+		let q = getAllUrlParams()
+		if(q.ret) {
+			location.href = q.ret
+		} else {
+			location.href = location.origin + `#/dashboard/main?mid=0`
+		}
+	}, 3000)
+// }
+</script>
+</body>
+</html>

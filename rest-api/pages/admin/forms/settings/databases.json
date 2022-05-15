@@ -1,0 +1,36 @@
+{
+
+	"index": [{
+		"type": "grid",
+		"fields": {
+			"dbName": { "text": "Veri Ambarı", "type": "string", "html": "<i class=\"fas fa-database me-1 text-success\"></i>${dbName}" },
+			"userDb": { "text": "Db", "type": "string" },
+			"userDbHost": { "text": "Host", "type": "string" },
+			"dbStats.dataSizeText": { "text": "dataSize", "type": "string", "headerClass": "text-end me-1", "class": "text-end me-1" },
+			"passive": { "text": "Pasif?", "type": "boolean" }
+		},
+		"options": {
+			"selection": true,
+			"filter": true,
+			"buttons": {
+				"add": true,
+				"edit": true,
+				"delete": true,
+				"view": false,
+				"print": false,
+				"copy": true
+			}
+		},
+		"dataSource": { "url": "/api/dbdefine" }
+	}],
+	"form": [{
+		"type": "form",
+		"fields": {
+			"dbName": { "text": "Veri Ambarı", "type": "string", "col": 8, "required": true },
+			"passive": { "text": "Pasif?", "type": "boolean", "col": 4 },
+			"userDb": { "text": "Db", "type": "string", "col": 6, "readonly": true },
+			"userDbHost": { "text": "Host", "type": "string", "col": 6, "readonly": true }
+		},
+		"dataSource": { "url": "/api/dbdefine" }
+	}]
+}

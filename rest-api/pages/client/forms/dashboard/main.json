@@ -1,0 +1,16 @@
+{
+	"index": [{
+			"type":"form",
+			"fields": {
+				"dbLabel11": {
+					"type": "string",
+					"text": "AKTİF VERİ AMBARI :",
+					"noGroup": false,
+					"class": "text-primary bold fa-2x",
+					"value": "${global.dbName}",
+					"readonly":true
+				}
+			}
+		}
+	]
+}

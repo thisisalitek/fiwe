@@ -1,0 +1,9 @@
+{
+	"type": "widget",
+	"name": "contact",
+	"fields": {
+		"${prefix}telephone.value": { "text": "Telefon", "type": "string", "col": 3 },
+		"${prefix}telefax.value": { "text": "Fax", "type": "string", "col": 3 },
+		"${prefix}electronicMail.value": { "text": "E-Mail", "type": "string", "col": 3 }
+	}
+}

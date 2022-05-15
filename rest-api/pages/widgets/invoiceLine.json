@@ -1,0 +1,93 @@
+{
+	"type": "widget",
+	"name": "invoiceLine",
+	"fields": {
+		"invoiceLine": {
+			"text": "Satırlar",
+			"type": "grid",
+			"fields": {
+				"ID.value": { "text": "#", "type": "identity", "readonly": true, "width": "50px" },
+				"item._id": {
+					"text": "Mal/Hizmet",
+					"type": "remoteLookup",
+					"dataSource": {
+						"type": "remote",
+						"method": "GET",
+						"url": "/dbapi/items?itemType=all",
+						"label": "${name.value} ${description.value}"
+					},
+					"lookupTextField": "item.name.value",
+					"width": "40%",
+					"required": true
+				},
+				"invoicedQuantity.value": { "text": "Miktar", "type": "quantity", "required": true, "width": "80px" },
+				"invoicedQuantity.attr.unitCode": { "text": "Birim", "type": "lookup", "staticValues": "unitCodeList", "required": true, "lastRecord": true, "width": "80px" },
+				"price.priceAmount.value": { "text": "Fiyat", "type": "price", "required": true, "width": "80px" },
+				"lineExtensionAmount.value": { "text": "Tutar", "type": "amount", "calc": "Number(invoicedQuantity.value*price.priceAmount.value).round(2)", "readonly": true, "width": "80px" },
+				"taxTotal.taxSubtotal.0.taxCategory.taxScheme.name.value": { "text": "Vergi Açıklama", "visible": false, "type": "string", "value": "KDV" },
+				"taxTotal.taxSubtotal.0.taxCategory.taxScheme.taxTypeCode.value": { "text": "Vergi Kodu", "visible": false, "type": "string", "value": "0015" },
+				"taxTotal.taxSubtotal.0.taxableAmount.value": { "text": "Matrah", "visible": false, "type": "amount", "readonly": true, "calc": "Number(invoicedQuantity.value*price.priceAmount.value).round(2)" },
+				"taxTotal.taxSubtotal.0.taxAmount.value": { "text": "Kdv", "visible": false, "type": "amount", "calc": "Math.round(100*(Math.round(invoicedQuantity.value*price.priceAmount.value*100)/100)*taxTotal.taxSubtotal[0].percent.value/100)/100", "readonly": true },
+				"taxTotal.taxSubtotal.0.percent.value": { "text": "Kdv %", "type": "number", "lastRecord": true, "width": "60px" },
+				"taxTotal.taxAmount.value": { "text": "Kdv", "type": "amount", "calc": "Math.round(100*(Math.round(invoicedQuantity.value*price.priceAmount.value*100)/100)*taxTotal.taxSubtotal[0].percent.value/100)/100", "readonly": true, "width": "80px" },
+				"note.0.value": { "text": "Notlar", "type": "string", "visible": false }
+			},
+			"modal": {
+				"fields": {
+					"ID.value": { "text": "#", "type": "identity", "readonly": true, "width": "50px" },
+					"item._id": { "text": "Mal/Hizmet", "type": "remoteLookup", "dataSource": { "type": "remote", "method": "GET", "url": "/dbapi/items?itemType=all", "label": "{name.value} {description.value}" }, "lookupTextField": "item.name.value" },
+					"invoicedQuantity.value": { "text": "Miktar", "type": "number" },
+					"invoicedQuantity.attr.unitCode": { "text": "Birim", "type": "lookup", "staticValues": "unitCodeList" },
+					"price.priceAmount.value": { "text": "Fiyat", "type": "money" },
+					"lineExtensionAmount.value": { "text": "Tutar", "type": "money", "calc": "Math.round(100*invoicedQuantity.value*price.priceAmount.value)/100", "readonly": true },
+					"taxTotal.taxSubtotal.0.percent.value": { "text": "Kdv %", "type": "number" },
+					"taxTotal.taxAmount.value": { "text": "Kdv", "type": "money", "calc": "Math.round(100*(Math.round(invoicedQuantity.value*price.priceAmount.value*100)/100)*taxTotal.taxSubtotal[0].percent.value/100)/100", "readonly": true },
+					"note": {
+						"type": "grid",
+						"text": "Satır Notları",
+						"fields": {
+							"value": { "text": "Not", "type": "string" }
+						},
+						"options": {
+							"selection": false,
+							"filter": false,
+							"confirmBeforeRemove": false,
+							"buttons": { "add": true, "edit": true, "delete": true, "view": false, "print": false, "copy": false }
+						}
+					}
+				},
+
+				"options": {
+					"autocol": true
+				}
+			},
+			"options": {
+				"selection": false,
+				"filter": false,
+				"confirmBeforeRemove": false,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": false
+				}
+			},
+			"onchange": "toplamlariGuncelle(this)"
+
+		}
+	},
+	"script": [
+		"function toplamlariGuncelle(grid){",
+		"var toplamMiktar=0",
+		"grid.value.forEach((e)=>{",
+		"toplamMiktar+=Number(e.invoicedQuantity.value)",
+		"})",
+		"$('#toplamMiktar').val(Number(toplamMiktar).formatMoney(3))",
+		"}"
+	],
+	"javascript": ["order-helper.js"],
+	"stylesheet": []
+
+}

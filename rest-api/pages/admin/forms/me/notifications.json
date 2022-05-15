@@ -1,0 +1,52 @@
+{
+	"index": [{
+			"type": "form",
+			"fields": {
+				"aciklama": { "type": "warning", "class":"bold", "text": "Son 90 gün içindeki bildirimler" }
+			}
+		},
+		{
+			"type": "grid",
+			"fields": {
+				"status": { "text": "Durum", "type": "string" },
+				"createdDate": { "text": "Tarih", "type": "datetime", "width": "150px" },
+				"text": { "text": "Açıklama", "type": "string" },
+				"isRead": { "text": "Okundu?", "type": "boolean" }
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": false,
+					"edit": false,
+					"delete": true,
+					"view": true,
+					"print": false,
+					"copy": false
+				}
+			},
+			"dataSource": {
+				"type": "remote",
+				"method": "GET",
+				"url": "/dbapi/notifications"
+			}
+		}
+	],
+	"form": [{
+		"type": "form",
+		"fields": {
+			"status": { "text": "Durum", "type": "string" },
+			"createdDate": { "text": "Tarih", "type": "datetime" },
+			"text": { "text": "Açıklama", "type": "strings" },
+			"isRead": { "text": "Okundu?", "type": "boolean" }
+		},
+		"options": {
+			"mode": "view",
+			"isForm": true
+		},
+		"dataSource": {
+			"method": "GET",
+			"url": "/dbapi/notifications"
+		}
+	}]
+}

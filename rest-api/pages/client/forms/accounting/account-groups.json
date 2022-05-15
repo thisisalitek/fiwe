@@ -1,0 +1,110 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"name":{"text":"Grup Ismi", "type":"string"},
+				"account.accountCode":{"text":"Muh. Kodu", "type":"string"},
+				"salesAccount.accountCode":{"text":"Satış", "type":"string"},
+				"returnAccount.accountCode":{"text":"Iade", "type":"string"},
+				"exportSalesAccount.accountCode":{"text":"İhracat", "type":"string"},
+				"salesDiscountAccount.accountCode":{"text":"Şatış indirim", "type":"string"},
+				"buyingDiscountAccount.accountCode":{"text":"Alım indirim", "type":"string"},
+				"costOfGoodsSoldAccount.accountCode":{"text":"S.M.Maliyeti", "type":"string"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": false
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"/dbapi/account-groups"
+			}
+
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"name"									:{"text":"Grup Ismi", "type":"string" , "required":true,"col":8},
+				"account" 							:{"text":"Muh. Kodu", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				},
+				"salesAccount" 					:{"text":"Satış", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				},
+				"returnAccount" 				:{"text":"Iade", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				},
+				"exportSalesAccount" 		:{"text":"İhracat", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				},
+				"salesDiscountAccount" 	:{"text":"Şatış indirim", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				},
+				"buyingDiscountAccount" :{"text":"Alım indirim", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				},
+				"costOfGoodsSoldAccount":{"text":"S.M.Maliyeti", "type":"remoteLookup",
+					"dataSource":{
+						"type":"remote",
+						"method":"GET",
+						"url":"/dbapi/accounts",
+						"label":"${accountCode} - ${name}"
+					},
+					"col":4
+				}
+			},
+			"dataSource": {
+				"method":"GET",
+				"url":"/dbapi/account-groups"
+			}
+		}
+	]
+}

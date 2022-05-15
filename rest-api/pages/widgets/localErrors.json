@@ -1,0 +1,15 @@
+{
+	"type": "widget",
+	"name": "localErrors",
+	"fields": {
+		"localErrors": {
+			"type": "grid",
+			"class":"font-monospace",
+			"fields": {
+				"_date": { "text": "Tarih Saat", "type": "datetime" },
+				"code": { "text": "Kod", "type": "string" },
+				"message": { "text": "Açıklama", "type": "string" }
+			}
+		}
+	}
+}

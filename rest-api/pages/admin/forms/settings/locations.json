@@ -1,0 +1,64 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"type":{"text":"Türü", "type":"lookup", "staticValues":"locationTypes"},
+				"name":{"text":"Adı", "type":"string"},
+				"passive":{"text":"Pasif?", "type":"boolean"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": true
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"/dbapi/locations"
+			}
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"type":{"text":"Türü", "type":"lookup", "staticValues":"locationTypes","col":4},
+				"name":{"text":"Adı", "type":"string","col":8},
+				"passive":{"text":"Pasif?", "type":"boolean", "col":4},
+				"subLocations" :{
+					"text":"Alt Bölümler/Raflar", 
+					"type":"grid",
+					"fields": {
+						"name" :{"text":"Adı", "type":"string"},
+						"passive" :{"text":"Pasif?", "type":"boolean"}
+					},
+					"options": {
+						"selection": false,
+						"filter": false,
+						"confirmBeforeRemove":true,
+						"buttons": {
+							"add": true,
+							"edit": true,
+							"delete": true,
+							"view": false,
+							"print": false,
+							"copy": false
+						}
+					}
+				}
+			},
+			"dataSource": {
+				"method":"GET",
+				"url":"/dbapi/locations"
+			}
+		}
+	]
+}

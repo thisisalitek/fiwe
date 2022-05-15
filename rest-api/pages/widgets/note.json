@@ -1,0 +1,19 @@
+{
+	"type": "widget",
+	"name": "note",
+	"fields": {
+		"note": {
+			"type": "grid",
+			"text": "Satır Notları",
+			"fields": {
+				"value": { "text": "Not", "type": "string" }
+			},
+			"options": {
+				"selection": false,
+				"filter": false,
+				"confirmBeforeRemove": false,
+				"buttons": { "add": true, "edit": true, "delete": true, "view": false, "print": false, "copy": false }
+			}
+		}
+	}
+}

@@ -1,0 +1,159 @@
+$primary: #0075B0;
+// $primary: #54b554;
+$secondary: #d18f52;
+$success: #198754;
+$info: #0dcaf0;
+$warning: #ffc107;
+$danger: #dc3545;
+$light: #c9d1d9;
+$dark: #212529;
+
+
+// $primary:#083358;
+// $secondary:#F67280;
+// $success:#0074E4;
+// $danger:#FF4057;
+// $info:#74DBEF;
+// $warning:#FC3C3C;
+// $light:#F2F2F0;
+// $dark:#072247;
+
+$min-contrast-ratio: 4.0;
+
+// $font-family-sans-serif:      system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
+// $font-family-sans-serif:      'Nunito', sans-serif;
+// $font-family-sans-serif:      'Roboto', sans-serif;
+$font-family-sans-serif: Open Sans,
+Helvetica Neue,
+Arial,
+sans-serif;
+$font-family-monospace: SFMono-Regular,
+Menlo,
+Monaco,
+Consolas,
+"Liberation Mono",
+"Courier New",
+monospace;
+
+@import "./_base";
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+
+// input:-internal-autofill-selected {
+//     appearance: menulist-button;
+//     background-image: none !important;
+//     background-color: -internal-light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
+//     color: -internal-light-dark(black, white) !important;
+// }
+
+input:-internal-autofill-selected {
+    background-image: none !important;
+    background-color: unset !important;
+    color: unset !important;
+}
+
+
+.login-logo {
+	margin-bottom: 0.5rem;
+}
+
+#login-form {
+	padding: 1rem;
+	min-width: 350px;
+
+}
+
+
+
+.auth-code-input{
+	font-size: 2rem;
+	font-family: monospace;
+	text-align: center;
+	letter-spacing: 1rem;
+}
+
+a.disabled {
+  pointer-events: none;
+  cursor: default;
+}
+
+a:hover {}
+
+header {
+	.nav-link {
+		color:#6532cd;
+	}
+}
+
+.dark {
+	a:hover {
+		color: var(--bs-secondary);
+	}
+
+	#side-menu {
+		color: var(--bs-gray-200);
+		background-color: var(--bs-gray-900);
+		border-left: none;
+
+		.nav-link {
+			color: var(--bs-gray-200);
+			background-color: var(--bs-gray-900);
+		}
+
+
+		.nav-pills .nav-link.active,
+		.nav-pills .show>.nav-link {
+			color: var(--bs-gray-200);
+			background-color: var(--bs-primary);
+		}
+	}
+
+	header {
+		.nav-link {
+			color:#9acd32;
+		}
+	}
+
+
+
+	body {
+		background-color: var(--bs-gray-900);
+		color: var(--bs-light);
+	}
+
+	footer {
+		color: var(--bs-gray-500);
+	}
+
+	.g-input label {
+		background: var(--bs-dark);
+		color: var(--bs-light);
+	}
+
+	.g-input input,
+	.g-input textarea,
+	.g-input select {
+		background: var(--bs-dark);
+		color: var(--bs-light);
+	}
+
+	.border {
+		border-color: var(--bs-gray-800) !important;
+	}
+
+	.shadow {
+		-webkit-box-shadow: 0 0.15rem 0.45rem 0 #121212 !important;
+		box-shadow: 0 0.15rem 0.45rem 0 #121212 !important;
+	}
+
+	.modal-content {
+		background-color: var(--bs-dark);
+	}
+
+	.modal-header, .modal-footer {
+		background: none !important;
+		color: unset !important;
+		border-color: var(--bs-gray-800) !important;
+	}
+
+}

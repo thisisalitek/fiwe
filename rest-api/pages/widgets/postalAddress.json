@@ -1,0 +1,36 @@
+{
+	"type": "widget",
+	"name": "postalAddress",
+	"fields": {
+		"${prefix}streetName.value": { "text": "Cadde/Sokak", "type": "string", "col": 6 },
+		"${prefix}buildingNumber.value": { "text": "Bina No", "type": "string", "col": 1 },
+		"${prefix}buildingName.value": { "text": "Bina/Site adı", "type": "string", "col": 2 },
+		"${prefix}blockName.value": { "text": "Blok adı", "type": "string", "col": 2 },
+		"${prefix}room.value": { "text": "Daire", "type": "string", "col": 1 },
+		"${prefix}citySubdivisionName.value": { "text": "Mahalle/Semt", "type": "string", "col": 3 },
+		"${prefix}district.value": { "text": "İlçe", "type": "string", "col": 3 },
+		"${prefix}cityName.value": { "text": "Şehir", "type": "string", "col": 3 },
+		"${prefix}region.value": { "text": "Bölge", "type": "string", "col": 3 },
+		"${prefix}postalZone.value": { "text": "Posta Kutusu", "type": "string", "col": 3 },
+		"${prefix}country.identificationCode.value": {
+			"text": "Ülke Kodu",
+			"type": "lookup",
+			"staticValues": "countryList",
+			"col": 3,
+			"onchange": "countryCode_changed('${prefix}')"
+		},
+		"${prefix}country.name.value": { "text": "Ülke", "type": "string", "visible": false }
+	},
+	"script": [
+		"function countryCode_changed(prefix){",
+		"let fieldName=`${prefix}country.identificationCode.value`",
+		"let fieldNameCountryName=`${prefix}country.name.value`",
+		"let countryCode=$(`#${generateFormId(fieldName)}`).val() || ''",
+		"let countryText=$(`#${generateFormId(fieldName)} option:selected`).text() || ''",
+		"if(countryCode!=''){",
+		"$(`#${generateFormId(fieldNameCountryName)}`).val(countryText)",
+		"console.log('countryText:',countryText)",
+		"}", 
+		"}"
+	]
+}

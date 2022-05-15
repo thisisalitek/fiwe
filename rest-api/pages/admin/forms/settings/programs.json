@@ -1,0 +1,180 @@
+{
+	"index": [{
+		"type": "grid",
+		"fields": {
+			"name": { "text": "Adı", "type": "string" },
+			"type": { "text": "Türü", "type": "lookup", "staticValues": "programTypes" },
+			"crontab": { "text": "crontab (m h dom dow)", "type": "string" },
+			"passive": { "text": "Pasif?", "type": "boolean" }
+		},
+		"options": {
+			"selection": true,
+			"filter": true,
+			"buttons": {
+				"add": true,
+				"edit": true,
+				"delete": true,
+				"view": false,
+				"print": false,
+				"copy": true
+			}
+		},
+		"dataSource": {
+			"type": "remote",
+			"method": "GET",
+			"url": "/dbapi/programs"
+		}
+	}],
+	"form": [{
+		"type": "form",
+		"tabs": [{
+				"text": "Bilgiler",
+				"fields": {
+					"name": { "text": "Adı", "type": "string", "required": true, "col": 6 },
+					"type": { "text": "Türü", "type": "lookup", "staticValues": "programTypes", "col": 3 },
+					"crontab": { "text": "crontab (zamanlayici) m h dom dow", "type": "string" },
+					"passive": { "text": "Pasif?", "type": "boolean" },
+					"tables1": {
+						"text": "Collection",
+						"collapsed": true,
+						"fields": {
+							"collections.0.name": { "text": "collection", "type": "lookup", "staticValues": "collections" },
+							"collections.0.filter": { "text": "filter", "type": "string" },
+							"collections.0.updateExpression": { "text": "updateExpression", "type": "string" },
+							"collections.0.updateErrorExpression": { "text": "updateExpression", "type": "string" }
+						}
+					},
+					"fileImporter1": {
+						"text": "File Importer",
+						"collapsed": true,
+						"fields": {
+							"fileImporter.accept": { "text": "Accept Files", "type": "string" }
+						}
+					},
+					"fileExporter1": {
+						"text": "File Exporter",
+						"collapsed": true,
+						"fields": {
+							"fileExporter.fileName": { "text": "Dosya Adı", "type": "string" }
+						}
+					},
+					"connector1": {
+						"text": "Local Connector",
+						"collapsed": true,
+						"fields": {
+							"downloadLink": { "text": "Local Connector Download Link", "type": "html", "col": "col-md-6", "html": "<br><a href=\"https://github.com/shamancoders/localconnector/raw/master/installer/TR216_LocalConnector_setup.zip\" title=\"Local Connector indir\" target=\"_blank\"><i class=\"fas fa-download\"></i> Local Connector Win32 Indir</a>" },
+							"button1": { "text": "", "text": "Connector Test", "type": "button", "href": "javascript:connectorTest()", "class": "btn btn-primary", "icon": "fas fa-plug", "col": "col-md-6 text-md-end" },
+							"connector.connectorId": { "text": "connectorId", "type": "string", "col": 4 },
+							"connector.connectorPass": { "text": "connectorPass", "type": "string", "col": 4 },
+							"connector.connectionType": { "text": "Server Connection Type", "type": "lookup", "staticValues": "localConnectorConnectionTypes", "col": 4, "onchange": "localConnType_Change()" },
+							"connection1": {
+								"text": "Server Connection",
+								"collapsed": false,
+								"fields": {
+									"connector.connection.server": { "text": "server", "type": "string", "col": 3 },
+									"connector.connection.port": { "text": "port", "type": "number", "col": 2 },
+									"connector.connection.database": { "text": "database", "type": "string", "col": 3 },
+									"connector.connection.username": { "text": "username", "type": "string", "col": 2 },
+									"connector.connection.password": { "text": "password", "type": "string", "col": 2 }
+								}
+							}
+						}
+					},
+					"emailSender1": {
+						"text": "Email Sender",
+						"collapsed": true,
+						"fields": {
+							"emailSender.host": { "text": "Host", "type": "string" },
+							"emailSender.port": { "text": "Port", "type": "number", "value": 587 },
+							"emailSender.secure": { "text": "Secure", "type": "boolean", "value": false },
+							"emailSender.auth.user": { "text": "Auth User", "type": "string" },
+							"emailSender.auth.pass": { "text": "Auth Pass", "type": "string" },
+							"emailSender.from": { "text": "From", "type": "string" }
+						}
+					},
+					"smsSender1": {
+						"text": "SMS Sender",
+						"collapsed": true,
+						"fields": {
+							"smsSender.api": { "text": "API", "type": "string" },
+							"smsSender.method": { "text": "Method", "type": "lookup", "lookup": { "GET": "GET", "POST": "POST", "PUT": "PUT" } }
+						}
+					}
+				}
+			},
+			{
+				"text": "Code",
+				"fields": {
+					"file0": {
+						"text": "File 0",
+						"collapsed": false,
+						"fields": {
+							"files.0.fileName": { "text": "fileName", "type": "string", "value": "index.ejs" },
+							"files.0.data": { "text": "Code", "type": "code", "help": "https://ejs.co/" }
+						}
+					},
+					"file1": {
+						"text": "File 1",
+						"collapsed": true,
+						"fields": {
+							"files.1.fileName": { "text": "fileName", "type": "string", "value": "" },
+							"files.1.data": { "text": "Code", "type": "code", "help": "https://ejs.co/" }
+						}
+					},
+					"file2": {
+						"text": "File 2",
+						"collapsed": true,
+						"fields": {
+							"files.2.fileName": { "text": "fileName", "type": "string", "value": "" },
+							"files.2.data": { "text": "Code", "type": "code", "help": "https://ejs.co/" }
+						}
+					}
+				}
+			}
+		],
+		"options": {
+			"mode": "general",
+			"isForm": true
+		},
+		"dataSource": {
+			"method": "GET",
+			"url": "/dbapi/programs"
+		},
+		"script": [
+			"function localConnType_Change(){",
+			"if($('#connector_connectionType').val()=='mysql' || $('#connector_connectionType').val()=='mssql'){",
+			"$('#cardCollapseconnection1').closest('.card').show()",
+			"}else{",
+			"$('#cardCollapseconnection1').closest('.card').hide()",
+			"}",
+			"}",
+			"function connectorTest(){",
+			"$.ajax({url:`/dbapi/programs/connectorTest`,",
+			"    data:{",
+			"      token:global.token,",
+			"		connectorId:$('#connector_connectorId').val(),",
+			"      connectorPass:$('#connector_connectorPass').val(),",
+			"      connectionType:$('#connector_connectionType').val(),",
+			"      connection:{",
+			"        server:$('#connector_connection_server').val(),",
+			"        port:Number($('#connector_connection_port').val()),",
+			"        database:$('#connector_connection_database').val(),",
+			"        user:$('#connector_connection_username').val(),",
+			"        password:$('#connector_connection_password').val()",
+			"      }",
+			"    },",
+			"    type:'POST',dataType: 'json',",
+			"    success:(result)=>{",
+			"      console.log(result)",
+			"      if(result.success){",
+			"        alertX(`Connector Test Basarili :-)\nSonuc:\n${result.data}`,'Test Sonucu')",
+			"      }else{",
+			"        alertX(`<b>${result.error.code}</b>\n${result.error.message}`,'Hata','danger')",
+			"      }",
+			"    },",
+			"    error:(err)=>alertX(`${err.code || err.name} - ${err.message || err.name}`,'Hata2','danger')",
+			"})",
+			"}"
+		]
+	}]
+}

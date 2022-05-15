@@ -1,0 +1,15 @@
+{
+	"type": "widget",
+	"name": "despatchTitle",
+	"fields": {
+		"eIntegrator": { "text": "Entegratör", "type": "remoteLookup", "dataSource": { "method": "GET", "url": "/dbapi/integrators", "label": "${name}" }, "col": 3, "lastRecord": true },
+		"ID.value": { "text": "Belge No(Boş ise otomatik)", "type": "string", "col": 3 },
+		"uuid.value": { "text": "ETTN(uuid)", "type": "string", "readonly": true, "col": 3 },
+		"location": {"text": "Lokasyon","type": "remoteLookup",	"dataSource": {	"method": "GET", "url": "/dbapi/locations",	"label": "${name}" },	"col": 3,	"lastRecord": true},
+		"issueDate.value": { "text": "Tarih", "type": "date", "col": 3 },
+		"issueTime.value": { "text": "Saat", "type": "time", "col": 2 },
+		"profileId.value": { "text": "Senaryo", "type": "lookup", "staticValues": "despatchProfileIdList", "lastRecord": true, "col": 2 },
+		"despatchAdviceTypeCode.value": { "text": "Tipi", "type": "lookup", "staticValues": "despatchAdviceTypeCodeList", "lastRecord": true, "col": 2 },
+		"localDocumentId": {"text": "Yerel Belge No",	"type": "string",	"col": 3 }
+	}
+}

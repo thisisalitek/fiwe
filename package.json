@@ -1,0 +1,67 @@
+{
+	"name": "fiwerobo",
+	"version": "1.0.0",
+	"description": "Connector application for multiple forex services",
+	"main": "start.js",
+	"scripts": {
+		"test": "nodemon start.js --test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/redcodearmy/fx-connector.git"
+	},
+	"keywords": [
+		"fx",
+		"trade",
+		"websocket",
+		"restful",
+		"price",
+		"provider"
+	],
+	"author": "lc216",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/redcodearmy/fx-connector/issues"
+	},
+	"homepage": "https://github.com/redcodearmy/fx-connector#readme",
+	"dependencies": {
+		"@microsoft/signalr": "^6.0.4",
+		"@types/node": "^17.0.25",
+		"atob": "^2.1.2",
+		"axios": "^0.26.1",
+		"bluebird": "^3.7.2",
+		"body-parser": "^1.19.1",
+		"bootstrap": "^5.1.3",
+		"btoa": "^1.2.1",
+		"colors": "^1.4.0",
+		"cookie-parser": "^1.4.6",
+		"debug": "~2.6.9",
+		"dotenv": "^16.0.0",
+		"eval": "^0.1.6",
+		"express": "^4.17.1",
+		"express-session": "^1.17.2",
+		"form-data": "^4.0.0",
+		"http-errors": "~1.6.3",
+		"ioredis": "^5.0.4",
+		"jsonwebtoken": "^8.5.1",
+		"method-override": "^3.0.0",
+		"mongodb": "^4.2.2",
+		"mongoose": "^6.1.2",
+		"mongoose-aggregate-paginate-v2": "^1.0.42",
+		"mongoose-paginate-v2": "^1.4.2",
+		"morgan": "~1.9.1",
+		"node-cron": "^3.0.0",
+		"node-mailer": "^0.1.1",
+		"nodemailer-smtp-transport": "^2.7.4",
+		"object-sizeof": "^1.6.1",
+		"redis": "^4.0.6",
+		"serve-favicon": "^2.5.0",
+		"socket.io": "^4.4.1",
+		"socket.io-client": "^4.4.1",
+		"urllib": "^2.38.0",
+		"use-strict": "^1.0.1",
+		"uuid": "^8.3.2",
+		"websocket": "^1.0.34",
+		"ws": "^8.3.0"
+	}
+}

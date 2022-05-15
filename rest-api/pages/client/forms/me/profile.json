@@ -1,0 +1,39 @@
+{
+	"index": [{
+		"type": "form",
+		"fields": {
+			"username": { "text": "Username", "type": "string", "readonly": true },
+			"tab1": {
+				"tabs": [{
+						"text": "Bilgiler",
+						"fields": {
+							"name": { "text": "İsim", "type": "string", "required": true },
+							"lastName": { "text": "Soyad", "type": "string", "required": true },
+							"gender": { "text": "Cinsiyet", "type": "lookup", "staticValues": "genderList", "required": true },
+							"db.partyName": { "text": "Şirket/Firma Ünvan", "type": "string", "required": true },
+							"db.taxNumber": { "text": "Vergi No (Şahıslar için TCKN)", "type": "string", "required": true },
+							"db.integrationCode": { "text": "Entegrasyon Kodu", "type": "string", "readonly": true }
+						}
+					},
+					{
+						"text": "Şifre İşlemleri",
+						"fields": {
+							"button1": {
+								"text": "Parolamı değiştir",
+								"type": "button",
+								"href": "/login/changepassword?token=${global.token}&ret=${encodeURIComponent(location.href)}",
+								"class": "btn btn-danger",
+								"icon": "fas fa-key",
+								"col": "col-md-6"
+							}
+						}
+					}
+				]
+			}
+		},
+		"dataSource": {
+			"method": "GET",
+			"url": "/me/profile"
+		}
+	}]
+}

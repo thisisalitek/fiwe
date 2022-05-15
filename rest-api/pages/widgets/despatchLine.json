@@ -1,0 +1,71 @@
+{
+	"type": "widget",
+	"name": "despatchLine",
+	"fields": {
+		"despatchLine": {
+			"text": "Satırlar",
+			"type": "grid",
+			"fields": {
+				"ID.value": { "text": "#", "type": "identity", "readonly": true, "width": "50px" },
+				"item._id": {
+					"text": "Mal",
+					"type": "remoteLookup",
+					"dataSource": {
+						"type": "remote",
+						"method": "GET",
+						"url": "/dbapi/items?itemType=all",
+						"label": "${name.value} ${description.value}"
+					},
+					"lookupTextField": "item.name.value",
+					"width": "40%",
+					"required": true
+				},
+				"deliveredQuantity.value": { "text": "Miktar", "type": "quantity", "required": true, "width": "80px" },
+				"deliveredQuantity.attr.unitCode": { "text": "Birim", "type": "lookup", "staticValues": "unitCodeList", "required": true, "lastRecord": true, "width": "80px" },
+				"note.0.value": { "text": "SatırNot 1", "type": "string" },
+				"note.1.value": { "text": "SatırNot 2", "type": "string" },
+				"note.2.value": { "text": "SatırNot 3", "type": "string" }
+			},
+			"modal": {
+				"text": "Satir bilgileri",
+				"fields": {
+					"ID.value": { "text": "#", "type": "identity", "readonly": true, "width": "50px" },
+					"item._id": { "text": "Mal/Hizmet", "type": "remoteLookup", "dataSource": { "type": "remote", "method": "GET", "url": "/dbapi/items?itemType=all", "label": "{name.value} {description.value}" }, "lookupTextField": "item.name.value" },
+					"deliveredQuantity.value": { "text": "Miktar", "type": "number" },
+					"deliveredQuantity.attr.unitCode": { "text": "Birim", "type": "lookup", "staticValues": "unitCodeList" },
+					"note": { "text": "SatırNotları", "type": "widget", "widget": "note", "grouped": false, "collapsed": false, "prefix": "", "col": 12 }
+				},
+				"options": {
+					"autocol": true
+				}
+			},
+			"options": {
+				"selection": false,
+				"filter": false,
+				"confirmBeforeRemove": false,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": false
+				}
+			},
+			"onchange": "toplamlariGuncelle(this)"
+
+		}
+	},
+	"script": [
+		"function toplamlariGuncelle(grid){",
+		"var toplamMiktar=0",
+		"grid.value.forEach((e)=>{",
+		"toplamMiktar+=Number(e.deliveredQuantity.value)",
+		"})",
+		"$('#toplamMiktar').val(Number(toplamMiktar).formatMoney(3))",
+		"}"
+	],
+	"javascript": ["order-helper.js"],
+	"stylesheet": []
+
+}

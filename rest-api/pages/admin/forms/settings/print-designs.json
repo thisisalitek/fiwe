@@ -1,0 +1,49 @@
+{
+	"index": [
+		{
+		"type": "grid",
+		"fields": {
+			"module": { "text": "Modül", "type": "lookup", "staticValues": "modules" },
+			"func": { "text": "Fonksiyon", "type": "lookup", "lookup": { "index": "index", "form": "form" } },
+			"name": { "text": "Adı", "type": "string" },
+			"isDefault": { "text": "Varsayılan?", "type": "boolean" },
+			"passive": { "text": "Pasif?", "type": "boolean" }
+		},
+		"options": {
+			"selection": true,
+			"filter": true,
+			"buttons": {
+				"add": true,
+				"edit": true,
+				"delete": true,
+				"view": false,
+				"print": false,
+				"copy": true
+			}
+		},
+		"dataSource": {
+			"type": "remote",
+			"method": "GET",
+			"url": "/dbapi/print-designs"
+		}
+	}],
+	"form": [{
+		"type": "form",
+		"fields": {
+			"module": { "text": "Modül", "type": "lookup", "staticValues": "modules", "required": true, "col": 4, "help": "/help/qwerty" },
+			"func": { "text": "Fonksiyon", "type": "lookup", "lookup": { "index": "index", "form": "form" }, "required": true, "col": 2, "value": "form", "help": "/help/qwerty" },
+			"name": { "text": "Adı", "type": "string", "required": true, "col": 4 },
+			"isDefault": { "text": "Varsayılan?", "type": "boolean", "col": 2 },
+			"design": { "text": "Tasarım (EJS)", "type": "code", "help": "https://ejs.co/" },
+			"passive": { "text": "Pasif?", "type": "boolean" }
+		},
+		"options": {
+			"mode": "general",
+			"isForm": true
+		},
+		"dataSource": {
+			"method": "GET",
+			"url": "/dbapi/print-designs"
+		}
+	}]
+}

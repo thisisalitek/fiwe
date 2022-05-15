@@ -1,0 +1,48 @@
+{
+	"type": "widget",
+	"name": "monetaryTotal",
+	"fields": {
+		"grup2": {
+			"type": "group",
+			"text": "Vergiler",
+			"col": 6,
+			"showHeader": false,
+			"class111":"border-0",
+			"fields": {
+				"taxTotal.taxSubtotal": {
+					"type": "grid",
+					"fields": {
+						"taxCategory.taxScheme.name.value": { "text": "Vergi Açıklama", "type": "string", "html": "${taxCategory.taxScheme.name.value}<span class=\"small ms-1\">(${taxCategory.taxScheme.taxTypeCode.value})</span>" },
+						"taxableAmount.value": { "text": "Matrah", "type": "amount" },
+						"percent.value": { "text": "%", "type": "number", "round":0},
+						"taxAmount.value": { "text": "Vergi", "type": "amount" }
+					}
+				},
+				"withholdingTaxTotal.taxSubtotal": {
+					"type": "grid",
+					"fields": {
+						"taxCategory.taxScheme.name.value": { "text": "Tevkifat Açıklama", "type": "string", "html": "${taxCategory.taxScheme.name.value}<span class=\"small ms-1\">(${taxCategory.taxScheme.taxTypeCode.value})</span>" },
+						"taxableAmount.value": { "text": "Matrah", "type": "amount" },
+						"percent.value": { "text": "%", "type": "number", "round":0 },
+						"taxAmount.value": { "text": "Tevkifat", "type": "amount" }
+					}
+				}
+			}
+		},
+		"grup1": {
+			"type": "group",
+			"text": "Tutarlar",
+			"col": 6,
+			"showHeader": false,
+			"fields": {
+				"toplamMiktar": { "text": "T.Miktar", "type": "total", "dataType": "quantity", "class": "bold", "col": 12 },
+				"${prefix}lineExtensionAmount.value": { "text": "Satır Toplam", "type": "total", "col": 12 },
+				"${prefix}allowanceTotalAmount.value": { "text": "İndirimler", "type": "total", "col": 12 },
+				"${prefix}chargeTotalAmount.value": { "text": "Artırımlar", "type": "total", "col": 12 },
+				"${prefix}taxExclusiveAmount.value": { "text": "Vergisiz Toplam", "type": "total", "col": 12 },
+				"${prefix}taxInclusiveAmount.value": { "text": "Vergili Toplam", "type": "total", "class": "bold", "col": 12 },
+				"${prefix}payableAmount.value": { "text": "Ödenecek Tutar", "type": "total", "class": "bold fs-125", "col": 12 }
+			}
+		}
+	}
+}
