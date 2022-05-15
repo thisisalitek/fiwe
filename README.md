@@ -9,7 +9,7 @@ FiweRobo Artificial Intelligence on Big Data Analyzing
 
 ```mermaid
 graph LR
-dc(Data Collector);style dc fill:#ed7d31,color:#eee;
+dc(Automatic Data Collector Service);style dc fill:#ed7d31,color:#eee;
 mdb[(Mongo Db)];style mdb fill:#548235,color:#eee;
 ww(fiwerobo.com)
 mob(Mobile App Fiwe Robo)
