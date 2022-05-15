@@ -2,7 +2,8 @@
 FiweRobo Artificial Intelligence on Big Data Analyzing
 - [Structure](#structure)
 - [Project Description](#project-description)
-
+- [config.json](#configjson)
+- [REST API](/docs/rest-api.md)
 
 ## Structure
 
