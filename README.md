@@ -17,10 +17,12 @@ ra{{Rest API}};style ra fill:#4472c4,color:#eee;
 pe(Python Engine);style pe fill:#70ad47,color:#eee;
 frd[Financial Raw Data]
 bld[Balances Raw Data]
+xls[Csv/Excel Importer]
 
 KAP --> dc
 FMP -->dc
 JPX -->dc
+xls -->ra
 dc --> mdb
 
 ra -->mdb
