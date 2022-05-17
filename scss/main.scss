@@ -108,6 +108,21 @@ header {
 		}
 	}
 
+	#top-panel .dropdown-menu {
+	    background-color: var(--bs-gray-800);
+	    color: var(--bs-light);
+	}
+
+	#top-panel .dropdown-menu .dropdown-item {
+	    // background-color: var(--bs-gray-800);
+	    color: var(--bs-light);
+	}
+
+	#top-panel .dropdown-menu .dropdown-item.active {
+	    background-color: var(--bs-gray-900);
+	    color: var(--bs-light);
+	}
+
 	header {
 		.nav-link {
 			color:#9acd32;

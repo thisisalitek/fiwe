@@ -12256,6 +12256,17 @@ header .nav-link {
     color: var(--bs-gray-200);
     background-color: var(--bs-primary); }
 
+.dark #top-panel .dropdown-menu {
+  background-color: var(--bs-gray-800);
+  color: var(--bs-light); }
+
+.dark #top-panel .dropdown-menu .dropdown-item {
+  color: var(--bs-light); }
+
+.dark #top-panel .dropdown-menu .dropdown-item.active {
+  background-color: var(--bs-gray-900);
+  color: var(--bs-light); }
+
 .dark header .nav-link {
   color: #9acd32; }
 
