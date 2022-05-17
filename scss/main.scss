@@ -125,7 +125,7 @@ header {
 
 	header {
 		.nav-link {
-			color:#9acd32;
+			color:var(--bs-sariYesil);
 		}
 	}
 
@@ -171,4 +171,8 @@ header {
 		border-color: var(--bs-gray-800) !important;
 	}
 
+	.menu-toggle-button {
+		color: var(--bs-sariYesil);
+    border-color: var(--bs-sariYesil)!important;
+	}
 }

@@ -72,7 +72,7 @@ function publishPage(divId, before, after) {
 }
 
 
-function generatePage(divId, pageJson, callback) {
+function generatePage(divId, pageJson,callback) {
 	$(divId).html('')
 	$(divId).hide()
 	//	try {
@@ -98,12 +98,8 @@ function generatePage(divId, pageJson, callback) {
 
 
 		headerButtons(divId, pageSubObj)
-		// appendLinkedScript(divId, '/js/order-helper.js')
-		// appendScript(divId, `<script type="text/javascript">function formCalc(tableId) { calculateOrder('${divId}',tableId) }</script>`)
-
-		// appendScript(divId, pageSubObj.script)
-		getRemoteData(pageSubObj, (err, data) => {
-			if(!err) {
+		getRemoteData(pageSubObj)
+		.then(data => {
 				switch ((pageSubObj.type || '')) {
 					case 'filter':
 						generateControl(divId, pageSubObj, data, false, (err) => {
@@ -130,25 +126,18 @@ function generatePage(divId, pageJson, callback) {
 							setTimeout(calistir, 0, cb)
 						})
 						break
-						// default:
-
-						// index++
-						// setTimeout(calistir,0,cb)
-						// break
 				}
-			} else {
-				cb(err)
-			}
 		})
+		.catch(cb)
 	}
 
 	calistir((err) => {
 		if(err) {
-			$(divId).html(`Hata1:${err.code || err.name || ''} ${err.message || ''}`)
+			$(divId).html(`Hata:${err.code || err.name || ''} ${err.message || ''}`)
 			if(err.code == 'SESSION_NOT_FOUND') {
 				confirmX('Oturum sonlandırılmış. Yeniden giriş yapmak istiyor musunuz?', (answer) => {
 					if(answer) {
-						window.location.href = `${global.basePath}/login?ret=${window.location.href}`
+						window.location.href = `/login?ret=${window.location.href}`
 
 					}
 					if(callback)
@@ -162,13 +151,7 @@ function generatePage(divId, pageJson, callback) {
 		if(callback)
 			return callback()
 	})
-	// } catch (tryErr) {
-	// 	console.error(tryErr)
-	// 	$(divId).html(`Hata2:${tryErr.name || ''} ${tryErr.message || ''}`)
-	// 	$(divId).show()
-	// 	if(callback)
-	// 		return callback()
-	// }
+	
 }
 
 
@@ -216,7 +199,6 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 
 	if(item.script) {
 		$(divId).append(`<script type="text/javascript">${item.script}</script>`)
-		//document.querySelector(divId).insertAdjacentHTML('afterbegin', `<script type="text/javascript">${item.script}</script>`)
 	}
 
 	if(item.fields) {

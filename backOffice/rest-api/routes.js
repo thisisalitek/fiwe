@@ -1,7 +1,7 @@
 module.exports = (app) => {
-	app.all('/', (req, res, next) => {
-		res.status(200).json({ success: true, data: { name: config.name || '', description: config.description || '', version: config.version || '', status: config.status } })
-	})
+	// app.all('/', (req, res, next) => {
+	// 	res.status(200).json({ success: true, data: { name: config.name || '', description: config.description || '', version: config.version || '', status: config.status } })
+	// })
 
 	let apiWelcomeMessage = { message: `Welcome to ${config.name} API V1. Usage: /api/v1/:func/[:param1]/[:param2]/[:param3] . Methods: GET, POST, PUT, DELETE `, status: config.status }
 	app.all('/api', function(req, res) {

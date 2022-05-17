@@ -327,30 +327,30 @@ function loadCardCollapses() {
 
 
 function postMan(url, options) {
-	let isForeignUrl=false
-	if(!(url.startsWith('http') || url.startsWith('//'))){
-		url=config.api.url + url
-	}else{
-		isForeignUrl=true
+	let isForeignUrl = false
+	if(!(url.startsWith('http') || url.startsWith('//'))) {
+		url = config.api.url + url
+	} else {
+		isForeignUrl = true
 	}
-	
+
 
 	return new Promise((resolve, reject) => {
 		let data = options.data || {}
 		let token = data.token || global.token || ''
-		options.headers=options.headers || {}
-		if(!isForeignUrl){
-			options.headers.token=token
+		options.headers = options.headers || {}
+		if(!isForeignUrl) {
+			options.headers.token = token
 		}
 		$.ajax({
 			url: url,
 			type: options.method || options.type || 'GET',
 			dataType: options.dataType || 'json',
 			data: data,
-			headers:options.headers,
+			headers: options.headers,
 			timeout: 120000
 		}).done((result, textStatus) => {
-			console.log(`result:`,result)
+			console.log(`result:`, result)
 			if(result.success != undefined) {
 				if(result.success) {
 					resolve(result.data)
@@ -380,36 +380,6 @@ function htmlEval(html, values = {}, bracketDollar = true) {
 	} catch (tryErr) {}
 	return html
 }
-
-// function getAjax(url, labelStr = '${name}', exceptId = '', cb) {
-// 	postMan(url, { type: 'GET', dataType: 'json' }, (err, data) => {
-// 		if(!err) {
-// 			let dizi = []
-// 			if(data) {
-// 				if(data.docs != undefined) {
-// 					data.docs.forEach((e) => {
-// 						let text = replaceUrlCurlyBracket(labelStr, e)
-// 						dizi.push({ label: text, value: text, obj: e })
-// 					})
-// 				} else {
-// 					if(Array.isArray(data)) {
-// 						data.forEach((e) => {
-// 							let text = replaceUrlCurlyBracket(labelStr, e)
-// 							dizi.push({ label: text, value: text, obj: e })
-// 						})
-// 					} else {
-// 						let text = replaceUrlCurlyBracket(labelStr, data)
-// 						dizi.push({ label: text, value: text, obj: data })
-// 					}
-// 				}
-// 			}
-
-// 			if(cb) cb(null, dizi)
-// 		} else {
-// 			if(cb) cb(err)
-// 		}
-// 	})
-// }
 
 
 function remoteLookupAutocomplete(locals) {
@@ -721,84 +691,84 @@ function getFormData(divId) {
 // 	return obj
 // }
 
-function getRemoteData(item, cb) {
+function getRemoteData(item) {
 
-	let data = item.value || ''
+	return new Promise((resolve, reject) => {
 
-	if(item.value == undefined) {
-		switch (item.type) {
-			case 'grid':
-				data = []
-				let ps = pageSettings.getItem(`pageSize`)
-				if(ps) {
-					hashObj.query.pageSize = ps
-					setHashObject(hashObj)
-				}
-				break
-			case 'form':
-				data = {}
-				break
-			case 'filter':
-				data = {}
-				break
+		let data = item.value || ''
 
-			case 'number':
-			case 'money':
-				data = 0
-				break
-			case 'boolean':
-				data = false
-				break
-			default:
-				data = ''
-				break
+		if(item.value == undefined) {
+			switch (item.type) {
+				case 'grid':
+					data = []
+					let ps = pageSettings.getItem(`pageSize`)
+					if(ps) {
+						hashObj.query.pageSize = ps
+						setHashObject(hashObj)
+					}
+					break
+				case 'form':
+					data = {}
+					break
+				case 'filter':
+					data = {}
+					break
+
+				case 'number':
+				case 'money':
+					data = 0
+					break
+				case 'boolean':
+					data = false
+					break
+				default:
+					data = ''
+					break
+			}
+
 		}
-	}
 
-	if(item.dataSource == undefined) {
-		return cb(null, data)
-	}
+		if(item.dataSource == undefined) {
+			return resolve(data)
+		}
 
-	let url = ''
-	if(hashObj.func == 'print') {
-		url = item.dataSource.printUrl || item.dataSource.url || ''
-	} else {
-		url = item.dataSource.url || ''
-	}
+		let url = ''
+		if(hashObj.func == 'print') {
+			url = item.dataSource.printUrl || item.dataSource.url || ''
+		} else {
+			url = item.dataSource.url || ''
+		}
 
-	let bHashParamsEkle = false
-	if(hashObj.func == 'addnew') {
-		return cb(null, item)
-	} else {
-		if(hashObj.id) {
-			url = `${url.split('?')[0]}/${hashObj.id}`
-			if(url.split('?')[1]) {
-				url += '?' + url.split('?')[1]
+		let bHashParamsEkle = false
+		if(hashObj.func == 'addnew') {
+			return resolve(item)
+		} else {
+			if(hashObj.id) {
+				url = `${url.split('?')[0]}/${hashObj.id}`
+				if(url.split('?')[1]) {
+					url += '?' + url.split('?')[1]
+				}
 			}
 		}
-	}
-	let filterString = ''
-	Object.keys(hashObj.query).forEach((key) => {
-		if(key != 'mid') {
-			if(filterString != '')
-				filterString += '&'
-			filterString += `${key}=${encodeURIComponent2(hashObj.query[key])}`
+		let filterString = ''
+		Object.keys(hashObj.query).forEach((key) => {
+			if(key != 'mid') {
+				if(filterString != '')
+					filterString += '&'
+				filterString += `${key}=${encodeURIComponent2(hashObj.query[key])}`
+			}
+		})
+		if(filterString != '') {
+			url += `${url.indexOf('?')>-1?'&':'?'}${filterString}`
 		}
-	})
-	if(filterString != '') {
-		url += `${url.indexOf('?')>-1?'&':'?'}${filterString}`
-	}
 
-	if((url || '') == '')
-		return cb(null, data)
+		if((url || '') == '')
+			return resolve(data)
 
-	postMan(url, { type: item.dataSource.method || 'GET', dataType: 'json' }, (err, data) => {
-		if(!err) {
-			cb(null, data)
-		} else {
-			console.error(`getRemoteData error err:`, err)
-			cb(err)
-		}
+		postMan(url, { type: item.dataSource.method || 'GET', dataType: 'json' })
+		.then(resolve) 
+		.catch(reject)
+
 	})
 }
 

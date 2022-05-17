@@ -13,6 +13,7 @@
   --bs-red: #dc3545;
   --bs-orange: #fd7e14;
   --bs-yellow: #ffc107;
+  --bs-sariYesil: #97ca31;
   --bs-green: #198754;
   --bs-teal: #20c997;
   --bs-cyan: #0dcaf0;
@@ -12268,7 +12269,7 @@ header .nav-link {
   color: var(--bs-light); }
 
 .dark header .nav-link {
-  color: #9acd32; }
+  color: var(--bs-sariYesil); }
 
 .dark body {
   background-color: var(--bs-gray-900);
@@ -12301,3 +12302,7 @@ header .nav-link {
   background: none !important;
   color: unset !important;
   border-color: var(--bs-gray-800) !important; }
+
+.dark .menu-toggle-button {
+  color: var(--bs-sariYesil);
+  border-color: var(--bs-sariYesil) !important; }
