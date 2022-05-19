@@ -85,7 +85,7 @@ function logout() {
 	confirmX('Programdan çıkmak istiyor musunuz?', (resp) => {
 		if(resp) {
 			localStorage.removeItem('global')
-			window.location.href = `/login`
+			window.location.href = `login.html`
 		}
 	})
 }
@@ -190,7 +190,15 @@ function modalFormOptions() {
 }
 
 function reloadHaham(){
-	location.href=global.basePath + '/changedb?ret=' + encodeURIComponent2(location.href)
+	postMan('/session', { method: 'POST', data: {token:global.token} })
+		.then(result => {
+			global=Object.assign({},global,result)
+			localStorage.setItem('global', JSON.stringify(global || {}))
+			location.reload()
+		})
+		.catch(err => {
+			showError(err)
+		})
 }
 
 

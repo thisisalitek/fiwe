@@ -1,21 +1,19 @@
 {
-	"dashboard": { "text": "Ana Sayfa", "path": "/dashboard/main", "icon": "fas fa-tachometer-alt" },
-	"waitingSaleOrders": { "text": "Açık Siparişlerim", "path": "/dashboard/closed", "icon": "fas fa-business-time" },
-	"orderList": { "text": "Verilen Siparişler", "path": "/order/order-list", "icon": "fas fa-list" },
-	"consignment": { "text": "Konsinye Stoklarım", "path": "/inventory/consignment-inventory", "icon": "fas fa-boxes" },
-	"items": { "text": "Ürünler", "path": "/inventory/items", "icon": "fas fa-dolly-flatbed" },
-	"finance": {
-		"text": "Finans",
-		"icon": "fas fa-money-bill-1",
+	"dashboard": { "text": "Dashboard", "path": "/dashboard/main", "icon": "fas fa-tachometer-alt" },
+	"projects": { "text": "Projects", "path": "/dashboard/closed", "icon": "fas fa-building" },
+	"repositories": { "text": "Repositories", "path": "/dashboard/closed", "icon": "fas fa-database" },
+	"outerWorld": {
+		"text": "Outer World",
+		"icon": "fas fa-cloud",
 		"fields": {
-			"flow": { "text": "Hareketler", "path": "/dashboard/closed", "icon": "fas fa-money-bill-wave" },
-			"balances": { "text": "Bakiyeler", "path": "/dashboard/closed", "icon": "fas fa-scale-balanced" }
+			"importers": { "text": "Data Importers", "path": "/dashboard/closed", "icon": "fas fa-cloud-arrow-down" },
+			"exporters": { "text": "Data Exporters", "path": "/dashboard/closed", "icon": "fas fa-cloud-arrow-up" }
 		}
 	},
 	"me": {
 		"fields": {
 			"profile": { "text": "Profilim", "path": "/me/profile", "icon": "fas fa-user" },
-			"balances": { "text": "Bildirimler", "path": "/me/notifications", "icon": "fas fa-bell" }
+			"notifications": { "text": "Bildirimler", "path": "/me/notifications", "icon": "fas fa-bell" }
 		},
 		"visible": false
 	}

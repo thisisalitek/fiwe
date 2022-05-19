@@ -83,7 +83,7 @@ let pages = {
 	
 
 <div class="d-flex mt-4 justify-content-between align-items-center">
-	<a class="skip-enter-next" href="/login">Back</a>
+	<a class="skip-enter-next" href="">Back</a>
 	<a id="btnVerify" class="btn btn-primary" href="javascript:verify()">Verify</a>
 </div>
 	`,
@@ -94,7 +94,7 @@ let pages = {
 						<label for="forgotUsername">Phone or email</label>
 					</div>
 				<div class="d-flex mt-4 justify-content-between align-items-center">
-					<a class="skip-enter-next" href="/login">Back</a>
+					<a class="skip-enter-next" href="">Back</a>
 					<a class="btn btn-primary px-3" href="javascript:forgotPass()">Send Reset Link</a>
 				</div>
 	`,
@@ -110,7 +110,7 @@ let pages = {
 	</div>
 
 <div class="d-flex mt-4 justify-content-between align-items-center">
-	<a class="skip-enter-next" href="/login">Back</a>
+	<a class="skip-enter-next" href="">Back</a>
 	<a id="btnCreate" class="btn btn-primary" href="javascript:resetPass()">Reset</a>
 </div>
 	`,
@@ -136,7 +136,7 @@ function resetPass() {
 	loginInfo.rePassword = $('#rePassword').val() || ''
 
 	if(!loginInfo.resetCode) {
-		location.href = '/login'
+		location.href = 'login.html'
 		return
 	}
 	if(loginInfo.password.length < 4) {
@@ -152,7 +152,7 @@ function resetPass() {
 	postMan('/auth/reset-password', { method: 'POST', data: loginInfo })
 		.then(result => {
 			alertX('Your password has been changed successfully', () => {
-				location.href = '/login'
+				location.href = 'login.html'
 			})
 		})
 		.catch(err => {
@@ -190,7 +190,7 @@ function forgotPass() {
 	postMan('/auth/forgot-password', { method: 'POST', data: loginInfo })
 		.then(result => {
 			alertX(`${loginInfo.username} Parolaniz gonderildi`, () => {
-				location.href = '/login?username=' + loginInfo.username
+				location.href = 'login.html?username=' + loginInfo.username
 			})
 		})
 		.catch(err => {
@@ -228,7 +228,7 @@ function nextToPassword() {
 
 	postMan('/auth/login-username', { method: 'POST', data: loginInfo })
 		.then(result => {
-			location.href = location.origin + location.pathname + '?username=' + loginInfo.username + '#password'
+			location.href = 'login.html?username=' + loginInfo.username + '#password'
 		})
 		.catch(err => {
 			showError(err, () => {
@@ -309,7 +309,7 @@ function createAccount() {
 	}
 	postMan('/auth/signup', { method: 'POST', data: loginInfo })
 		.then(result => {
-			location.href = `/login?username=${loginInfo.username}#verify`
+			location.href = `login.html?username=${loginInfo.username}#verify`
 		})
 		.catch(err => {
 			showError(err)
@@ -345,7 +345,7 @@ function initializeGlobals(token) {
 		.catch(err => {
 			showError(err, () => {
 				if(err.code == 'USER_NOT_VERIFIED') {
-					location.hash = 'verify'
+					location.href = 'login.html#verify'
 				}
 			})
 		})

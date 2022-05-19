@@ -217,8 +217,7 @@ global.repoDbModel = function(_id, cb) {
 				let dbModel = { get nameLog() { return dbNameLog(doc.dbName) } }
 				dbModel._id = doc._id
 				dbModel.dbName = doc.dbName
-				// dbModel.enabledServices = doc.services
-				// dbModel.authorizedMembers = doc.authorizedMembers
+		
 				switch (doc.userDbHost) {
 					case config.mongodb.server1:
 						dbModel.conn = serverConn1.useDb(doc.userDb)

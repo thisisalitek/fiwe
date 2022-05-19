@@ -14,8 +14,6 @@ module.exports = () => new Promise((resolve, reject) => {
 		
 		global.moment = require(path.join(__root, 'lib/moment'))
 		global.moment.updateLocale('tr')
-		global.axios = require('axios')
-		global.FormData = require('form-data')
 
 		global.config = {}
 

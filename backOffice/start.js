@@ -12,7 +12,9 @@ require('./initialize')() // initializing some require global variables and incl
 			.then(() => testKod(455)
 				.then(() => restApi()
 					.then(app => httpServer(config.httpserver.port, app)
-						.then(() => eventLog(`Application was started properly :-)`.yellow))
+						.then(() => {
+							eventLog(`Application was started properly :-)`.yellow)
+						})
 						.catch(showError)
 					)
 					.catch(showError)
@@ -20,34 +22,21 @@ require('./initialize')() // initializing some require global variables and incl
 				.catch(showError)
 			)
 			.catch(showError)
+
+		if(config.status != 'development') {
+			process.on('uncaughtException', err=>{errorLog('Caught exception: ', err)})
+			process.on('unhandledRejection', err=>{errorLog('Caught rejection: ', err)})
+		}
+
 	})
 	.catch(showError)
 
 function showError(err) {
-	errorLog('initialize error:', err)
+	console.log('initialize error:', err)
 }
 
 function testKod(a) {
 	return new Promise((resolve, reject) => {
-
-		// setInterval(()=>{
-		// 	a+=12
-		// 	console.log(`testKod a:`, a)
-		// },2000)
-
 		resolve('fitifiti')
 	})
-
 }
-
-// /* Catch Global Crashing */
-// if the program is running 'release' mode, this code prevents to crash the program
-process.on('uncaughtException', function(err) {
-	errorLog('Caught exception: ', err)
-	// here we can add a sending error mail to system admin
-})
-
-process.on('unhandledRejection', (reason, promise) => {
-	errorLog('Caught Rejection: ', reason)
-})
-// end /* Catch Global Crashing */

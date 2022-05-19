@@ -361,7 +361,9 @@ function postMan(url, options) {
 				resolve(result)
 			}
 		}).fail((jqXHR, textStatus, errorThrown) => {
-			reject(jqXHR.responseJSON.error)
+			console.log(`jqXHR:`, jqXHR)
+			console.log(`errorThrown:`, errorThrown)
+			reject((jqXHR.responseJSON || {}).error || errorThrown)
 		})
 	})
 }

@@ -13,7 +13,7 @@ module.exports = (app) => {
 	})
 
 	authControllers(app, '/api/v1/auth/:func/:param1/:param2/:param3', 'auth')
-	repoControllers(app, '/api/v1/:dbId/:func/:param1/:param2/:param3', 'master')
+	repoControllers(app, '/api/v1/db/:func/:param1/:param2/:param3', 'master')
 	masterControllers(app, '/api/v1/:func/:param1/:param2/:param3', 'master')
 
 	// catch 404 and forward to error handler
@@ -28,18 +28,13 @@ module.exports = (app) => {
 }
 
 function repoControllers(app, route, folder) {
-	app.all('/api/:dbId/*', (req, res, next) => {
-		next()
-	})
-
 	setRoutes(app, route, (req, res, next) => {
-		let ctl = getController('master', req.params.func)
-		if(!ctl) {
+		let ctl = getController('repo', req.params.func)
+		if(!ctl)
 			return next()
-		}
-		passport(req, res, next, (member) => {
-			repoDbModel(req.params.dbId, (err, dbModel) => {
-				ctl(dbModel, member, req, res, next, (data) => {
+		passport(req)
+			.then(member => {
+				ctl(member, req, res, next, (data) => {
 					if(data == undefined)
 						res.json({ success: true })
 					else if(data == null)
@@ -49,28 +44,31 @@ function repoControllers(app, route, folder) {
 					}
 				})
 			})
-		})
+		.catch(next)
 	})
 
 }
 
+ 
+
 function masterControllers(app, route, folder) {
 	setRoutes(app, route, (req, res, next) => {
 		let ctl = getController('master', req.params.func)
-		if(!ctl) {
+		if(!ctl)
 			return next()
-		}
-		passport(req, res, next, (member) => {
-			ctl(member, req, res, next, (data) => {
-				if(data == undefined)
-					res.json({ success: true })
-				else if(data == null)
-					res.json({ success: true })
-				else {
-					res.status(200).json({ success: true, data: data })
-				}
+		passport(req)
+			.then(member => {
+				ctl(member, req, res, next, (data) => {
+					if(data == undefined)
+						res.json({ success: true })
+					else if(data == null)
+						res.json({ success: true })
+					else {
+						res.status(200).json({ success: true, data: data })
+					}
+				})
 			})
-		})
+		.catch(next)
 	})
 
 }
@@ -136,19 +134,20 @@ function setRoutes(app, route, cb1, cb2) {
 }
 
 
-function passport(req, res, next, cb) {
-	let IP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || ''
-	let exceptedFunctions = ['subscribe', 'signup', 'verify']
-	if(exceptedFunctions.includes(req.params.func)) {
-		cb(null)
-	} else {
-		let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['token']
-		auth.verify(token)
-			.then(userInfo => cb(userInfo))
-			.catch(next)
-	}
+function passport(req) {
+	return new Promise((resolve, reject) => {
+		let IP = req.headers['x-forwarded-for'] || req.connection.remoteAddress || ''
+		let exceptedFunctions = ['subscribe', 'signup', 'verify']
+		if(exceptedFunctions.includes(req.params.func)) {
+			resolve()
+		} else {
+			let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['token']
+			auth.verify(token)
+				.then(userInfo => resolve(userInfo))
+				.catch(reject)
+		}
+	})
 }
-
 global.restError = {
 	param1: function(req, next) {
 		next({ code: 'INCORRECT_PARAMETER', message: `function:[/${req.params.func}] [/:param1] is required` })

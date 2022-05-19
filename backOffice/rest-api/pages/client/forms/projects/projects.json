@@ -1,0 +1,44 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"name":{"text":"Name", "type":"string"},
+				"description":{"text":"Description", "type":"string"},
+				"passive":{"text":"Passive?","type":"boolean"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": false
+				}
+			},
+			"dataSource": {
+				"type":"remote",
+				"method":"GET",
+				"url":"/dbapi/account-groups"
+			}
+
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"name":{"text":"Name", "type":"string"},
+				"description":{"text":"Description", "type":"string"},
+				"passive":{"text":"Passive?","type":"boolean"}
+			},
+			"dataSource": {
+				"method":"GET",
+				"url":"/dbapi/account-groups"
+			}
+		}
+	]
+}

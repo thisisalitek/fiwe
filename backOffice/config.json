@@ -61,7 +61,7 @@
 		"sendForgotPassword": {
 			"mail": {
 				"subject": "Parola Sıfırla",
-				"body": "Parola Sıfırlama Linkiniz : <a href='http://localhost:4500/login?resetCode=${resetPassCode}#reset' target='_blank'>TIKLAYINIZ</a> <br><br><small>Kullanıcı: ${username}</small>"
+				"body": "Parola Sıfırlama Linkiniz : <a href='http://test.fiwerobo.com/login.html?resetCode=${resetPassCode}#reset' target='_blank'>TIKLAYINIZ</a> <br><br><small>Kullanıcı: ${username}</small>"
 			},
 			"sms": {
 				"body": "FiweRobo Sifreniz: ${password}     "

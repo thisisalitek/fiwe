@@ -105,7 +105,7 @@ function viewStylePrint(divId) {
 }
 
 
-function generateMenu(menu, parent) {
+function generateMenu(menu, parent,baseElem='') {
 	let mId = '0'
 	let s = ''
 	if(hashObj && hashObj.query && hashObj.query.mid) {
@@ -127,7 +127,7 @@ function generateMenu(menu, parent) {
 			<a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#pagesCollapse${menuId}" aria-expanded="${item.expanded}" aria-controls="pagesCollapse${menuId}">
 				${item.icon?'<i class="' + item.icon + '"></i>':''}${item.text || ''} <i class="fas fa-angle-down float-end"></i>
 			</a>
-			<div class="collapse ${item.expanded?'show':''}" id="pagesCollapse${menuId}" data-bs-parent="#pagesCollapse${parentMenuId}">
+			<div class="collapse ${item.expanded?'show':''}" id="pagesCollapse${menuId}" data-bs-parent="${parentMenuId!=''?'#pagesCollapse'+parentMenuId:baseElem}">
 				<nav class="nav ms-2 accordion" id="navId${menuId}">
 					${generateMenu(item.fields, item)}
 				</nav>
@@ -143,4 +143,4 @@ function generateMenu(menu, parent) {
 	return s
 }
 
-document.querySelector('#leftMenu').innerHTML = generateMenu(global.menu)
+document.querySelector('#leftMenu').innerHTML = generateMenu(global.menu,null,'#leftMenu')
