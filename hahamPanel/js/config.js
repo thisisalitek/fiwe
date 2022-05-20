@@ -12,7 +12,7 @@ var config={
 	},
 	ui:{
 		title:'FiweRobo',
-		logo:`<div class="d-flex align-items-center"><img class="logo" src="img/webicon.png" alt="logo" style="max-height:30px;"> <div class="fs-150 ms-2">FiweRobo</div></div>`,
+		logo:`<div class="d-flex align-items-center"><img class="logo" src="img/logo.png" alt="logo" style="max-height:30px;"> <div class="fs-150 ms-2">FiweRobo</div></div>`,
 		copyRight:`&copy; ${(new Date()).getFullYear()} `	
 	}
 	
