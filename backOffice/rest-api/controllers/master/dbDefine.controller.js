@@ -1,6 +1,6 @@
 module.exports = (member, req, res, next, cb) => {
 	if(member.role!='admin'){
-		return error.auth(req,next)
+		return restError.auth(req,next)
 	}
 	switch (req.method) {
 		case 'GET':
@@ -106,7 +106,7 @@ function userMongoServerAddress() {
 
 function put(member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		error.param1(req)
+		restError.param1(req)
 
 	let data = req.body || {}
 	data._id = req.params.param1
@@ -130,7 +130,7 @@ function put(member, req, res, next, cb) {
 
 function deleteItem(member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		error.param1(req)
+		restError.param1(req)
 
 	let data = req.body || {}
 	data._id = req.params.param1

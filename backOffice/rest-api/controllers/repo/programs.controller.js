@@ -86,7 +86,7 @@ function run(dbModel, member, req, res, next, cb) {
 function render(dbModel, member, req, res, next, cb) {
 	let doc = req.body || {}
 	if(!doc.files)
-		return error.data(req, next, 'files')
+		return restError.data(req, next, 'files')
 	if(doc.data == undefined) {
 		doc.data = {}
 	}
@@ -103,7 +103,7 @@ function render(dbModel, member, req, res, next, cb) {
 function runCode(dbModel, member, req, res, next, cb) {
 	let doc = req.body || {}
 	if(!doc.files)
-		return error.data(req, next, 'files')
+		return restError.data(req, next, 'files')
 
 	let data = doc.data || {}
 
@@ -121,7 +121,7 @@ function copy(dbModel, member, req, res, next, cb) {
 	let newName = req.body['newName'] || req.body['name'] || ''
 
 	if(id == '')
-		return error.param2(req, next)
+		return restError.param2(req, next)
 
 	dbModel.programs.findOne({ _id: id }, (err, doc) => {
 		if(dberr(err, next)) {
@@ -203,7 +203,7 @@ function post(dbModel, member, req, res, next, cb) {
 
 function put(dbModel, member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		return error.param1(req, next)
+		return restError.param1(req, next)
 	let data = req.body || {}
 
 	data._id = req.params.param1
@@ -234,7 +234,7 @@ function fazlaliklariTemizleDuzelt(data) {
 
 function deleteItem(dbModel, member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		return error.param1(req, next)
+		return restError.param1(req, next)
 	let data = req.body || {}
 	data._id = req.params.param1
 	dbModel.programs.removeOne(member, { _id: data._id }, (err, doc) => {

@@ -12299,11 +12299,6 @@ body.plain #right-side main {
   height: 640px;
   background: white; }
 
-input:-internal-autofill-selected {
-  background-image: none !important;
-  background-color: unset !important;
-  color: unset !important; }
-
 .login-logo {
   margin-bottom: 0.5rem; }
 

@@ -21,7 +21,7 @@
 			"dataSource": {
 				"type":"remote",
 				"method":"GET",
-				"url":"/dbapi/shifts"
+				"url":"/db/shifts"
 			}
 		}
 	],
@@ -58,7 +58,7 @@
 			},
 			"dataSource": {
 				"method":"GET",
-				"url":"/dbapi/shifts"
+				"url":"/db/shifts"
 			}
 		}
 	]

@@ -50,7 +50,7 @@ let pages = {
 <a class="skip-enter-next" href="#forgot">Forgot your password?</a>
 <div class="d-flex mt-4 justify-content-between ">
 	
-	<a class="skip-enter-next" href="">Back</a>
+	<a class="skip-enter-next" href="#">Back</a>
 	<a class="btn btn-primary" href="javascript:login()">Login</a>
 </div>`,
 	signup: `
@@ -149,7 +149,7 @@ function resetPass() {
 		return
 	}
 
-	postMan('/auth/reset-password', { method: 'POST', data: loginInfo })
+	postMan('/auth/resetPassword', { method: 'POST', data: loginInfo })
 		.then(result => {
 			alertX('Your password has been changed successfully', () => {
 				location.href = 'login.html'
@@ -187,7 +187,7 @@ function forgotPass() {
 		return
 	}
 
-	postMan('/auth/forgot-password', { method: 'POST', data: loginInfo })
+	postMan('/auth/forgotPassword', { method: 'POST', data: loginInfo })
 		.then(result => {
 			alertX(`${loginInfo.username} Parolaniz gonderildi`, () => {
 				location.href = 'login.html?username=' + loginInfo.username
@@ -226,9 +226,9 @@ function nextToPassword() {
 		return
 	}
 
-	postMan('/auth/login-username', { method: 'POST', data: loginInfo })
+	postMan('/auth/loginUsername', { method: 'POST', data: loginInfo })
 		.then(result => {
-			location.href = 'login.html?username=' + loginInfo.username + '#password'
+			location.href = '?username=' + loginInfo.username + '#password'
 		})
 		.catch(err => {
 			showError(err, () => {
@@ -254,6 +254,7 @@ function login() {
 
 	loginInfo.password = $('#password').val()
 
+	console.log(`loginInfo:`, loginInfo)
 	postMan('/auth/login', { method: 'POST', data: loginInfo })
 		.then(result => {
 			initializeGlobals(result.token)
@@ -340,7 +341,7 @@ function initializeGlobals(token) {
 			global.token = token
 			global=Object.assign({},global,result)
 			localStorage.setItem('global', JSON.stringify(global || {}))
-			location.href = location.origin
+			location.href = '/'
 		})
 		.catch(err => {
 			showError(err, () => {

@@ -7,7 +7,7 @@ module.exports = (member, req, res, next, cb) => {
 			} else if(req.params.param1.toLowerCase() == 'changedb') {
 				changeDb(member, req, res, next, cb)
 			} else {
-				error.param1(req, next)
+				restError.param1(req, next)
 			}
 			break
 
@@ -34,7 +34,7 @@ function newSession(member, req, res, next, cb) {
 			})
 
 			let lastLoginDbId = ''
-			db.sessions.find({ memberId: member._id }).sort({ _id: -1 }).limit(1).exec((err, sonGiris) => {
+			db.sessions.find({ memberId: member._id, passive:false }).sort({ _id: -1 }).limit(1).exec((err, sonGiris) => {
 				if(dberr(err, next)) {
 					if(sonGiris.length > 0)
 						lastLoginDbId = sonGiris[0].dbId
@@ -121,19 +121,19 @@ function changeDb(member, req, res, next, cb) {
 	let sessionId = (req.body || {}).sid || (req.query || {}).sid || ''
 
 	if(dbId == '')
-		return next({ code: 'WRONG_PARAMETER', message: 'db parametresi gereklidir' })
+		return next({ code: 'WRONG_PARAMETER', message: 'db parameter is required' })
 
 	if(sessionId == '')
 		return next({ code: 'WRONG_PARAMETER', message: 'sid parametresi gereklidir' })
 	db.sessions.findOne({ memberId: member._id, _id: sessionId }, (err, sessionDoc) => {
 		if(dberr(err, next)) {
 			if(sessionDoc == null)
-				return next({ code: 'SESSION_NOT_FOUND', message: 'Oturum sonlandırılmış. Tekrar giriş yapınız.' })
+				return next({ code: 'SESSION_NOT_FOUND', message: 'The session has been terminated. Please login.' })
 			db.dbDefines.find({ deleted: false, passive: false }, (err, databases) => {
 				if(!err) {
 					let dbObj = databases.find(e => e._id == dbId)
 					if(!dbObj)
-						return next({ code: 'DATABASE_NOT_FOUND', message: `${dbId} Veri ambarı bulunamadı` })
+						return next({ code: 'DATABASE_NOT_FOUND', message: `${dbId} Database was not found` })
 					sessionDoc.dbId = dbObj._id
 					sessionDoc.dbName = dbObj.dbName
 

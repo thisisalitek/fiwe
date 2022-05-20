@@ -11,6 +11,7 @@ var global = {
 	dbId: '',
 	dbName: '',
 	token: '',
+	sessionId: '',
 	formOptionsLink: '',
 	numberFormats: {
 		money: { round: 2 },
@@ -338,9 +339,11 @@ function postMan(url, options) {
 	return new Promise((resolve, reject) => {
 		let data = options.data || {}
 		let token = data.token || global.token || ''
+		let sid = data.sid || data.sessionId || global.sessionId || ''
 		options.headers = options.headers || {}
 		if(!isForeignUrl) {
 			options.headers.token = token
+			options.headers.sid = sid
 		}
 		$.ajax({
 			url: url,
@@ -350,7 +353,6 @@ function postMan(url, options) {
 			headers: options.headers,
 			timeout: 120000
 		}).done((result, textStatus) => {
-			console.log(`result:`, result)
 			if(result.success != undefined) {
 				if(result.success) {
 					resolve(result.data)
@@ -361,8 +363,6 @@ function postMan(url, options) {
 				resolve(result)
 			}
 		}).fail((jqXHR, textStatus, errorThrown) => {
-			console.log(`jqXHR:`, jqXHR)
-			console.log(`errorThrown:`, errorThrown)
 			reject((jqXHR.responseJSON || {}).error || errorThrown)
 		})
 	})
@@ -768,8 +768,8 @@ function getRemoteData(item) {
 			return resolve(data)
 
 		postMan(url, { type: item.dataSource.method || 'GET', dataType: 'json' })
-		.then(resolve) 
-		.catch(reject)
+			.then(resolve)
+			.catch(reject)
 
 	})
 }
@@ -853,12 +853,12 @@ function formSave(dataSource, formData, returnUrl = '') {
 		method = 'PUT'
 	}
 
-	if(method == 'POST') {
+	if(method == 'POST')
 		pageSettings.setItem('lastRecord', formData)
-	}
+	
 
-	postMan(url, { type: method, data: formData, dataType: 'json' }, (err, data) => {
-		if(!err) {
+	postMan(url, { type: method, data: formData, dataType: 'json' })
+		.then(data => {
 			if(hashObj.func == 'index') {
 				alertX('Kayıt başarılı :-)')
 			} else {
@@ -866,13 +866,12 @@ function formSave(dataSource, formData, returnUrl = '') {
 					window.location.href = returnUrl
 				} else {
 					let h = Object.assign({}, hashObj, { func: 'index', query: { page: 1 } })
+					console.log(`h:`, h)
 					setHashObject(h)
 				}
 			}
-		} else {
-			showError(err)
-		}
-	})
+		})
+		.catch(showError)
 }
 
 function collectFieldList(item) {
@@ -1532,20 +1531,7 @@ if(localStorage.getItem('theme') == null) {
 	}
 }
 
-function changeColorScheme(theme) {
-	if(theme)
-		localStorage.setItem('theme', theme)
 
-	if(localStorage.getItem('theme') == 'dark') {
-		document.documentElement.classList.remove('light')
-		document.documentElement.classList.add('dark')
-	} else {
-		document.documentElement.classList.remove('dark')
-		document.documentElement.classList.add('light')
-	}
-}
-
-changeColorScheme()
 
 
 

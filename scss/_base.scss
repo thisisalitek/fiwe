@@ -150,8 +150,6 @@ $theme-colors: ("primary": $primary,
 "transferred": $transferred,
 "ontheway": $ontheway) !default;
 
-
-
 // Quickly modify global styling by enabling or disabling optional features.
 
 $enable-caret: true !default;
@@ -277,7 +275,6 @@ body {
 	pointer-events: none;
 	opacity: 0.65;
 	box-shadow: none;
-	border: 0.1rem solid var(--bs-gray);
 	color: var(--bs-gray);
 }
 
@@ -301,7 +298,7 @@ body {
 }
 
 .pagination-info .input-group i {
-	color: var(--bs-primary);
+	color: var(--bs-light);
 }
 
 .pagination-info .input-group-text {
@@ -695,38 +692,6 @@ body {
 	background-color: #111111;
 	overflow-x: scroll;
 }
-
-// .rounded-circle {
-// 	border-radius: 50% !important;
-// 	padding: 0.4rem 0.8rem !important;
-// }
-
-// .btn-outline-secondary {
-// 	// color: #F0f0f0;
-// 	border-color: #F0f0f0;
-// }
-
-// .badge-status {
-// 	border-radius: 0.15rem;
-// 	font-size: 100%;
-// 	padding: 0.35rem 0.30rem;
-
-// 	text-shadow: 1px 0 0 #0003, -1px 0 0 #0003, 0 1px 0 #0003, 0 -1px 0 #0003, 1px 1px #0003, -1px -1px 0 #0003, 1px -1px 0 #0003, -1px 1px 0 #0003;
-
-// 	height: 1.6rem;
-// 	white-space: nowrap !important;
-
-// }
-
-// .badge-status,
-// .badge-status a {
-// 	// color: #fff;
-// }
-
-// .badge-status:hover,
-// .badge-status a:hover {
-// 	text-decoration: none;
-// }
 
 header .badge-counter {
 	position: absolute;

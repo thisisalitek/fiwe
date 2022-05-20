@@ -1,5 +1,4 @@
 $primary: #0075B0;
-// $primary: #54b554;
 $secondary: #d18f52;
 $success: #198754;
 $info: #0dcaf0;
@@ -8,20 +7,9 @@ $danger: #dc3545;
 $light: #c9d1d9;
 $dark: #212529;
 
-// $primary:#083358;
-// $secondary:#F67280;
-// $success:#0074E4;
-// $danger:#FF4057;
-// $info:#74DBEF;
-// $warning:#FC3C3C;
-// $light:#F2F2F0;
-// $dark:#072247;
 
 $min-contrast-ratio: 4.0;
 
-// $font-family-sans-serif:      system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !default;
-// $font-family-sans-serif:      'Nunito', sans-serif;
-// $font-family-sans-serif:      'Roboto', sans-serif;
 $font-family-sans-serif: Open Sans,
 Helvetica Neue,
 Arial,
@@ -38,18 +26,6 @@ monospace;
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto');
 
-// input:-internal-autofill-selected {
-//     appearance: menulist-button;
-//     background-image: none !important;
-//     background-color: -internal-light-dark(rgb(232, 240, 254), rgba(70, 90, 126, 0.4)) !important;
-//     color: -internal-light-dark(black, white) !important;
-// }
-
-input:-internal-autofill-selected {
-    background-image: none !important;
-    background-color: unset !important;
-    color: unset !important;
-}
 
 
 .login-logo {
@@ -64,7 +40,7 @@ input:-internal-autofill-selected {
 
 
 
-.auth-code-input{
+.auth-code-input {
 	font-size: 2rem;
 	font-family: monospace;
 	text-align: center;
@@ -72,15 +48,15 @@ input:-internal-autofill-selected {
 }
 
 a.disabled {
-  pointer-events: none;
-  cursor: default;
+	pointer-events: none;
+	cursor: default;
 }
 
 a:hover {}
 
 header {
 	.nav-link {
-		color:#6532cd;
+		color: #6532cd;
 	}
 }
 
@@ -108,23 +84,23 @@ header {
 	}
 
 	#top-panel .dropdown-menu {
-	    background-color: var(--bs-gray-800);
-	    color: var(--bs-light);
+		background-color: var(--bs-gray-800);
+		color: var(--bs-light);
 	}
 
 	#top-panel .dropdown-menu .dropdown-item {
-	    // background-color: var(--bs-gray-800);
-	    color: var(--bs-light);
+		// background-color: var(--bs-gray-800);
+		color: var(--bs-light);
 	}
 
 	#top-panel .dropdown-menu .dropdown-item.active {
-	    background-color: var(--bs-gray-900);
-	    color: var(--bs-light);
+		background-color: var(--bs-gray-900);
+		color: var(--bs-light);
 	}
 
 	header {
 		.nav-link {
-			color:var(--bs-sariYesil);
+			color: var(--bs-sariYesil);
 		}
 	}
 
@@ -164,7 +140,8 @@ header {
 		background-color: var(--bs-dark);
 	}
 
-	.modal-header, .modal-footer {
+	.modal-header,
+	.modal-footer {
 		background: none !important;
 		color: unset !important;
 		border-color: var(--bs-gray-800) !important;
@@ -172,6 +149,30 @@ header {
 
 	.menu-toggle-button {
 		color: var(--bs-sariYesil);
-    border-color: var(--bs-sariYesil)!important;
+		border-color: var(--bs-sariYesil) !important;
+	}
+
+	.table {
+		--bs-table-bg: #212529;
+		--bs-table-striped-bg: #2c3034;
+		--bs-table-striped-color: #fff;
+		--bs-table-active-bg: #373b3e;
+		--bs-table-active-color: #fff;
+		--bs-table-hover-bg: #323539;
+		--bs-table-hover-color: #fff;
+		color: #fff;
+		border-color: #373b3e;
+	}
+
+	.form-control:disabled, .form-control[readonly] {
+		background-color: transparent;
+    color: var(--bs-gray-500);
+    border-color: var(--bs-gray-600);
+	}
+
+	.form-control {
+		background-color: transparent;
+		color:var(--bs-light);
+		border-color: var(--bs-light);
 	}
 }

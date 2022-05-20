@@ -11115,7 +11115,6 @@ body {
   pointer-events: none;
   opacity: 0.65;
   box-shadow: none;
-  border: 0.1rem solid var(--bs-gray);
   color: var(--bs-gray); }
 
 .pagination-info,
@@ -11134,7 +11133,7 @@ body {
   box-shadow: none; }
 
 .pagination-info .input-group i {
-  color: var(--bs-primary); }
+  color: var(--bs-light); }
 
 .pagination-info .input-group-text {
   background-color: unset;
@@ -12217,10 +12216,87 @@ body.plain #right-side main {
 .nav-tabs .nav-item.show .nav-link {
   font-weight: bold; }
 
-input:-internal-autofill-selected {
-  background-image: none !important;
-  background-color: unset !important;
-  color: unset !important; }
+.tablet {
+  position: relative;
+  width: 768px;
+  height: 1024px;
+  margin: auto;
+  border: 16px black solid;
+  border-top-width: 60px;
+  border-bottom-width: 60px;
+  border-radius: 36px; }
+
+.tablet:before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 5px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #333;
+  border-radius: 10px; }
+
+.tablet:after {
+  content: '';
+  display: block;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  left: 50%;
+  bottom: -65px;
+  transform: translate(-50%, -50%);
+  background: #333;
+  border-radius: 50%; }
+
+.tablet .content {
+  width: 768px;
+  height: 1024px;
+  background: white;
+  margin: -1px; }
+
+.smartphone {
+  position: relative;
+  width: 360px;
+  height: 640px;
+  margin: auto;
+  border: 16px black solid;
+  border-top-width: 60px;
+  border-bottom-width: 60px;
+  border-radius: 36px; }
+
+/* The horizontal line on the top of the device */
+.smartphone:before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 5px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #333;
+  border-radius: 10px; }
+
+/* The circle on the bottom of the device */
+.smartphone:after {
+  content: '';
+  display: block;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  left: 50%;
+  bottom: -65px;
+  transform: translate(-50%, -50%);
+  background: #333;
+  border-radius: 50%; }
+
+/* The screen (or content) of the device */
+.smartphone .content {
+  width: 360px;
+  height: 640px;
+  background: white; }
 
 .login-logo {
   margin-bottom: 0.5rem; }
@@ -12298,7 +12374,8 @@ header .nav-link {
 .dark .modal-content {
   background-color: var(--bs-dark); }
 
-.dark .modal-header, .dark .modal-footer {
+.dark .modal-header,
+.dark .modal-footer {
   background: none !important;
   color: unset !important;
   border-color: var(--bs-gray-800) !important; }
@@ -12306,3 +12383,24 @@ header .nav-link {
 .dark .menu-toggle-button {
   color: var(--bs-sariYesil);
   border-color: var(--bs-sariYesil) !important; }
+
+.dark .table {
+  --bs-table-bg: #212529;
+  --bs-table-striped-bg: #2c3034;
+  --bs-table-striped-color: #fff;
+  --bs-table-active-bg: #373b3e;
+  --bs-table-active-color: #fff;
+  --bs-table-hover-bg: #323539;
+  --bs-table-hover-color: #fff;
+  color: #fff;
+  border-color: #373b3e; }
+
+.dark .form-control:disabled, .dark .form-control[readonly] {
+  background-color: transparent;
+  color: var(--bs-gray-500);
+  border-color: var(--bs-gray-600); }
+
+.dark .form-control {
+  background-color: transparent;
+  color: var(--bs-light);
+  border-color: var(--bs-light); }

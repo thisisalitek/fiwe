@@ -22,7 +22,7 @@
 			"dataSource": {
 				"type":"remote",
 				"method":"GET",
-				"url":"/dbapi/locations"
+				"url":"/db/locations"
 			}
 		}
 	],
@@ -57,7 +57,7 @@
 			},
 			"dataSource": {
 				"method":"GET",
-				"url":"/dbapi/locations"
+				"url":"/db/locations"
 			}
 		}
 	]

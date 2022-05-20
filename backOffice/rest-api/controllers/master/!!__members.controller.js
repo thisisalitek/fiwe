@@ -1,6 +1,6 @@
 module.exports = (member, req, res, next, cb) => {
 	if(member.role != 'admin')
-		return error.auth(req, next)
+		return restError.auth(req, next)
 
 	switch (req.method) {
 		case 'GET':
@@ -108,7 +108,7 @@ function copy(member, req, res, next, cb) {
 	let newName = req.body['newName'] || req.body['username'] || ''
 
 	if(id == '')
-		error.param2(req, next)
+		restError.param2(req, next)
 
 	db.members.findOne({ _id: id }, (err, doc) => {
 		if(dberr(err, next)) {
@@ -182,7 +182,7 @@ function userMongoServerAddress() {
 
 function put(member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		error.param1(req)
+		restError.param1(req)
 
 	let data = req.body || {}
 	data._id = req.params.param1
@@ -211,7 +211,7 @@ function put(member, req, res, next, cb) {
 
 function deleteItem(member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		return error.param1(req, next)
+		return restError.param1(req, next)
 	let data = req.body || {}
 	data._id = req.params.param1
 	if(member._id == data._id) {

@@ -164,7 +164,7 @@ global.db = {
 
 module.exports = () => new Promise((resolve, reject) => {
 	connectMongoDatabase('master', config.mongodb.master, db)
-		.then(()=>{
+		.then(() => {
 			initRepoDb()
 			resolve()
 		})
@@ -177,93 +177,96 @@ global.repoHolder = {}
 var serverConn1, serverConn2, serverConn3
 
 function initRepoDb() {
-	moduleLoader(path.join(__dirname, 'repo'), '.collection.js', ``, (err, holder) => {
-		repoHolder = holder
-
-		if(!err) {
-			if(config.mongodb.server1) {
+	collectionLoader(path.join(__dirname, 'repo'), '.collection.js', ``)
+		.then(holder => {
+			repoHolder = holder
+			if(config.mongodb.server1 != '') {
 				serverConn1 = mongoose.createConnection(config.mongodb.server1, { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: true })
 				serverConn1.on('connected', () => {
-					eventLog(`${config.mongodb.server1.brightBlue} ${'connected'.brightGreen}`)
-					
+					eventLog('[MongoDb.server1]'.cyan, `${config.mongodb.server1.brightBlue} ${'connected'.brightGreen}`)
+
 				})
 
 				serverConn1.on('error', (err) => errorLog(`${config.mongodb.server1.brightBlue} Error:`, err))
 				serverConn1.on('disconnected', () => eventLog(`${config.mongodb.server1.brightBlue} disconnected`))
+
 			}
-			if(config.mongodb.server2) {
+			if(config.mongodb.server2 != '') {
 				serverConn2 = mongoose.createConnection(config.mongodb.server2, { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: true })
 				serverConn2.on('connected', () => {
-					eventLog(`${config.mongodb.server2.brightBlue} ${'connected'.brightGreen}`)
+					eventLog('[MongoDb.server1]'.cyan, `${config.mongodb.server2.brightBlue} ${'connected'.brightGreen}`)
 				})
 
 				serverConn2.on('error', (err) => errorLog(`${config.mongodb.server2.brightBlue} Error:`, err))
 				serverConn2.on('disconnected', () => eventLog(`${config.mongodb.server2.brightBlue} disconnected`))
 			}
 
-		} else {
+		})
+		.catch(err => {
 			errorLog('refreshRepoDb:', err)
-		}
-	})
+		})
 }
 
-global.repoDbModel = function(_id, cb) {
+global.getRepoDbModel = (_id) => new Promise((resolve, reject) => {
 	if(_id == '')
-		return dbnull(null, cb)
+		return reject('Repo Database was not found1')
 
-	db.dbdefines.findOne({ _id: _id, deleted: false, passive: false }, (err, doc) => {
-		if(dberr(err, cb)) {
-			if(dbnull(doc, cb)) {
-				let dbModel = { get nameLog() { return dbNameLog(doc.dbName) } }
-				dbModel._id = doc._id
-				dbModel.dbName = doc.dbName
-		
-				switch (doc.userDbHost) {
-					case config.mongodb.server1:
-						dbModel.conn = serverConn1.useDb(doc.userDb)
-						break
-					case config.mongodb.server2:
-						dbModel.conn = serverConn2.useDb(doc.userDb)
-						break
-					case config.mongodb.server3:
-						dbModel.conn = serverConn3.useDb(doc.userDb)
-						break
-					default:
-						dbModel.conn = serverConn1.useDb(doc.userDb)
-						break
-				}
+	db.dbDefines.findOne({ _id: _id, deleted: false, passive: false }, (err, doc) => {
+		if(dberr(err, reject)) {
+			if(doc == null)
+				return reject('Repo Database was not found')
 
-				dbModel.free = function() {
-					Object.keys(dbModel.conn.models).forEach((key) => {
-						delete dbModel.conn.models[key]
-						if(dbModel.conn.collections[key] != undefined)
-							delete dbModel.conn.collections[key]
-						if(dbModel.conn.base != undefined) {
-							if(dbModel.conn.base.modelSchemas != undefined)
-								if(dbModel.conn.base.modelSchemas[key] != undefined)
-									delete dbModel.conn.base.modelSchemas[key]
-						}
-					})
-				}
+			let dbModel = { get nameLog() { return dbNameLog(doc.dbName) } }
+			dbModel._id = doc._id
+			dbModel.dbName = doc.dbName
 
-				Object.keys(repoHolder).forEach((key) => {
-					Object.defineProperty(dbModel, key, {
-						get: function() {
-							if(dbModel.conn.models[key]) {
-								return dbModel.conn.models[key]
-							} else {
-								return repoHolder[key](dbModel)
-							}
-						}
-					})
-				})
-
-
-				cb(null, dbModel)
+			switch (doc.userDbHost) {
+				case config.mongodb.server1:
+					dbModel.conn = serverConn1.useDb(doc.userDb)
+					break
+				case config.mongodb.server2:
+					dbModel.conn = serverConn2.useDb(doc.userDb)
+					break
+				case config.mongodb.server3:
+					dbModel.conn = serverConn3.useDb(doc.userDb)
+					break
+				default:
+					dbModel.conn = serverConn1.useDb(doc.userDb)
+					break
 			}
+
+			dbModel.free = function() {
+				Object.keys(dbModel.conn.models).forEach((key) => {
+					delete dbModel.conn.models[key]
+					if(dbModel.conn.collections[key] != undefined)
+						delete dbModel.conn.collections[key]
+					if(dbModel.conn.base != undefined) {
+						if(dbModel.conn.base.modelSchemas != undefined)
+							if(dbModel.conn.base.modelSchemas[key] != undefined)
+								delete dbModel.conn.base.modelSchemas[key]
+					}
+				})
+			}
+
+			Object.keys(repoHolder).forEach((key) => {
+				Object.defineProperty(dbModel, key, {
+					get: function() {
+						if(dbModel.conn.models[key]) {
+							return dbModel.conn.models[key]
+						} else {
+							return repoHolder[key](dbModel)
+						}
+					}
+				})
+			})
+
+
+			resolve(dbModel)
+
 		}
 	})
-}
+})
+
 
 
 function connectMongoDatabase(collectionFolder, mongoAddress, dbObj) {

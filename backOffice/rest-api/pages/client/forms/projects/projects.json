@@ -22,7 +22,7 @@
 			"dataSource": {
 				"type":"remote",
 				"method":"GET",
-				"url":"/dbapi/account-groups"
+				"url":"/db/projects"
 			}
 
 		}
@@ -37,7 +37,7 @@
 			},
 			"dataSource": {
 				"method":"GET",
-				"url":"/dbapi/account-groups"
+				"url":"/db/projects"
 			}
 		}
 	]

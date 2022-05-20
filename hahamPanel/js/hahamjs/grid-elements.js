@@ -228,7 +228,7 @@ function gridBody(parentId, item, insideOfModal, cb) {
 				s += gridBody_Cell(field, listItem, insideOfModal)
 			})
 			if(item.options.buttonCount > 0) {
-				s += `<td class="border-start text-center text-nowrap pt-0 pb-1 px-1">${buttonRowCell(listItem,index,item )}</td>`
+				s += `<td class="text-center text-nowrap pt-0 pb-1 px-1">${buttonRowCell(listItem,index,item )}</td>`
 			}
 			s += `</tr>`
 		})
@@ -406,7 +406,6 @@ function gridYeniSatir(parentId, insideOfModal) {
 	let td = newRow.insertCell()
 	td.classList.add('text-center')
 	td.classList.add('text-nowrap')
-	td.classList.add('border-start')
 	td.classList.add('p-0')
 	td.innerHTML = `<a href="javascript:gridSatirOK('${parentId}','${newRow.id}',${rowIndex},${insideOfModal})" class="btn btn-primary btn-grid-row" title="Tamam"><i class="fas fa-check"></i></a>
 	<a href="javascript:gridSatirVazgec('${parentId}','${newRow.id}',${rowIndex},${insideOfModal}) "class="btn btn-dark btn-grid-row" title="Vazgeç"><i class="fas fa-reply"></i></a>
@@ -561,7 +560,6 @@ function gridSatirDuzenle(tableId, rowIndex, insideOfModal) {
 		let td = editRow.insertCell()
 		td.classList.add('text-center')
 		td.classList.add('text-nowrap')
-		td.classList.add('border-start')
 		td.classList.add('p-0')
 		td.innerHTML = `<a href="javascript:gridSatirOK('${tableId}','${editRow.id}',${rowIndex},${insideOfModal})" class="btn btn-primary btn-grid-row" title="Tamam"><i class="fas fa-check"></i></a>
 		<a href="javascript:gridSatirVazgec('${tableId}','${editRow.id}',${rowIndex},${insideOfModal}) "class="btn btn-dark btn-grid-row" title="Vazgeç"><i class="fas fa-reply"></i></a>
@@ -657,7 +655,7 @@ function gridBody_Cell(field, listItem, insideOfModal) {
 			// }
 			tdClass = field.class || 'text-center'
 			itemValue = (itemValue || '').toString() === 'true' ? true : false
-			td = itemValue ? '<i class="fas fa-check-square text-primary font-size-150 align-middle"></i>' : '<i class="far fa-square text-dark font-size-150 align-middle"></i>'
+			td = itemValue ? '<i class="fas fa-check-square text-light font-size-150 align-middle"></i>' : '<i class="far fa-square font-size-150 align-middle"></i>'
 			// td = `
 			// <div class="form-switch  m-0  p-0 ms-3 ps-3">
 			// 	<input type="checkbox" class="${swClass}" value="true" ${itemValue?'checked':''} disabled />
@@ -872,7 +870,7 @@ function gridHeader(parentId, item, insideOfModal, cb) {
 	})
 
 	if(item.options.buttonCount > 0) {
-		s += `<th class="text-center border-start" style="width:${item.options.buttonWidth}">
+		s += `<th class="text-center " style="width:${item.options.buttonWidth}">
 		${item.options.buttons.add[0]==true?item.options.buttons.add[1]:''}
 		</th>`
 	}

@@ -7,7 +7,7 @@ module.exports = (member, req, res, next, cb) => {
 			} else if(req.params.param1.toLowerCase() == 'changedb') {
 				changeDb(member, req, res, next, cb)
 			} else {
-				error.param1(req, next)
+				restError.param1(req, next)
 			}
 			break
 

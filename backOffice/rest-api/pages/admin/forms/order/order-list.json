@@ -39,7 +39,7 @@
 
 					"itemId": { "text": "Malzeme", "type": "remoteLookup", "html":"${description}<div class=\"d-md-flex justify-content-between\"><div class=\"bold\">#${name}</div><div class=\"text-muted small\">${ubb?'UBB:'+ubb:''} ${sut?'SUT:'+sut:''}</div> </div>",
 					"dataSource":{
-						"url":"/dbapi/items",
+						"url":"/db/items",
 						"label": "${name} ${description}${ubb || sut ?' - ':''}${ubb?'UBB:'+ubb:''} ${sut?'SUT:'+sut:''}"
 					},
 					"lookupTextField111":"itemName",

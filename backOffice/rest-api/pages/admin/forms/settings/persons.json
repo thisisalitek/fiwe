@@ -13,14 +13,14 @@
 					"dataSource":{
 						"type":"remote",
 						"method":"GET",
-						"url":"/dbapi/shifts"
+						"url":"/db/shifts"
 					}
 				},
 				"station":{"text":"Üretim İstasyonu", "type":"remoteLookup", 
 					"dataSource":{
 						"type":"remote",
 						"method":"GET",
-						"url":"/dbapi/mrp-stations"
+						"url":"/db/mrp-stations"
 					}
 				},
 				"passive":{"text":"Pasif?", "type":"boolean"}
@@ -40,7 +40,7 @@
 			"dataSource": {
 				"type":"remote",
 				"method":"GET",
-				"url":"/dbapi/persons"
+				"url":"/db/persons"
 			}
 		}
 	],
@@ -57,7 +57,7 @@
 					"dataSource":{
 						"type":"remote",
 						"method":"GET",
-						"url":"/dbapi/accounts",
+						"url":"/db/accounts",
 						"label":"${accountCode} - ${name}"
 					}, "col":6
 				},
@@ -91,14 +91,14 @@
 							"dataSource":{
 								"type":"remote",
 								"method":"GET",
-								"url":"/dbapi/shifts"
+								"url":"/db/shifts"
 							}, "col":3
 						},
 						"station":{"text":"Üretim İstasyonu", "type":"remoteLookup", 
 							"dataSource":{
 								"type":"remote",
 								"method":"GET",
-								"url":"/dbapi/mrp-stations"
+								"url":"/db/mrp-stations"
 							}, "col":3
 						}
 					}
@@ -106,7 +106,7 @@
 			},
 			"dataSource": {
 				"method":"GET",
-				"url":"/dbapi/persons"
+				"url":"/db/persons"
 			}
 		}
 	]

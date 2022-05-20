@@ -1,7 +1,4 @@
 module.exports = (dbModel, member, req, res, next, cb) => {
-	if(req.method != 'GET' && member.role != 'admin')
-		return error.auth(req, next)
-
 	switch (req.method) {
 		case 'GET':
 			if(req.params.param1 != undefined) {
@@ -16,11 +13,11 @@ module.exports = (dbModel, member, req, res, next, cb) => {
 			}
 			break
 		case 'POST':
-			// if(req.params.param1 == 'copy') {
-			// 	copy(dbModel, member, req, res, next, cb)
-			// } else {
-			post(dbModel, member, req, res, next, cb)
-			// }
+			if(req.params.param1 == 'copy') {
+				copy(dbModel, member, req, res, next, cb)
+			} else {
+				post(dbModel, member, req, res, next, cb)
+			}
 
 			break
 		case 'PUT':
@@ -36,6 +33,42 @@ module.exports = (dbModel, member, req, res, next, cb) => {
 
 }
 
+function copy(dbModel, member, req, res, next, cb) {
+	let id = req.params.param2 || req.body['id'] || req.query.id || ''
+	let newName = req.body['newName'] || req.body['name'] || ''
+
+	if(id == '')
+		restError.param2(req, next)
+
+	dbModel.projects.findOne({ _id: id }, (err, doc) => {
+		if(dberr(err, next)) {
+			if(dbnull(doc, next)) {
+				let data = doc.toJSON()
+				data._id = undefined
+				delete data._id
+				if(newName != '') {
+					data.name = newName
+				} else {
+					data.name += ' copy'
+				}
+				data.createdDate = new Date()
+				data.modifiedDate = new Date()
+
+				let newDoc = new dbModel.projects(data)
+				if(!epValidateSync(newDoc, next))
+					return
+				newDoc.save((err, newDoc2) => {
+					if(dberr(err, next)) {
+						let obj = newDoc2.toJSON()
+						obj['newName'] = newDoc2.name
+						cb(obj)
+					}
+				})
+			}
+		}
+	})
+}
+
 function getList(dbModel, member, req, res, next, cb) {
 	let options = {
 		page: (req.query.page || 1)
@@ -45,45 +78,30 @@ function getList(dbModel, member, req, res, next, cb) {
 	if((req.query.pageSize || req.query.limit))
 		options['limit'] = req.query.pageSize || req.query.limit
 
-	let filter = {
-		customerCode:member.db.integrationCode || 'xxxxxxxxxxxxxxxxxxxxxx11125'
-	}
+	let filter = {}
 	options.sort = {
-		'setCode': 1,
-		'setLot': 1,
-		'itemName': 1
+		'name': 1
 	}
 
 
-	if((req.query.setCode || '') != '')
-		filter['setCode'] = { $regex: '.*' + req.query.setCode + '.*', $options: 'i' }
+	if((req.query.passive || '') != '')
+		filter['passive'] = req.query.passive
 
-	if((req.query.setLot || '') != '')
-		filter['setLot'] = req.query.setLot
+	if((req.query.name || '') != '')
+		filter['name'] = { $regex: '.*' + req.query.name + '.*', $options: 'i' }
 
-	if((req.query.setLot || '') != '')
-		filter['setLot'] = req.query.setLot
-
-	if((req.query.itemName || '') != '')
-		filter['itemName'] = { $regex: '.*' + req.query.itemName + '.*', $options: 'i' }
-
-	if((req.query.itemDescription || '') != '')
-		filter['itemDescription'] = { $regex: '.*' + req.query.itemDescription + '.*', $options: 'i' }
-
-	if((req.query.partyNo || '') != '')
-		filter['partyNo'] = { $regex: '.*' + req.query.partyNo + '.*', $options: 'i' }
-
-	if((req.query.ubb || '') != '')
-		filter['ubb'] = { $regex: '.*' + req.query.ubb + '.*', $options: 'i' }
-
-	if((req.query.sut || '') != '')
-		filter['sut'] = { $regex: '.*' + req.query.sut + '.*', $options: 'i' }
-
-	if((req.query.quantity || '') != '')
-		filter['quantity'] = req.query.quantity
+	if((req.query.description || '') != '')
+		filter['description'] = { $regex: '.*' + req.query.description + '.*', $options: 'i' }
 
 
-	dbModel.consignment_inventories.paginate(filter, options, (err, resp) => {
+	if((req.query.search || '').trim() != '') {
+		filter['$or'] = [
+			{ 'name': { $regex: '.*' + req.query.search + '.*', $options: 'i' } },
+			{ 'description': { $regex: '.*' + req.query.search + '.*', $options: 'i' } }
+		]
+	}
+
+	dbModel.projects.paginate(filter, options, (err, resp) => {
 		if(dberr(err, next)) {
 			cb(resp)
 		}
@@ -96,7 +114,7 @@ function getIdList(dbModel, member, req, res, next, cb) {
 
 	filter['_id'] = { $in: idList }
 
-	dbModel.consignment_inventories.find(filter, (err, docs) => {
+	dbModel.projects.find(filter, (err, docs) => {
 		if(dberr(err, next)) {
 			cb(docs)
 		}
@@ -106,7 +124,7 @@ function getIdList(dbModel, member, req, res, next, cb) {
 
 function getOne(dbModel, member, req, res, next, cb) {
 	let populate = []
-	dbModel.consignment_inventories.findOne({ _id: req.params.param1 }).populate(populate).exec((err, doc) => {
+	dbModel.projects.findOne({ _id: req.params.param1 }).populate(populate).exec((err, doc) => {
 		if(dberr(err, next)) {
 			if(dbnull(doc, next)) {
 				cb(doc)
@@ -118,7 +136,7 @@ function getOne(dbModel, member, req, res, next, cb) {
 function post(dbModel, member, req, res, next, cb) {
 	let data = req.body || {}
 	data._id = undefined
-	let newDoc = new dbModel.consignment_inventories(data)
+	let newDoc = new dbModel.projects(data)
 	if(!epValidateSync(newDoc, next))
 		return
 	newDoc.save((err, newDoc2) => {
@@ -130,16 +148,16 @@ function post(dbModel, member, req, res, next, cb) {
 
 function put(dbModel, member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		return error.param1(req, next)
+		return restError.param1(req, next)
 	let data = req.body || {}
 	data._id = req.params.param1
 	data.modifiedDate = new Date()
 
-	dbModel.consignment_inventories.findOne({ _id: data._id }, (err, doc) => {
+	dbModel.projects.findOne({ _id: data._id }, (err, doc) => {
 		if(dberr(err, next)) {
 			if(dbnull(doc, next)) {
 				let doc2 = Object.assign(doc, data)
-				let newDoc = new dbModel.consignment_inventories(doc2)
+				let newDoc = new dbModel.projects(doc2)
 				if(!epValidateSync(newDoc, next))
 					return
 
@@ -155,10 +173,10 @@ function put(dbModel, member, req, res, next, cb) {
 
 function deleteItem(dbModel, member, req, res, next, cb) {
 	if(req.params.param1 == undefined)
-		return error.param1(req, next)
+		return restError.param1(req, next)
 	let data = req.body || {}
 	data._id = req.params.param1
-	dbModel.consignment_inventories.removeOne(member, { _id: data._id }, (err, doc) => {
+	dbModel.projects.removeOne(member, { _id: data._id }, (err, doc) => {
 		if(dberr(err, next)) {
 			cb(null)
 		}
