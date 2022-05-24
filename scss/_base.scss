@@ -1472,7 +1472,8 @@ header {
 // 	padding: 0.25rem;
 // }
 
-header .nav-link.dropdown-toggle>i {
+// header .nav-link.dropdown-toggle>i {
+header .nav-link>i {
 	font-size: 1.2rem;
 }
 
@@ -1529,12 +1530,12 @@ header .nav-link.dropdown-toggle>i {
 	}
 }
 
-#top-panel .dropdown-menu {
-	transform: translate(-100px, 36px) !important;
-	border: none;
-	border-radius: 0 0 0.35rem 0.35rem;
-	z-index: 999;
-}
+// #top-panel .dropdown-menu {
+// 	transform: translate(-100px, 36px) !important;
+// 	border: none;
+// 	border-radius: 0 0 0.35rem 0.35rem;
+// 	z-index: 999;
+// }
 
 
 // #right-side {

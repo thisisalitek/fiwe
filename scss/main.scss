@@ -39,7 +39,6 @@ monospace;
 }
 
 
-
 .auth-code-input {
 	font-size: 2rem;
 	font-family: monospace;
@@ -52,15 +51,26 @@ a.disabled {
 	cursor: default;
 }
 
-a:hover {}
 
 header {
 	.nav-link {
 		color: #6532cd;
 	}
 }
+.d-light-none {
+    display: none !important;
+}
+.d-dark-none {
+	display: block!important;
+}
 
 .dark {
+	.d-light-none {
+		display: block!important;
+	}
+	.d-dark-none {
+		display: none !important;
+	}
 	a:hover {
 		color: var(--bs-secondary);
 	}
@@ -174,5 +184,11 @@ header {
 		background-color: transparent;
 		color:var(--bs-light);
 		border-color: var(--bs-light);
+	}
+
+	select.form-control option {
+		background-color: var(--bs-gray-800);
+		color:var(--bs-light);
+		border-color: var(--bs-gray-800);
 	}
 }

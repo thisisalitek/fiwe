@@ -23,20 +23,36 @@ require('./initialize')() // initializing some require global variables and incl
 			)
 			.catch(showError)
 
-		if(config.status != 'development') {
-			process.on('uncaughtException', err=>{errorLog('Caught exception: ', err)})
-			process.on('unhandledRejection', err=>{errorLog('Caught rejection: ', err)})
+		if (config.status != 'development') {
+			process.on('uncaughtException', err => { errorLog('Caught exception: ', err) })
+			process.on('unhandledRejection', err => { errorLog('Caught rejection: ', err) })
 		}
 
 	})
 	.catch(showError)
-
+	
 function showError(err) {
 	console.log('initialize error:', err)
 }
 
+var xls = require('./lib/excel-helper')
 function testKod(a) {
 	return new Promise((resolve, reject) => {
-		resolve('fitifiti')
+		let options = {
+			sheetName: (s) => s.toUpperCase(),
+			rows: (rows) => {
+				rows.forEach(e => {
+					e[0]=(e[0] || '').toUpperCase()
+				})
+				return rows
+			}
+		}
+		xls.convertXlsxToJSON(path.join(__dirname, 'resources', 't1.xlsx'),options)
+			.then(result => {
+				tempLog('t1.json',JSON.stringify(result,null,2))
+				resolve()
+			})
+			.catch(reject)
+
 	})
 }

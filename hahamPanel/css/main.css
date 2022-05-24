@@ -11968,7 +11968,7 @@ html {
 header {
   margin-top: 0.5rem; }
 
-header .nav-link.dropdown-toggle > i {
+header .nav-link > i {
   font-size: 1.2rem; }
 
 #side-menu {
@@ -12010,12 +12010,6 @@ header .nav-link.dropdown-toggle > i {
 @media (max-width: 768px) {
   .nav-link {
     padding: 0.5rem 0.5rem; } }
-
-#top-panel .dropdown-menu {
-  transform: translate(-100px, 36px) !important;
-  border: none;
-  border-radius: 0 0 0.35rem 0.35rem;
-  z-index: 999; }
 
 #right-side footer {
   margin-bottom: 0px;
@@ -12318,6 +12312,18 @@ a.disabled {
 header .nav-link {
   color: #6532cd; }
 
+.d-light-none {
+  display: none !important; }
+
+.d-dark-none {
+  display: block !important; }
+
+.dark .d-light-none {
+  display: block !important; }
+
+.dark .d-dark-none {
+  display: none !important; }
+
 .dark a:hover {
   color: var(--bs-secondary); }
 
@@ -12404,3 +12410,8 @@ header .nav-link {
   background-color: transparent;
   color: var(--bs-light);
   border-color: var(--bs-light); }
+
+.dark select.form-control option {
+  background-color: var(--bs-gray-800);
+  color: var(--bs-light);
+  border-color: var(--bs-gray-800); }

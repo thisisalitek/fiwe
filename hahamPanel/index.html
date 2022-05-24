@@ -13,7 +13,7 @@
 	<script src="//cdn.socket.io/4.5.0/socket.io.min.js"></script>
 	<script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 	<script src="js/FileSaver.js"></script>
-	<script src="js/config.js"></script>
+	<script src="config.js"></script>
 	<script src="js/hahamjs/utils.js"></script>
 	<script src="js/hahamjs/modals.js"></script>
 	<script src="js/hahamjs/helper.js"></script>
@@ -22,21 +22,45 @@
 	<script src="js/hahamjs/haham.js"></script>
 	<link rel="stylesheet" href="css/main.css">
 	<script type="text/javascript">
-	if(!global.token)
-		location.href = 'login.html'
+		if (!global.token)
+			location.href = 'login.html'
 	</script>
 </head>
 
 <body class="">
 	<header id="top-panel" class="d-flex">
 		<div class="d-flex align-items-center">
-			<a class="menu-toggle-button border rounded ms-3 me-2 d-none d-md-block" href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars"></i></a>
+			<a class="menu-toggle-button border rounded ms-3 me-2 d-none d-md-block"
+				href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars"></i></a>
 			<div config-ui="logo" class="">Business Logo</div>
 		</div>
 		<div class="flex-fill d-flex align-items-center justify-content-end">
 			<ul class="nav">
+				<li class="nav-item dropdown">
+					<a class="nav-link d-light-none" href="javascript:changeColorScheme('light')" title="Light Theme"><i
+							class="fas fa-sun"></i></a>
+					<a class="nav-link d-dark-none" href="javascript:changeColorScheme('dark')" title="Dark Theme"><i
+							class="fas fa-moon"></i></a>
+					<script type="text/javascript">
+						function changeColorScheme(theme) {
+							if (theme)
+								localStorage.setItem('theme', theme)
+
+							if (localStorage.getItem('theme') == 'dark') {
+								document.documentElement.classList.remove('light')
+								document.documentElement.classList.add('dark')
+							} else {
+								document.documentElement.classList.remove('dark')
+								document.documentElement.classList.add('light')
+							}
+						}
+
+						changeColorScheme()
+					</script>
+				</li>
 				<li class="nav-item dropdown" id="alertsDropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="alertsDropdownBtn" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="alertsDropdownBtn" role="button"
+						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-bell"></i>
 						<span id="unread-notification-count" class="badge badge-danger badge-counter"></span>
 					</a>
@@ -50,7 +74,8 @@
 					</div>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" id="databasesDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Veri Ambarları">
+					<a class="nav-link dropdown-toggle" id="databasesDropdown" href="#" role="button"
+						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Veri Ambarları">
 						<i class="fas fa-database"></i>
 					</a>
 					<div id="dbList" class="dropdown-menu dropdown-menu-end" aria-labelledby="databasesDropdown">
@@ -58,39 +83,45 @@
 
 				</li>
 				<li class="nav-item d-none d-md-flex dropdown">
-					<a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Kullanıcı işlemleri">
+					<a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button"
+						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+						title="Kullanıcı işlemleri">
 						<i class="fas fa-user"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 						<a class="dropdown-item" href="#/me/profile">Profilim
 							<div id="usernameLabel" class="ms-1 small text-primary">
-								
+
 							</div>
 						</a>
-						
+
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="javascript:logout();">Çıkış</a>
 					</div>
 				</li>
 			</ul>
-			<a class="menu-toggle-button  border rounded ms-3 me-2 d-block d-md-none" href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars fs-150"></i></a>
+			<a class="menu-toggle-button  border rounded ms-3 me-2 d-block d-md-none"
+				href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars fs-150"></i></a>
 		</div>
 	</header>
 	<div id="main-content">
 		<div id="side-menu" class="collapse show" style="">
 			<nav class="nav nav-pills flex-column w-100">
 				<div id="leftMenu"></div>
-				<a id="support-link" class="nav-link d-flex align-items-center" href="https://api.whatsapp.com/send/?phone=905533521042&text=destek+almak+istiyorum" target="_blank">
+				<a id="support-link" class="nav-link d-flex align-items-center"
+					href="https://api.whatsapp.com/send/?phone=905533521042&text=destek+almak+istiyorum"
+					target="_blank">
 					<i class="fab fa-whatsapp"></i> Support
 				</a>
 				<a class="nav-link d-md-none align-items-center" href="#/me/profile">
 					<div><i class="fas fa-user"></i> Profilim</div>
 					<div id="usernameLabelMobile" class="ms-4 small text-primary">
-						
+
 					</div>
 				</a>
-				
-				<a class="nav-link d-flex d-md-none align-items-center" href="javascript:logout();"><i class="fas fa-right-from-bracket"></i> Çıkış</a>
+
+				<a class="nav-link d-flex d-md-none align-items-center" href="javascript:logout();"><i
+						class="fas fa-right-from-bracket"></i> Çıkış</a>
 			</nav>
 		</div>
 		<div id="right-side" class="">
@@ -108,14 +139,16 @@
 			<footer class="d-flex justify-content-between align-items-center px-1">
 				<div class="d-flex flex-md-fill justify-content-md-start align-items-center">
 					<div class="ms-2 d-flex">
-						<a href="javascript:reloadHaham()" class="btn btn-success ms-2 px-2" title="Reload Haham Engine"><i class="fas fa-sync"></i></a>
+						<a href="javascript:reloadHaham()" class="btn btn-success ms-2 px-2"
+							title="Reload Haham Engine"><i class="fas fa-sync"></i></a>
 					</div>
 					<div class="mt-1 mx-3 text-nowrap d-flex">
 						<div id="copy-right">&copy;</div> <span id="innerWidth" class="ms-2 d-none d-md-block"></span>
 					</div>
 				</div>
 				<div class="d-md-flex ms-2 justify-content-end text-end align-items-center">
-					<div id="dbLabel" class="mx-0 mx-md-3 d-flex justify-content-end align-items-center" title="Aktif veri ambarı">
+					<div id="dbLabel" class="mx-0 mx-md-3 d-flex justify-content-end align-items-center"
+						title="Aktif veri ambarı">
 						<i class="fas fa-database me-1" title=""></i> qwertyDB
 					</div>
 				</div>
