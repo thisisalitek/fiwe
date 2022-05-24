@@ -1,6 +1,7 @@
 let lastRecordRow = {}
 var rootGridId = 1
 
+
 function grid(parentId, item, insideOfModal, cb) {
 	item = gridDefaults(item, insideOfModal)
 	let listCount=0

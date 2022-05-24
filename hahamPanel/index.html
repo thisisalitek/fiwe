@@ -36,28 +36,7 @@
 		</div>
 		<div class="flex-fill d-flex align-items-center justify-content-end">
 			<ul class="nav">
-				<li class="nav-item dropdown">
-					<a class="nav-link d-light-none" href="javascript:changeColorScheme('light')" title="Light Theme"><i
-							class="fas fa-sun"></i></a>
-					<a class="nav-link d-dark-none" href="javascript:changeColorScheme('dark')" title="Dark Theme"><i
-							class="fas fa-moon"></i></a>
-					<script type="text/javascript">
-						function changeColorScheme(theme) {
-							if (theme)
-								localStorage.setItem('theme', theme)
-
-							if (localStorage.getItem('theme') == 'dark') {
-								document.documentElement.classList.remove('light')
-								document.documentElement.classList.add('dark')
-							} else {
-								document.documentElement.classList.remove('dark')
-								document.documentElement.classList.add('light')
-							}
-						}
-
-						changeColorScheme()
-					</script>
-				</li>
+				
 				<li class="nav-item dropdown" id="alertsDropdown">
 					<a class="nav-link dropdown-toggle" href="#" id="alertsDropdownBtn" role="button"
 						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -81,6 +60,12 @@
 					<div id="dbList" class="dropdown-menu dropdown-menu-end" aria-labelledby="databasesDropdown">
 					</div>
 
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link d-light-none" href="javascript:changeColorScheme('light')" title="Light Theme"><i
+							class="fas fa-sun"></i></a>
+					<a class="nav-link d-dark-none" href="javascript:changeColorScheme('dark')" title="Dark Theme"><i
+							class="fas fa-moon"></i></a>
 				</li>
 				<li class="nav-item d-none d-md-flex dropdown">
 					<a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button"

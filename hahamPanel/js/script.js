@@ -145,12 +145,11 @@ function generateMenu(menu, parent,baseElem='') {
 
 document.querySelector('#leftMenu').innerHTML = generateMenu(global.menu,null,'#leftMenu')
 
-
 function changeColorScheme(theme) {
-	if(theme)
+	if (theme)
 		localStorage.setItem('theme', theme)
 
-	if(localStorage.getItem('theme') == 'dark') {
+	if (localStorage.getItem('theme') == 'dark') {
 		document.documentElement.classList.remove('light')
 		document.documentElement.classList.add('dark')
 	} else {
@@ -159,4 +158,4 @@ function changeColorScheme(theme) {
 	}
 }
 
-//changeColorScheme()
+changeColorScheme()
