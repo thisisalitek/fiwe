@@ -1,4 +1,4 @@
-module.exports = function(conn) {
+module.exports = function(dbModel) {
 	let collectionName = path.basename(__filename, '.collection.js')
 	let schema = mongoose.Schema({
 		memberId: { type: mongoose.Schema.Types.ObjectId, ref: 'members', default: null, index: true },
@@ -24,7 +24,7 @@ module.exports = function(conn) {
 	schema.on('init', model => {})
 	schema.plugin(mongoosePaginate)
 
-	let model = conn.model(collectionName, schema, collectionName)
+	let model = dbModel.conn.model(collectionName, schema, collectionName)
 
 	return model
 }

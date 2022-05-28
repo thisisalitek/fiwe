@@ -1,48 +1,44 @@
 var ctlPassport = require('./passport.controller.js')
-
-module.exports = (req, res, next, cb) => {
+module.exports = (req) => new Promise((resolve, reject) => {
 	switch (req.method) {
 		case 'POST':
-			resetPassword(req, res, next, cb)
+			resetPassword(req).then(resolve).catch(reject)
 			break
 		default:
-			restError.method(req, next)
+			restError.method(req, reject)
 			break
 	}
-}
+})
 
-function resetPassword(req, res, next, cb) {
-	let resetCode = req.body.resetCode || ''
-	auth.verify(resetCode)
-		.then(decoded => {
-			db.members.findOne({ _id: decoded._id }, (err, doc) => {
-				if(dberr(err, next)) {
-					if(dbnull(doc, next)) {
-						let data = req.body || {}
-						var newPassword = data.newPassword || data.password || ''
-						var rePassword = data.rePassword || ''
-						if(newPassword.trim() == '')
-							return next({ code: 'REQUIRE_FIELD', message: 'Yeni parola gereklidir.' })
-					
-						if(req.body.rePassword != undefined) {
-							if(newPassword != rePassword)
-								return next({ code: 'REQUIRE_FIELD', message: 'Yeni tekrar parola hatali.' })
-						}
-						doc.password = newPassword
+function resetPassword(req) {
+	return new Promise((resolve, reject) => {
+		let resetCode = req.body.resetCode || ''
+		auth.verify(resetCode)
+			.then(decoded => {
+				db.members.findOne({ _id: decoded._id })
+					.then(doc => {
+						if(dbnull(doc, reject)) {
+							let data = req.body || {}
+							let newPassword = data.newPassword || data.password || ''
+							let rePassword = data.rePassword || ''
+							if(newPassword.trim() == '')
+								return reject({ code: 'REQUIRE_FIELD', message: 'Yeni parola gereklidir.' })
 
-						doc.modifiedDate = new Date()
-
-						doc.save((err, newDoc) => {
-							if(dberr(err, next)) {
-
-								cb('OK')
+							if(req.body.rePassword != undefined) {
+								if(newPassword != rePassword)
+									return reject({ code: 'REQUIRE_FIELD', message: 'Yeni tekrar parola hatali.' })
 							}
-						})
+							doc.password = newPassword
 
-					}
-				}
+							doc.modifiedDate = new Date()
+
+							doc.save()
+								.then(newDoc => resolve('OK'))
+								.catch(reject)
+						}
+					})
+					.catch(reject)
 			})
-		})
-		.catch(next)
-
+			.catch(reject)
+	})
 }

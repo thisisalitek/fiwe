@@ -1,0 +1,144 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"name":{"text":"Name", "type":"string"},
+				"type":{"text":"Type", "type":"lookup", "staticValues":"importerTypes"},
+				"passive":{"text":"Passive?","type":"boolean"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": true
+				}
+			},
+			"dataSource": {
+				"url":"/db/importers"
+			}
+
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"name":{"text":"Name", "type":"string", "col":6},
+				"type":{"text":"Type", "type":"lookup", "staticValues":"importerTypes","onchange":"importerTypeChange(this.value)", "col":6},
+				"fileGroup1":{
+					"text":"File Upload",
+					"collapsed":false,
+					"class":"d-none",
+					"fields":{
+						"fileUpload.type":{"text":"File Upload Type", "type":"lookup", "staticValues":"fileUploadTypes","onchange":"fileUploadTypeChange(this.value)", "col":4},
+						"csvGroup1":{
+							"class":"d-none",
+							"showHeader":false,
+							"fields":{
+								"fileUpload.csv.separator":{"text":"Separator", "type":"lookup", "lookup":{";":"Semicolon(;)",",":"Comma(,)","\t":"Tab character(\t)"}, "col":2},
+								"fileUpload.csv.decimalPointer":{"text":"Decimal Pointer","title":"Decimal Pointer for CSV Numbers", "type":"lookup", "lookup":{".":"dot(.)",",":"comma(,)"}, "col":2},
+								"fileUpload.csv.dateFormat":{"text":"Date Format", "type":"string", "value":"dd/mm/yyyy", "col":2},
+								"fileUpload.csv.timeFormat":{"text":"Time Format", "type":"string", "value":"hh:mm:ss", "col":2}
+							}
+						},
+						"excelGroup1":{
+							"class":"d-none",
+							"showHeader":false,
+							"fields":{
+								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
+								"fileUpload.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
+							}
+						}
+					}
+				},
+				"fileSystem1":{
+					"text":"File System",
+					"collapsed":false,
+					"class":"d-none",
+					"fields":{
+						"path":{"text":"Path", "type":"string", "col":6},
+						"afterImport":{"text":"After Import", "type":"string", "col":6},
+						"fileSystem.type":{"text":"Read File Type", "type":"lookup", "staticValues":"fileSystemTypes","onchange":"fileSystemTypeChange(this.value)", "col":4},
+						"csvGroup2":{
+							"class":"d-none",
+							"showHeader":false,
+							"fields":{
+								"fileSystem.csv.separator":{"text":"Separator", "type":"lookup", "lookup":{";":"Semicolon(;)",",":"Comma(,)","\t":"Tab character(\t)"}, "col":2},
+								"fileUpload.csv.decimalPointer":{"text":"Decimal Pointer","title":"Decimal Pointer for CSV Numbers", "type":"lookup", "lookup":{".":"dot(.)",",":"comma(,)"}, "col":2},
+								"fileUpload.csv.dateFormat":{"text":"Date Format", "type":"string", "value":"dd/mm/yyyy", "col":2},
+								"fileUpload.csv.timeFormat":{"text":"Time Format", "type":"string", "value":"hh:mm:ss", "col":2}
+							}
+						},
+						"excelGroup2":{
+							"class":"d-none",
+							"showHeader":false,
+							"fields":{
+								"fileSystem.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
+								"fileSystem.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
+							}
+						}
+					}
+				},
+				"passive":{"text":"Passive?","type":"boolean"}
+			},
+			"dataSource": {
+				"url":"/db/importers"
+			},
+			"script":[
+				"function importerTypeChange(){",
+				"var val=document.querySelector('select[data-field=\"type\"]').value",
+				"document.querySelector('div[data-field=\"fileGroup1\"]').classList.add('d-none')",
+				"document.querySelector('div[data-field=\"fileSystem1\"]').classList.add('d-none')",
+				"switch(val){",
+				"case 'fileUpload':",
+				"document.querySelector('div[data-field=\"fileGroup1\"]').classList.remove('d-none')",
+				"fileUploadTypeChange()",
+				"break",
+				"case 'fileSystem':",
+				"document.querySelector('div[data-field=\"fileSystem1\"]').classList.remove('d-none')",
+				"fileSystemTypeChange()",
+				"break",
+				"}",
+				"",
+				"}",
+				"",
+				"function fileUploadTypeChange(){",
+				"var val=document.querySelector('select[data-field=\"fileUpload.type\"]').value",
+				"document.querySelector('div[data-field=\"csvGroup1\"]').classList.add('d-none')",
+				"document.querySelector('div[data-field=\"excelGroup1\"]').classList.add('d-none')",
+				"switch(val){",
+				"case 'csv':",
+				"document.querySelector('div[data-field=\"csvGroup1\"]').classList.remove('d-none')",
+				"break",
+				"case 'excel':",
+				"document.querySelector('div[data-field=\"excelGroup1\"]').classList.remove('d-none')",
+				"break",
+				"}",
+				"",
+				"}",
+				"function fileSystemTypeChange(){",
+				"var val=document.querySelector('select[data-field=\"fileSystem.type\"]').value",
+				"document.querySelector('div[data-field=\"csvGroup2\"]').classList.add('d-none')",
+				"document.querySelector('div[data-field=\"excelGroup2\"]').classList.add('d-none')",
+				"switch(val){",
+				"case 'csv':",
+				"document.querySelector('div[data-field=\"csvGroup2\"]').classList.remove('d-none')",
+				"break",
+				"case 'excel':",
+				"document.querySelector('div[data-field=\"excelGroup2\"]').classList.remove('d-none')",
+				"break",
+				"}",
+				"",
+				"}",
+				"",
+				"$(document).ready(()=>{ setTimeout(()=>{ importerTypeChange() },200) })"
+			]
+		}
+	]
+}

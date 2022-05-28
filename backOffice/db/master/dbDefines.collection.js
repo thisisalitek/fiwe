@@ -1,11 +1,11 @@
-module.exports = function(conn) {
+module.exports = function (dbModel) {
 	let collectionName = path.basename(__filename, '.collection.js')
 	let schema = mongoose.Schema({
 		owner: { type: mongoose.Schema.Types.ObjectId, ref: 'members', default: null, index: true },
 		dbName: { type: String, required: true, index: true },
 		userDb: { type: String, default: '', index: true },
 		userDbHost: { type: String, default: 'mongodb://localhost:27017/', index: true },
-		allowedMembers:{},
+		allowedMembers: {},
 		dbStats: {},
 		version: { type: String, default: '', index: true },
 		deleted: { type: Boolean, default: false, index: true },
@@ -17,14 +17,16 @@ module.exports = function(conn) {
 	schema.pre('save', next => next())
 	schema.pre('remove', next => next())
 	schema.pre('remove', true, (next, done) => next())
-	schema.on('init', model => {})
+	schema.on('init', model => { })
 	schema.plugin(mongoosePaginate)
 
-	let model = conn.model(collectionName, schema, collectionName)
+	let model = dbModel.conn.model(collectionName, schema, collectionName)
 
-	model.removeOne = (member, filter, cb) => {
-		conn.model(collectionName).updateOne(filter, {$set:{deleted:true,passive:true,modifiedDate:new Date()}}, err => cb(err))
-		// sendToTrash(conn, collectionName, member, filter, cb) 
-	}
+	model.removeOne = (member, filter) => new Promise((resolve, reject) => {
+		dbModel.conn.model(collectionName).updateOne(filter, { $set: { deleted: true, passive: true, modifiedDate: new Date() } })
+			.then(resolve)
+			.catch(reject)
+	})
+
 	return model
 }

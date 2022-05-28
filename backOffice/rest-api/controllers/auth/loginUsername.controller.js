@@ -1,35 +1,40 @@
-module.exports = function(req, res, next, cb) {
+module.exports = (req) => new Promise((resolve, reject) => {
 	if(req.method == 'GET' || req.method == 'POST') {
-		var username = req.body.username || req.query.username || ''
+		let username = req.body.username || req.query.username || ''
 
 		if(username.trim() == '')
-			return next({ code: 'USERNAME_EMPTY', message: 'Kullanıcı bilgisi(email,username,telefon) boş olamaz.' })
+			return reject({ code: 'USERNAME_EMPTY', message: 'Kullanıcı bilgisi(email,username,telefon) boş olamaz.' })
 
-		db.members.findOne({ username: username }, (err, doc) => {
-			if(dberr(err, next)) {
+		db.members.findOne({ username: username })
+			.then(doc => {
 				if(doc != null) {
-					spamCheck(doc, next, (doc) => {
-						if(!doc.verified) {
-							doc.authCode = util.randomNumber(1200, 9980).toString()
-							spamCheck(doc, next, (doc) => {
+					spamCheck(doc)
+						.then(doc => {
+							if(!doc.verified) {
+								doc.authCode = util.randomNumber(1200, 9980).toString()
+								spamCheck(doc)
+									.then(doc => {
+										doc.save()
+										sender.sendAuthCode(doc.username, doc.authCode)
+										.then(() => {
+											reject({ code: 'USER_NOT_VERIFIED', message: 'User is not verified. New Auth Code has been sent. Check your sms or email.' })
+										})
+										.catch(reject)
+									})
+									.catch(reject)
+							} else {
 								doc.save()
-								sender.sendAuthCode(doc.username, doc.authCode, next, () => {
-									return next({ code: 'USER_NOT_VERIFIED', message: 'User is not verified. New Auth Code has been sent. Check your sms or email.' })
-								})
-							})
-
-						} else {
-							doc.save()
-							cb({ _id: doc._id, username: doc.username, passive: doc.passive, verified: doc.verified })
-						}
-					})
+								resolve({ _id: doc._id, username: doc.username, passive: doc.passive, verified: doc.verified })
+							}
+						})
+						.catch(reject)
 				} else {
-					next({ code: 'USER_NOT_FOUND', message: 'User not found' })
+					reject({ code: 'USER_NOT_FOUND', message: 'User not found' })
 				}
-			}
-		})
+			})
+			.catch(reject)
 	} else {
-		restError.method(req, next)
+		restError.method(req, reject)
 	}
 
-}
+})

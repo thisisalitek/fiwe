@@ -1,4 +1,7 @@
 module.exports = (member, req) => new Promise((resolve, reject) => {
+	if(member.role != 'admin')
+		return restError.auth(req, reject)
+
 	switch (req.method) {
 		case 'GET':
 			if(req.params.param1 != undefined) {
@@ -27,26 +30,22 @@ module.exports = (member, req) => new Promise((resolve, reject) => {
 })
 
 
-
-
-
-
 function getOne(member, req) {
 	return new Promise((resolve, reject) => {
 		let filter = { deleted: false }
 		filter._id = req.params.param1
-		db.priceProviders.findOne(filter)
-			.then(resolve)
-			.catch(reject)
+		db.members.findOne(filter)
+			.then(doc => {
+				if(dbnull(doc, reject))
+					resolve(doc)
+			}).catch(reject)
 	})
 }
 
 
 function getList(member, req) {
 	return new Promise((resolve, reject) => {
-		let options = {
-			page: (req.query.page || 1),
-		}
+		let options = { page: (req.query.page || 1) }
 
 		if((req.query.pageSize || req.query.limit))
 			options['limit'] = req.query.pageSize || req.query.limit
@@ -56,50 +55,77 @@ function getList(member, req) {
 			createdDate: -1
 		}
 
+		if((req.query.role || '') != '')
+			filter['role'] = req.query.role
+
+		filter['approved'] = true
+
+
+		if(req.query.approved === 'false') {
+			filter['approved'] = false
+			filter['role'] = 'user'
+			options.sort = {
+				createdDate: 1
+			}
+		}
 
 		if((req.query.passive || '') != '')
 			filter['passive'] = req.query.passive
 
-		if((req.query.name || '') != '')
-			filter['name'] = { $regex: '.*' + req.query.name + '.*', $options: 'i' }
-
-		if((req.query.providerKey || '') != '')
-			filter['providerKey'] = { $regex: '.*' + req.query.providerKey + '.*', $options: 'i' }
+		if((req.query.verified || '') != '')
+			filter['verified'] = req.query.verified
 
 
-		db.priceProviders.paginate(filter, options).then(resolve).catch(reject)
+
+
+		if((req.query.name || req.query.username || '') != '') {
+			filter['$or'] = [
+				{ 'username': { $regex: '.*' + (req.query.name || req.query.username) + '.*', $options: 'i' } },
+				{ 'name': { $regex: '.*' + (req.query.name || req.query.username) + '.*', $options: 'i' } },
+				{ 'lastName': { $regex: '.*' + (req.query.name || req.query.username) + '.*', $options: 'i' } }
+			]
+		}
+
+		if((req.query.taxNumber || '') != '')
+			filter['taxNumber'] = { $regex: '' + req.query.taxNumber + '.*', $options: 'i' }
+
+		if((req.query.partyName || '') != '')
+			filter['partyName'] = { $regex: '.*' + req.query.partyName + '.*', $options: 'i' }
+
+
+		db.members.paginate(filter, options).then(resolve).catch(reject)
 	})
 }
 
 function copy(member, req) {
 	return new Promise((resolve, reject) => {
 		let id = req.params.param2 || req.body['id'] || req.query.id || ''
-		let newName = req.body['newName'] || req.body['name'] || ''
+		let newName = req.body['newName'] || req.body['username'] || ''
 
 		if(id == '')
-			return restError.param2(req, reject)
+			restError.param2(req, reject)
 
-		db.priceProviders.findOne({ _id: id })
+		db.members.findOne({ _id: id })
 			.then(doc => {
 				if(dbnull(doc, reject)) {
 					let data = doc.toJSON()
 					data._id = undefined
 					delete data._id
 					if(newName != '') {
-						data.name = newName
+						data.username = newName
 					} else {
-						data.name += ' copy'
+						data.username += ' copy'
 					}
 					data.createdDate = new Date()
 					data.modifiedDate = new Date()
 
-					let newDoc = new db.priceProviders(data)
+					let newDoc = new db.members(data)
 					if(!epValidateSync(newDoc, reject))
 						return
 					newDoc.save()
 						.then(newDoc2 => {
 							let obj = newDoc2.toJSON()
-							obj['newName'] = newDoc2.name
+							obj['newName'] = newDoc2.username
 							resolve(obj)
 						})
 						.catch(reject)
@@ -112,14 +138,24 @@ function copy(member, req) {
 function post(member, req) {
 	return new Promise((resolve, reject) => {
 		let data = req.body || {}
-		let newDoc = new db.priceProviders(data)
-		if(!epValidateSync(newDoc, reject))
-			return
+		if(!data.hasOwnProperty("username"))
+			return reject({ code: "ERROR", message: "username gereklidir." })
 
-		newDoc.save()
-			.then(resolve)
-			.catch(reject)
+		if(data.username.trim() == "")
+			return reject({ code: "ERROR", message: "username boş olamaz." })
 
+		db.members.findOne({ username: data.username })
+			.then(foundDoc => {
+				if(foundDoc != null) {
+					reject({ code: `ALREADY_EXISTS`, message: `Member '${data.username}' zaten var.` })
+				} else {
+					delete data.createdDate
+					delete data.lastOnline
+					delete data.modifiedDate
+					let newDoc = new db.members(data)
+					newDoc.save().then(resolve).catch(reject)
+				}
+			})
 	})
 }
 
@@ -144,22 +180,23 @@ function put(member, req) {
 		data._id = req.params.param1
 
 		data.modifiedDate = new Date()
-		db.priceProviders.findOne({ _id: data._id })
-			.then(doc => {
-				if(dbnull(doc, reject)) {
-
-					let doc2 = Object.assign(doc, data)
-					let newDoc = new db.priceProviders(doc2)
-					newDoc.modifiedDate = new Date()
-
-					if(!epValidateSync(newDoc, reject))
-						return
-					newDoc.save()
-						.then(resolve)
-						.catch(reject)
+		db.members.findOne({ _id: data._id })
+		.then(doc => {
+			if(dbnull(doc, reject)) {
+				delete data.createdDate
+				delete data.lastOnline
+				delete data.modifiedDate
+				if(member.role == 'admin' && doc._id == member._id) {
+					delete data.role
+					delete data.passive
 				}
-			})
-			.catch(reject)
+				let doc2 = Object.assign(doc, data)
+				let newDoc = new db.members(doc2)
+				newDoc.modifiedDate = new Date()
+				newDoc.save().then(resolve).catch(reject)
+			}
+		})
+		.catch(reject)
 	})
 }
 
@@ -172,8 +209,6 @@ function deleteItem(member, req) {
 		if(member._id == data._id) {
 			return reject({ code: 'AUTH_ERROR', message: 'Kendi kendinizi silemezsiniz!' })
 		}
-		db.priceProviders.removeOne(member, { _id: data._id })
-			.then(resolve)
-			.catch(reject)
+		db.members.removeOne(member, { _id: data._id }).then(resolve).catch(reject)
 	})
 }

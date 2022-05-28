@@ -1,0 +1,228 @@
+// scss-docs-start gray-color-variables
+$white: #fff;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+$black: #000;
+// scss-docs-end gray-color-variables
+
+// fusv-disable
+// scss-docs-start gray-colors-map
+$grays: ("100": $gray-100,
+"200": $gray-200,
+"300": $gray-300,
+"400": $gray-400,
+"500": $gray-500,
+"600": $gray-600,
+"700": $gray-700,
+"800": $gray-800,
+"900": $gray-900);
+// scss-docs-end gray-colors-map
+// fusv-enable
+
+// scss-docs-start color-variables
+$blue: #0d6efd;
+$indigo: #6610f2;
+$purple: #6f42c1;
+$pink: #d63384;
+$red: #dc3545;
+$orange: #fd7e14;
+$yellow: #ffc107;
+$sariYesil: #97ca31;
+$green: #198754;
+$teal: #20c997;
+$cyan: #0dcaf0;
+$zima: #8ab4f8;
+
+// scss-docs-end color-variables
+
+// scss-docs-start colors-map
+$colors: ("blue": $blue,
+"indigo": $indigo,
+"purple": $purple,
+"pink": $pink,
+"red": $red,
+"orange": $orange,
+"yellow": $yellow,
+"sariYesil": $sariYesil,
+"green": $green,
+"teal": $teal,
+"cyan": $cyan,
+"zima": $zima,
+"white": $white,
+"gray": $gray-600,
+"gray-dark": $gray-800);
+// scss-docs-end colors-map
+
+// --- THEMES  -------
+$primary: #335476;
+$secondary: #e3cf7f;
+$success: #a97d84;
+$danger: #e82135;
+$info: #3c9ed7;
+$warning: #ffc107;
+$light: #edd9c4;
+$dark: #35363a;
+$zima: $zima;
+
+// ---document profileId list ---
+$temelfatura: #47d1de;
+$ticarifatura: #ffa037;
+$ihracat: #990099;
+$yolcuberaberfatura: #994555;
+$earsivfatura: #994555;
+$temelsiparis: $temelfatura;
+$temelirsaliye: $temelfatura;
+
+// ---document type code list ---
+$satis: #00CC66;
+$iade: #990099;
+$tevkifat: #3333FF;
+$istisna: #101080;
+$ozelmatrah: #0033CC;
+$ihrackayitli: #468847;
+$sevk: $satis;
+$matbudan: #0033CC;
+
+// ---document status types ---
+$draft: #d6c5b8;
+$canceled: #33FF33;
+$cancelled: $canceled;
+$deleted: #333333;
+$pending: #4444FF;
+$queued: #2575a9;
+$processing: #444444;
+$senttogib: #2020FF;
+$approved: #cc9900;
+$partialapproved: #d9b01c;
+$declined: #FF6666;
+$waitingforapprovement: #7e3db9;
+$completed: $success;
+$error: $danger;
+$pending: #8a8486;
+$transferring: #444444;
+$transferred: #55859f;
+$ontheway: #A68855;
+
+$theme-colors: ("primary": $primary,
+"secondary": $secondary,
+"success": $success,
+"info": $info,
+"warning": $warning,
+"danger": $danger,
+"light": $light,
+"dark": $dark,
+"zima": $zima,
+"temelfatura": $temelfatura,
+"ticarifatura": $ticarifatura,
+"ihracat": $ihracat,
+"yolcuberaberfatura": $yolcuberaberfatura,
+"earsivfatura": $earsivfatura,
+"temelsiparis": $temelsiparis,
+"temelirsaliye": $temelirsaliye,
+"satis": $satis,
+"iade": $iade,
+"tevkifat": $tevkifat,
+"ozelmatrah": $ozelmatrah,
+"ihrackayitli": $ihrackayitli,
+"sevk": $sevk,
+"matbudan": $matbudan,
+"draft": $draft,
+"canceled": $canceled,
+"cancelled": $cancelled,
+"deleted": $deleted,
+"pending": $pending,
+"queued": $queued,
+"processing": $processing,
+"senttogib": $senttogib,
+"approved": $approved,
+"partialapproved": $partialapproved,
+"waitingforapprovement": $waitingforapprovement,
+"completed": $completed,
+"error": $error,
+"transferring": $transferring,
+"transferred": $transferred,
+"ontheway": $ontheway);
+
+// Quickly modify global styling by enabling or disabling optional features.
+
+$enable-caret: true;
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: false;
+$enable-transitions: true;
+$enable-reduced-motion: true;
+$enable-smooth-scroll: true;
+$enable-grid-classes: true;
+$enable-cssgrid: false;
+$enable-button-pointers: true;
+$enable-rfs: true;
+$enable-validation-icons: true;
+$enable-negative-margins: true;
+$enable-deprecation-messages: false;
+$enable-important-utilities: true;
+
+$body-bg: $white;
+$body-color: $gray-900;
+$font-size-base: 0.875rem;
+$link-decoration: none;
+$input-btn-font-size: $font-size-base;
+$btn-font-size: $input-btn-font-size;
+
+
+$form-floating-height:            add(2rem, $input-height-border);
+$form-floating-line-height:       1.25;
+$form-floating-padding-x:         $input-padding-x;
+$form-floating-padding-y:         .5rem;
+$form-floating-input-padding-t:   .625rem;
+$form-floating-input-padding-b:   .625rem;
+$form-floating-label-opacity:     .65;
+$form-floating-label-transform:   scale(.85) translateY(-2rem) translateX(-.15rem);
+$form-floating-transition:        opacity .1s ease-in-out, transform .1s ease-in-out;
+
+
+.form-floating {
+	margin-bottom: 0.45rem;
+   margin-top: 0.45rem;
+}
+
+$form-check-input-width:                  1em;
+$form-check-min-height:                   $font-size-base * $line-height-base;
+$form-check-padding-start:                $form-check-input-width + 1.5em;
+$form-check-margin-bottom:                .125rem;
+$form-check-label-color:                  null;
+$form-check-label-cursor:                 null;
+$form-check-transition:                   null;
+
+$form-check-input-active-filter:          brightness(90%);
+
+$form-check-input-bg:                     $input-bg;
+$form-check-input-border:                 1px solid rgba($black, .25);
+$form-check-input-border-radius:          .25em;
+$form-check-radio-border-radius:          50%;
+$form-check-input-focus-border:           $input-focus-border-color;
+$form-check-input-focus-box-shadow:       $input-btn-focus-box-shadow;
+
+$form-check-input-checked-color:          $component-active-color;
+$form-check-input-checked-bg-color:       $component-active-bg;
+$form-check-input-checked-border-color:   $form-check-input-checked-bg-color;
+$form-check-input-checked-bg-image:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$form-check-input-checked-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/></svg>");
+$form-check-radio-checked-bg-image:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'><circle r='2' fill='#{$form-check-input-checked-color}'/></svg>");
+
+$form-check-input-indeterminate-color:          $component-active-color;
+$form-check-input-indeterminate-bg-color:       $component-active-bg;
+$form-check-input-indeterminate-border-color:   $form-check-input-indeterminate-bg-color;
+$form-check-input-indeterminate-bg-image:       url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path fill='none' stroke='#{$form-check-input-indeterminate-color}' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/></svg>");
+
+$form-check-input-disabled-opacity:        .5;
+$form-check-label-disabled-opacity:        $form-check-input-disabled-opacity;
+$form-check-btn-check-disabled-opacity:    $btn-disabled-opacity;
+
+$form-check-inline-margin-end:    1rem;
+

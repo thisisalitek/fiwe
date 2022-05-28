@@ -27,7 +27,7 @@ module.exports = () => new Promise((resolve, reject) => {
 	testControllers(true)
 		.then(() => {
 			require('./routes')(app)
-			require('./pages/index')()
+			require(path.join(__root,'/pages/index'))()
 				.then(() => {
 					eventLog(`[RestAPI]`.cyan, 'started')
 					resolve(app)

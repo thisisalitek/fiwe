@@ -4,23 +4,22 @@ exports.getOne = (dbId, memberId) => new Promise((resolve, reject) => {
 	if(memberId) {
 		filter.owner = memberId
 	}
-	db.dbDefines.findOne(filter, function(err, doc) {
-		if(dberr(err, reject)) {
+	db.dbDefines.findOne(filter)
+		.then(doc => {
 			if(dbnull(doc, reject)) {
 				resolve(doc)
 			}
-		}
-	})
+		})
 })
 
 exports.newUserDb = (member, dbName) => new Promise((resolve, reject) => {
 	if(!dbName)
 		dbName = `DB ${member.username.split('@')[0]}`
 	let userDbSyntax = config.mongodb.newUserDbSyntax || 'fx${_id}'
-	db.dbDefines.findOne({ dbName: dbName, deleted: false, owner: member._id }, (err, foundDoc) => {
-		if(dberr(err, reject))
+	db.dbDefines.findOne({ dbName: dbName, deleted: false, owner: member._id })
+		.then(foundDoc => {
 			if(foundDoc != null) {
-				return reject({ code: `DB_ALREADY_EXISTS`, message: `Database '${dbName}' zaten var.` })
+				reject({ code: `DB_ALREADY_EXISTS`, message: `Database '${dbName}' already exist.` })
 			} else {
 				let dbDefinesId = new ObjectId()
 				let newDoc = new db.dbDefines({
@@ -30,14 +29,12 @@ exports.newUserDb = (member, dbName) => new Promise((resolve, reject) => {
 					userDb: htmlEval(userDbSyntax, { _id: dbDefinesId, username: member.username, role: member.role }),
 					userDbHost: userMongoServerAddress(),
 				})
-				newDoc.save((err, newDoc2) => {
-					if(dberr(err, reject)) {
-						resolve(newDoc2)
-					}
-				})
+				newDoc.save()
+					.then(resolve)
+					.catch(reject)
 			}
 
-	})
+		})
 
 })
 
@@ -60,23 +57,24 @@ exports.editUserDb = (dbId) => new Promise((resolve, reject) => {
 
 
 
-function deleteItem(member, req, res, next, cb) {
-	if(req.params.param1 == undefined)
-		error.param1(req)
+function deleteItem(member, req) {
+	return new Promise((resolve, reject) => {
+		if(req.params.param1 == undefined)
+			error.param1(req)
 
-	let data = req.body || {}
-	data._id = req.params.param1
+		let data = req.body || {}
+		data._id = req.params.param1
 
-	db.dbDefines.findOne({ _id: data._id, deleted: false }, (err, doc) => {
-		if(dberr(err, next))
-			if(dbnull(doc, next)) {
-				doc.deleted = true
-				doc.modifiedDate = new Date()
-				doc.save(function(err, newDoc2) {
-					if(dberr(err, next)) {
-						cb({ success: true })
-					}
-				})
-			}
+		db.dbDefines.findOne({ _id: data._id, deleted: false })
+			.then(doc => {
+				if(dbnull(doc, next)) {
+					doc.deleted = true
+					doc.modifiedDate = new Date()
+					doc.save()
+						.then(() => resolve({ success: true }))
+						.catch(reject)
+				}
+			})
+			.catch(reject)
 	})
 }

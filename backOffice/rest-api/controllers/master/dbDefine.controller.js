@@ -1,94 +1,91 @@
-module.exports = (member, req, res, next, cb) => {
-	if(member.role!='admin'){
-		return restError.auth(req,next)
-	}
+module.exports = (member, req) => new Promise((resolve, reject) => {
+	if(member.role != 'admin')
+		return restError.auth(req, reject)
+
 	switch (req.method) {
 		case 'GET':
 			if(req.params.param1 != undefined) {
-				getOne(member, req, res, next, cb)
+				getOne(member, req).then(resolve).catch(reject)
 			} else {
-				getList(member, req, res, next, cb)
+				getList(member, req).then(resolve).catch(reject)
 			}
 			break
 		case 'POST':
-			post(member, req, res, next, cb)
+			post(member, req).then(resolve).catch(reject)
 			break
 		case 'PUT':
-			put(member, req, res, next, cb)
+			put(member, req).then(resolve).catch(reject)
 			break
 		case 'DELETE':
-			deleteItem(member, req, res, next, cb)
+			deleteItem(member, req).then(resolve).catch(reject)
 			break
 		default:
-			restError.method(req, next)
+			restError.method(req, reject)
 			break
 	}
-}
+})
 
 
-function getOne(member, req, res, next, cb) {
-
-	let filter = { deleted: false }
-	filter._id = req.params.param1
-	db.dbDefines.findOne(filter, function(err, doc) {
-		if(dberr(err, next)) {
-			if(dbnull(doc, next)) {
-				cb(doc)
-			}
-		}
+function getOne(member, req) {
+	return new Promise((resolve, reject) => {
+		let filter = { deleted: false }
+		filter._id = req.params.param1
+		db.dbDefines.findOne(filter)
+			.then(doc => {
+				if(dbnull(doc, reject)) {
+					resolve(doc)
+				}
+			})
+			.catch(reject)
 	})
 }
 
 
-function getList(member, req, res, next, cb) {
-	
-	let options = { page: (req.query.page || 1) }
-	if((req.query.pageSize || req.query.limit)) {
-		options.limit = req.query.pageSize || req.query.limit
-	}
+function getList(member, req) {
+	return new Promise((resolve, reject) => {
 
-	let filter = {
-		deleted: false
-	}
-
-	db.dbDefines.paginate(filter, options, (err, resp) => {
-		if(dberr(err, next)) {
-			cb(resp)
+		let options = { page: (req.query.page || 1) }
+		if((req.query.pageSize || req.query.limit)) {
+			options.limit = req.query.pageSize || req.query.limit
 		}
+
+		let filter = { deleted: false }
+
+		db.dbDefines.paginate(filter, options)
+			.then(resolve)
+			.catch(reject)
 	})
 }
 
-function post(member, req, res, next, cb) {
-	let data = req.body || {}
-	if(!data.hasOwnProperty("dbName"))
-		return next({ code: "ERROR", message: "dbName gereklidir." })
+function post(member, req) {
+	return new Promise((resolve, reject) => {
+		let data = req.body || {}
+		if(!data.hasOwnProperty("dbName"))
+			return reject({ code: "ERROR", message: "dbName required" })
 
-	if(data.dbName.trim() == "")
-		return next({ code: "ERROR", message: "dbName boş olamaz." })
+		if(data.dbName.trim() == "")
+			return reject({ code: "ERROR", message: "dbName required" })
 
-	db.dbDefines.findOne({ dbName: data.dbName, deleted: false }, function(err, foundDoc) {
-		if(dberr(err, next))
-			if(foundDoc != null) {
-				return next({ code: `DB_ALREADY_EXISTS`, message: `Database '${data.dbName}' zaten var.` })
-			} else {
-				delete data.userDb
-				delete data.userDbHost
-				let newDoc = new db.dbDefines(data)
-				newDoc.save(function(err, newDoc2) {
-					if(!err) {
-						newDoc2.userDb = htmlEval(config.mongodb.newUserDbSyntax || '${_id}',newDoc2.toJSON())
-						newDoc2.userDbHost = userMongoServerAddress()
-						newDoc2.save((err, newDoc3) => {
-							if(dberr(err, next)) {
-								cb(newDoc3)
-							}
+		db.dbDefines.findOne({ dbName: data.dbName, deleted: false })
+			.then(foundDoc => {
+				if(foundDoc != null) {
+					reject({ code: `DB_ALREADY_EXISTS`, message: `Database '${data.dbName}' zaten var.` })
+				} else {
+					delete data.userDb
+					delete data.userDbHost
+					let newDoc = new db.dbDefines(data)
+					newDoc.save()
+						.then(newDoc2 => {
+							newDoc2.userDb = htmlEval(config.mongodb.newUserDbSyntax || '${_id}', newDoc2.toJSON())
+							newDoc2.userDbHost = userMongoServerAddress()
+							newDoc2.save()
+								.then(newDoc3 => resolve(newDoc3))
+								.catch(reject)
 						})
-					} else {
-						next({ code: err.name, message: err.message })
-					}
-				})
-			}
-
+						.catch(reject)
+				}
+			})
+			.catch(reject)
 	})
 }
 
@@ -104,47 +101,47 @@ function userMongoServerAddress() {
 	}
 }
 
-function put(member, req, res, next, cb) {
-	if(req.params.param1 == undefined)
-		restError.param1(req)
+function put(member, req) {
+	return new Promise((resolve, reject) => {
+		if(req.params.param1 == undefined)
+			return restError.param1(req, reject)
 
-	let data = req.body || {}
-	data._id = req.params.param1
+		let data = req.body || {}
+		data._id = req.params.param1
 
-	data.modifiedDate = new Date()
-	db.dbDefines.findOne({ _id: data._id}, (err, doc) => {
-		if(dberr(err, next))
-			if(dbnull(doc, next)) {
-				delete data.userDb
-				delete data.userDbHost
+		data.modifiedDate = new Date()
+		db.dbDefines.findOne({ _id: data._id }).then(doc => {
+				if(dbnull(doc, reject)) {
+					delete data.userDb
+					delete data.userDbHost
 
-				let doc2 = Object.assign(doc, data)
-				let newDoc = new db.dbDefines(doc2)
-				newDoc.save((err, newDoc2) => {
-					if(dberr(err, next))
-						cb(newDoc2)
-				})
-			}
+					let doc2 = Object.assign(doc, data)
+					let newDoc = new db.dbDefines(doc2)
+					newDoc.save()
+						.then(resolve)
+						.catch(reject)
+				}
+			})
+			.catch(reject)
 	})
 }
 
-function deleteItem(member, req, res, next, cb) {
-	if(req.params.param1 == undefined)
-		restError.param1(req)
+function deleteItem(member, req) {
+	return new Promise((resolve, reject) => {
+		if(req.params.param1 == undefined)
+			restError.param1(req, reject)
 
-	let data = req.body || {}
-	data._id = req.params.param1
+		let data = req.body || {}
+		data._id = req.params.param1
 
-	db.dbDefines.findOne({ _id: data._id, deleted: false }, (err, doc) => {
-		if(dberr(err, next))
-			if(dbnull(doc, next)) {
+		db.dbDefines.findOne({ _id: data._id, deleted: false }).then(doc => {
+			if(dbnull(doc, reject)) {
 				doc.deleted = true
 				doc.modifiedDate = new Date()
-				doc.save(function(err, newDoc2) {
-					if(dberr(err, next)) {
-						cb({ success: true })
-					}
-				})
+				doc.save()
+				.then(resolve)
+				.catch(reject)
 			}
+		}).catch(reject)
 	})
 }

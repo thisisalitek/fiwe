@@ -1,13 +1,19 @@
 {
 	"dashboard": { "text": "Dashboard", "path": "/dashboard/main", "icon": "fas fa-tachometer-alt" },
 	"projects": { "text": "Projects", "path": "/projects/projects", "icon": "fas fa-building" },
-	"repositories": { "text": "Repositories", "path": "/dashboard/closed", "icon": "fas fa-database" },
+	"repositories": { "text": "Repositories", "path": "/projects/repositories", "icon": "fas fa-database" },
 	"outerWorld": {
 		"text": "Outer World",
 		"icon": "fas fa-cloud",
 		"fields": {
-			"importers": { "text": "Data Importers", "path": "/dashboard/closed", "icon": "fas fa-cloud-arrow-down" },
+			"importers": { "text": "Data Importers", "path": "/outerWorld/importers", "icon": "fas fa-cloud-arrow-down" },
 			"exporters": { "text": "Data Exporters", "path": "/dashboard/closed", "icon": "fas fa-cloud-arrow-up" }
+		}
+	},
+	"settings":{"text":"Ayarlar",  "icon":"fas fa-wrench",
+		"fields":{
+			"extensions":{"text":"Extensions",	"path":"/settings/programs",	"icon":"fa-brands fa-node-js"},
+			"databases":{"text":"Veri Ambarları",	"path":"/settings/databases",	"icon":"fas fa-database"}
 		}
 	},
 	"me": {

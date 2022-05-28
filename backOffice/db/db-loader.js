@@ -7,28 +7,28 @@ mongoosePaginate.paginate.options = {
 }
 global.ObjectId = mongoose.Types.ObjectId
 
-global.userDbHelper = require('./userDbHelper')
+global.userDbHelper = require('./userdb-helper')
 
-global.dberr = (err, cb) => {
-	if(!err) {
-		return true
-	} else {
-		if(!cb) {
-			throw err
-			return false
-		} else {
-			cb(err)
-			return false
-		}
-	}
-}
+// global.dberr = (err, cb) => {
+// 	if(!err) {
+// 		return true
+// 	} else {
+// 		if(!cb) {
+// 			throw err
+// 			return false
+// 		} else {
+// 			cb(err)
+// 			return false
+// 		}
+// 	}
+// }
 
 global.dbnull = (doc, cb, msg = 'Kayıt bulunamadı') => {
-	if(doc != null) {
+	if (doc != null) {
 		return true
 	} else {
 		let err = { code: 'RECORD_NOT_FOUND', message: msg }
-		if(!cb) {
+		if (!cb) {
 			throw err
 			return false
 		} else {
@@ -38,110 +38,111 @@ global.dbnull = (doc, cb, msg = 'Kayıt bulunamadı') => {
 	}
 }
 
-global.sendToTrash = (conn, collectionName, member, filter, cb) => {
-	conn.model(collectionName).findOne(filter, (err, doc) => {
-		if(!err) {
-			function silelim(cb1) {
-				conn.model('recycle').insertMany([{ collectionName: collectionName, documentId: doc._id, document: doc, deletedBy: member.username, deletedById: member._id }], (err) => {
-					if(!err) {
-						conn.model(collectionName).deleteOne(filter, (err, doc) => {
-							cb1(err, doc)
-						})
-					} else {
-						cb1(err)
-					}
-				})
-			}
+global.sendToTrash = (dbModel, collectionName, member, filter) => new Promise((resolve, reject) => {
+	let conn = dbModel.conn
+	dbModel[collectionName].findOne(filter)
+		.then(doc => {
 
-			if(conn.model(collectionName).relations) {
+
+			if (conn.model(collectionName).relations) {
 				let relations = conn.model(collectionName).relations
 				let keys = Object.keys(relations)
 				let index = 0
 				let errorList = []
 
-				function kontrolEt(cb2) {
-					if(index >= keys.length) {
-						cb2(null)
-					} else {
-						repoDbModel(dbModel._id, (err, mdl) => {
-							if(!err) {
-								let k = keys[index]
-								let relationFilter
-								let errMessage = `Bu kayit <b>${k}</b> tablosuna baglidir.`
-								if(Array.isArray(relations[k])) {
-									if(relations[k].length > 0)
-										if(typeof relations[k][0] == 'string') {
-											relationFilter = {}
-											relationFilter[relations[k][0]] = doc._id
-											if(relations[k].length > 1)
-												if(typeof relations[k][1] == 'string') errMessage = relations[k][1]
-										}
-								} else if(typeof relations[k] == 'object') {
-									if(relations[k].field) {
+				let kontrolEt = () => new Promise((resolve, reject) => {
+					if (index >= keys.length)
+						return resolve()
+					getRepoDbModel(dbModel._id)
+						.then(mdl => {
+							let k = keys[index]
+							let relationFilter
+							let errMessage = `Bu kayit <b>${k}</b> tablosuna baglidir.`
+							if (Array.isArray(relations[k])) {
+								if (relations[k].length > 0)
+									if (typeof relations[k][0] == 'string') {
 										relationFilter = {}
-										relationFilter[relations[k].field] = doc._id
-										if(relations[k].filter) Object.assign(relationFilter, relations[k].filter)
-										if(relations[k].message) errMessage = relations[k].message
+										relationFilter[relations[k][0]] = doc._id
+										if (relations[k].length > 1)
+											if (typeof relations[k][1] == 'string') errMessage = relations[k][1]
 									}
-								}
-
-								if(!relationFilter) {
+							} else if (typeof relations[k] == 'object') {
+								if (relations[k].field) {
 									relationFilter = {}
-									relationFilter[relations[k]] = doc._id
+									relationFilter[relations[k].field] = doc._id
+									if (relations[k].filter) Object.assign(relationFilter, relations[k].filter)
+									if (relations[k].message) errMessage = relations[k].message
 								}
-
-								mdl[k].countDocuments(relationFilter, (err, c) => {
-									if(!err) {
-										if(c > 0) errorList.push(`${errMessage} ${c} Kayıt`)
-										index++
-										setTimeout(kontrolEt, 0, cb2)
-									} else {
-										cb2(err)
-									}
-								})
-							} else {
-								cb2(err)
 							}
+
+							if (!relationFilter) {
+								relationFilter = {}
+								relationFilter[relations[k]] = doc._id
+							}
+
+							mdl[k].countDocuments(relationFilter)
+								.then(c => {
+									if (c > 0) errorList.push(`${errMessage} ${c} Kayıt`)
+									index++
+									setTimeout(() => kontrolEt().then(resolve).catch(reject), 0)
+								})
+								.catch(reject)
+
 						})
-					}
-				}
-
-				kontrolEt((err) => {
-					if(!err && errorList.length == 0) {
-						silelim(cb)
-					} else {
-						errorList.unshift('<b>Bağlı kayıt(lar) var. Silemezsiniz!</b>')
-						if(err) errorList.push(err.message)
-						cb({ name: 'RELATION_ERROR', message: errorList.join('\n') })
-					}
+						.catch(reject)
 				})
+
+
+				kontrolEt()
+					.then(() => {
+						if (errorList.length == 0) {
+							resolve()
+						} else {
+							errorList.unshift('<b>Bağlı kayıt(lar) var. Silemezsiniz!</b>')
+							reject({ name: 'RELATION_ERROR', message: errorList.join('\n') })
+						}
+					})
+					.catch((err) => {
+						errorList.unshift('<b>Bağlı kayıt(lar) var. Silemezsiniz!</b>')
+						if (err) errorList.push(err.message)
+						reject({ name: 'RELATION_ERROR', message: errorList.join('\n') })
+					})
+
 			} else {
-				silelim(cb)
+				let rubbishDoc = new dbModel.recycle({ collectionName: collectionName, documentId: doc._id, document: doc, deletedBy: member.username, deletedById: member._id })
+				if (!epValidateSync(rubbishDoc, reject))
+					return
+				rubbishDoc
+					.save()
+					.then(() => {
+						dbModel[collectionName].deleteOne(filter)
+							.then(resolve)
+							.catch(reject)
+					})
+					.catch(reject)
 			}
+		})
+		.catch(reject)
+})
 
-		} else {
-			cb(err)
-		}
-	})
-}
-
-global.epValidateSync = (doc, cb) => {
+global.epValidateSync = (doc, reject) => {
 	let err = doc.validateSync()
-	if(err) {
+	if (err) {
 		let keys = Object.keys(err.errors)
 		let returnError = { code: 'HATALI_VERI', message: '' }
-		keys.forEach((e, index) => {
-			returnError.message += `#${(index+1).toString()} : ${err.errors[e].message}`
-			if(index < keys.length - 1)
-				returnError.message += '  |  '
-		})
-
-		if(cb) {
-			cb(returnError)
-			return false
+		if (keys.length == 1) {
+			returnError.message = err.errors[keys[0]].message
 		} else {
-			throw returnError
+			keys.forEach((e, index) => {
+				returnError.message += `#${(index + 1).toString()} : ${err.errors[e].message}`
+				if (index < keys.length - 1)
+					returnError.message += '\n'
+			})
+
 		}
+
+		reject(returnError)
+		return false
 	} else {
 		return true
 	}
@@ -149,8 +150,8 @@ global.epValidateSync = (doc, cb) => {
 
 mongoose.set('debug', false)
 
-process.on('SIGINT', function() {
-	mongoose.connection.close(function() {
+process.on('SIGINT', function () {
+	mongoose.connection.close(function () {
 		eventLog('Mongoose default connection disconnected through app termination')
 		process.exit(0)
 	})
@@ -180,7 +181,7 @@ function initRepoDb() {
 	collectionLoader(path.join(__dirname, 'repo'), '.collection.js', ``)
 		.then(holder => {
 			repoHolder = holder
-			if(config.mongodb.server1 != '') {
+			if (config.mongodb.server1 != '') {
 				serverConn1 = mongoose.createConnection(config.mongodb.server1, { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: true })
 				serverConn1.on('connected', () => {
 					eventLog('[MongoDb.server1]'.cyan, `${config.mongodb.server1.brightBlue} ${'connected'.brightGreen}`)
@@ -191,7 +192,7 @@ function initRepoDb() {
 				serverConn1.on('disconnected', () => eventLog(`${config.mongodb.server1.brightBlue} disconnected`))
 
 			}
-			if(config.mongodb.server2 != '') {
+			if (config.mongodb.server2 != '') {
 				serverConn2 = mongoose.createConnection(config.mongodb.server2, { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: true })
 				serverConn2.on('connected', () => {
 					eventLog('[MongoDb.server1]'.cyan, `${config.mongodb.server2.brightBlue} ${'connected'.brightGreen}`)
@@ -208,12 +209,12 @@ function initRepoDb() {
 }
 
 global.getRepoDbModel = (_id) => new Promise((resolve, reject) => {
-	if(_id == '')
+	if (_id == '')
 		return reject('Repo Database was not found1')
 
-	db.dbDefines.findOne({ _id: _id, deleted: false, passive: false }, (err, doc) => {
-		if(dberr(err, reject)) {
-			if(doc == null)
+	db.dbDefines.findOne({ _id: _id, deleted: false, passive: false })
+		.then(doc => {
+			if (doc == null)
 				return reject('Repo Database was not found')
 
 			let dbModel = { get nameLog() { return dbNameLog(doc.dbName) } }
@@ -235,14 +236,14 @@ global.getRepoDbModel = (_id) => new Promise((resolve, reject) => {
 					break
 			}
 
-			dbModel.free = function() {
+			dbModel.free = function () {
 				Object.keys(dbModel.conn.models).forEach((key) => {
 					delete dbModel.conn.models[key]
-					if(dbModel.conn.collections[key] != undefined)
+					if (dbModel.conn.collections[key] != undefined)
 						delete dbModel.conn.collections[key]
-					if(dbModel.conn.base != undefined) {
-						if(dbModel.conn.base.modelSchemas != undefined)
-							if(dbModel.conn.base.modelSchemas[key] != undefined)
+					if (dbModel.conn.base != undefined) {
+						if (dbModel.conn.base.modelSchemas != undefined)
+							if (dbModel.conn.base.modelSchemas[key] != undefined)
 								delete dbModel.conn.base.modelSchemas[key]
 					}
 				})
@@ -250,8 +251,8 @@ global.getRepoDbModel = (_id) => new Promise((resolve, reject) => {
 
 			Object.keys(repoHolder).forEach((key) => {
 				Object.defineProperty(dbModel, key, {
-					get: function() {
-						if(dbModel.conn.models[key]) {
+					get: function () {
+						if (dbModel.conn.models[key]) {
 							return dbModel.conn.models[key]
 						} else {
 							return repoHolder[key](dbModel)
@@ -263,23 +264,24 @@ global.getRepoDbModel = (_id) => new Promise((resolve, reject) => {
 
 			resolve(dbModel)
 
-		}
-	})
+
+		})
+		.catch(reject)
 })
 
 
 
 function connectMongoDatabase(collectionFolder, mongoAddress, dbObj) {
 	return new Promise((resolve, reject) => {
-		if(collectionFolder && mongoAddress && !dbObj.conn) {
+		if (collectionFolder && mongoAddress && !dbObj.conn) {
 			collectionLoader(path.join(__dirname, collectionFolder), '.collection.js', ``)
 				.then((holder) => {
 					dbObj.conn = mongoose.createConnection(mongoAddress, { useNewUrlParser: true, useUnifiedTopology: true, autoIndex: true })
 					dbObj.conn.on('connected', () => {
 						Object.keys(holder).forEach((key) => {
-							dbObj[key] = holder[key](dbObj.conn)
+							dbObj[key] = holder[key](dbObj)
 						})
-						if(dbObj.conn.active != undefined) {
+						if (dbObj.conn.active != undefined) {
 							eventLog(dbObj.nameLog, 're-connected')
 						} else {
 							eventLog(dbObj.nameLog, 'connected')
@@ -309,7 +311,6 @@ function connectMongoDatabase(collectionFolder, mongoAddress, dbObj) {
 	})
 }
 
-
 function collectionLoader(folder, suffix, expression) {
 	return new Promise((resolve, reject) => {
 		try {
@@ -317,10 +318,10 @@ function collectionLoader(folder, suffix, expression) {
 			let files = fs.readdirSync(folder)
 			files.forEach((e) => {
 				let f = path.join(folder, e)
-				if(!fs.statSync(f).isDirectory()) {
+				if (!fs.statSync(f).isDirectory()) {
 					let fileName = path.basename(f)
 					let apiName = fileName.substr(0, fileName.length - suffix.length)
-					if(apiName != '' && (apiName + suffix) == fileName) {
+					if (apiName != '' && (apiName + suffix) == fileName) {
 						collectionHolder[apiName] = require(f)
 					}
 				}

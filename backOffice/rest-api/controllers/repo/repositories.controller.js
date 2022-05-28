@@ -41,7 +41,7 @@ function copy(dbModel, member, req) {
 		if (id == '')
 			restError.param2(req, reject)
 
-		dbModel.projects.findOne({ _id: id }).then(doc => {
+		dbModel.repositories.findOne({ _id: id }).then(doc => {
 			if (dbnull(doc, reject)) {
 				let data = doc.toJSON()
 				data._id = undefined
@@ -54,7 +54,7 @@ function copy(dbModel, member, req) {
 				data.createdDate = new Date()
 				data.modifiedDate = new Date()
 
-				let newDoc = new dbModel.projects(data)
+				let newDoc = new dbModel.repositories(data)
 				if (!epValidateSync(newDoc, reject))
 					return
 				newDoc.save()
@@ -85,6 +85,8 @@ function getList(dbModel, member, req) {
 			'name': 1
 		}
 
+		if ((req.query.projectId || '') != '')
+			filter['projectId'] = req.query.projectId
 
 		if ((req.query.passive || '') != '')
 			filter['passive'] = req.query.passive
@@ -103,7 +105,7 @@ function getList(dbModel, member, req) {
 			]
 		}
 
-		dbModel.projects.paginate(filter, options).then(resolve).catch(reject)
+		dbModel.repositories.paginate(filter, options).then(resolve).catch(reject)
 	})
 }
 
@@ -114,7 +116,7 @@ function getIdList(dbModel, member, req) {
 
 		filter['_id'] = { $in: idList }
 
-		dbModel.projects.find(filter)
+		dbModel.repositories.find(filter)
 			.then(resolve)
 			.catch(reject)
 	})
@@ -123,7 +125,7 @@ function getIdList(dbModel, member, req) {
 
 function getOne(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
-		dbModel.projects.findOne({ _id: req.params.param1 })
+		dbModel.repositories.findOne({ _id: req.params.param1 })
 			.then(doc => {
 				if (dbnull(doc, reject)) {
 					resolve(doc)
@@ -137,7 +139,7 @@ function post(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
 		let data = req.body || {}
 		data._id = undefined
-		let newDoc = new dbModel.projects(data)
+		let newDoc = new dbModel.repositories(data)
 		if (!epValidateSync(newDoc, reject))
 			return
 		newDoc.save().then(resolve).catch(reject)
@@ -152,11 +154,12 @@ function put(dbModel, member, req) {
 		data._id = req.params.param1
 		data.modifiedDate = new Date()
 
-		dbModel.projects.findOne({ _id: data._id })
+		dbModel.repositories.findOne({ _id: data._id })
 			.then(doc => {
 				if (dbnull(doc, reject)) {
 					let doc2 = Object.assign(doc, data)
-					let newDoc = new dbModel.projects(doc2)
+					let newDoc = new dbModel.repositories(doc2)
+
 					if (!epValidateSync(newDoc, reject))
 						return
 					newDoc.save().then(resolve).catch(reject)
@@ -172,6 +175,6 @@ function deleteItem(dbModel, member, req) {
 			return restError.param1(req, next)
 		let data = req.body || {}
 		data._id = req.params.param1
-		dbModel.projects.removeOne(member, { _id: data._id }).then(resolve).catch(reject)
+		dbModel.repositories.removeOne(member, { _id: data._id }).then(resolve).catch(reject)
 	})
 }

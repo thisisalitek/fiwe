@@ -8,7 +8,7 @@
 			"button1": {
 				"text": "Parolamı değiştir",
 				"type": "button",
-				"href": "/login/changepassword?token=${global.token}&ret=${encodeURIComponent(location.href)}",
+				"href": "/login.html?ret=${encodeURIComponent(location.href)}#changepassword",
 				"class": "btn btn-danger",
 				"icon": "fas fa-key",
 				"col": "col-md-6"

@@ -1,7 +1,7 @@
 module.exports=function(dbModel){
 	let collectionName=path.basename(__filename,'.collection.js')
 	let schema = mongoose.Schema({
-		name: {type: String, required: [true,'Isim gereklidir.']},
+		name: {type: String, trim:true, required: [true,'Isim gereklidir.']},
 		type: {type: String, required: [true,'Program türü gereklidir.'],enum:['collection-process','file-importer','file-exporter','connector-importer','connector-exporter','email','sms']},
 		collections:[{
 			name:{type :String, default:''},
@@ -60,6 +60,7 @@ module.exports=function(dbModel){
 	schema.plugin(mongooseAggregatePaginate)
 
 	let model=dbModel.conn.model(collectionName, schema, collectionName)
-	model.removeOne=(member, filter,cb)=>{ sendToTrash(dbModel,collectionName,member,filter,cb) }
+	model.removeOne=(member, filter)=>sendToTrash(dbModel,collectionName,member,filter)
+	
 	return model
 }

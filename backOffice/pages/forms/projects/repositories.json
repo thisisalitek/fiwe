@@ -3,6 +3,7 @@
 		{
 			"type": "grid",
 			"fields": {
+				"projectId":{"text":"Project", "type":"remoteLookup","dataSource":{"url":"/db/projects"}},
 				"name":{"text":"Name", "type":"string"},
 				"description":{"text":"Description", "type":"string"},
 				"passive":{"text":"Passive?","type":"boolean"}
@@ -16,13 +17,13 @@
 					"delete": true,
 					"view": false,
 					"print": false,
-					"copy": false
+					"copy": true
 				}
 			},
 			"dataSource": {
 				"type":"remote",
 				"method":"GET",
-				"url":"/db/projects"
+				"url":"/db/repositories"
 			}
 
 		}
@@ -31,13 +32,14 @@
 		{
 			"type":"form",
 			"fields": {
+				"projectId":{"text":"Project", "type":"remoteLookup","dataSource":{"url":"/db/projects"}},
 				"name":{"text":"Name", "type":"string"},
 				"description":{"text":"Description", "type":"string"},
 				"passive":{"text":"Passive?","type":"boolean"}
 			},
 			"dataSource": {
 				"method":"GET",
-				"url":"/db/projects"
+				"url":"/db/repositories"
 			}
 		}
 	]

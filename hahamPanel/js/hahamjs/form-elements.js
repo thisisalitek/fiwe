@@ -4,13 +4,13 @@ function frm_Card(parentId, item, cb) {
 	let s = `
 	<div class="${item.col || ''} p-1 pb-1 ${item.visible===false?'hidden':''}">
 	<div class="card cerceve1 ${item.level>1?'child':'mother'} ${item.class || ''}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" >
-		<div class="card-header${item.showHeader===false?'d-none':''}"  >
+		<div class="card-header ${item.showHeader===false?'d-none':''}"  >
 			<span class="hand-pointer" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}">
 			<a class="btn btn-collapse ${item.collapsed?'collapsed':''}" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}" ><i class="fas fa-caret-up fa-2x"></i></a>	
 			${item.text}${helpButton(item)}
 			</span>
 		</div>
-		<div  id="cardCollapse${item.id}" class="card-body  card-collapse collapse p-2 pt-0 ${item.collapsed?'collapsed':'show'}">
+		<div  id="cardCollapse${item.id}" class="card-body  card-collapse collapse ${item.collapsed?'collapsed':'show'}">
 			<div class="row" id="${item.id}">
 			${item.html || item.controls || ''}
 			</div>
@@ -68,7 +68,7 @@ function frm_GInput(input, item) {
 	} else {
 		return `
 		<div class="${item.col || 'col-12'} p-1">
-		<div class="g-input  ${item.visible===false?'d-none':''}">
+		<div class="form-floating  ${item.visible===false?'d-none':''}">
 		${input}
 		<label for="${item.id}" class="">${itemLabelCaption(item)}${helpButton(item)}</label>
 		
@@ -197,7 +197,7 @@ function frm_Button(parentId, item, cb) {
 function frm_TextareaBox(parentId, item, cb) {
 
 	let s = `
-	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''}"  style="font-family: courier new"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>
+	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''}"  style="font-family: courier new;height:auto;"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>
 	<input type="hidden" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id}" name="${item.name}" >
 	`
 
@@ -468,7 +468,7 @@ function frm_CheckBoxLookup(parentId, item, cb) {
 	let s = ``
 
 	let input = `
-	<select name="${item.name}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="form-control p-0 m-0 ${item.class || ''}" title="${item.title || item.text || ''}">
+	<select name="${item.name}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="form-control ${item.class || ''}" title="${item.title || item.text || ''}">
 	<option value="">&#x2315;</option>
 	<option value="true" ${(item.value!=undefined?item.value:'').toString()=='true'?'selected':''}><i class="fas fa-check-square text-primary"></i> Evet</option>
 	<option value="false" ${(item.value!=undefined?item.value:'').toString()=='false'?'selected':''}><i class="far fa-square text-dark"></i> Hayır</option>
@@ -495,10 +495,6 @@ function frm_RemoteLookup(parentId, item, cb) {
 
 	let s = ``
 
-	// let input = `
-	// <input type="hidden" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  name="${item.name}" value="${item.value!=undefined?item.value:''}">
-	// <input type="hidden" level="${item.level || ''}" id="${item.id}-obj"  value="">
-	// `
 	let input = `
 	<input type="hidden" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  name="${item.name}" value="${item.value!=undefined?item.value:''}">
 	<input type="hidden" id="${item.id}-obj"  value="">
@@ -529,7 +525,7 @@ function frm_RemoteLookup(parentId, item, cb) {
 		s = input
 	} else {
 		s = `<div class="${item.col || ''} p-1 ${item.visible===false?'hidden':''}">
-		<div class="g-input">
+		<div class="form-floating">
 		${input}
 		<label for="${item.id}-autocomplete-text" class="text-nowrap"><i class="fas fa-search"></i> ${item.text || ''}</label>
 		</div>
@@ -575,7 +571,7 @@ function frm_DateRangeBox(parentId, item, cb) {
 	let s = `
 	<div class="${item.col || 'col-md-auto'} p-1">
 	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="d-md-flex m-0 p-0">
-		<div class="g-input">
+		<div class="form-floating">
 			<select class="form-control ${item.class || ''}" name="cbDate" id="cbDate">
 			<option value="">Tarih</option>
 			<option value="today">Bugün</option>
@@ -592,11 +588,11 @@ function frm_DateRangeBox(parentId, item, cb) {
 			<label for="cbDate" class="">Tarih</label>
 		</div>
 		<div class="d-md-flex">
-			<div class="g-input">
+			<div class="form-floating">
 				<input type="date" name="date1" id="date1" class="form-control" value="${moment().format('YYYY-MM-DD')}">
 				<label for="date1" class="">Başlangıç</label>
 			</div>
-			<div class="g-input">
+			<div class="form-floating">
 				<input type="date" name="date2" id="date2" class="form-control" value="${moment().format('YYYY-MM-DD')}">
 				<label for="date2" class="">Bitiş</label>
 			</div>

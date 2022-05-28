@@ -1,100 +1,94 @@
-module.exports = (member,  req, res, next, cb) => {
+module.exports = (member, req) => new Promise((resolve, reject) => {
 	switch (req.method) {
 		case 'GET':
 			if(req.params.param1 == undefined || req.params.param1 == 'profile') {
-				
-				getMyProfile(member, req, res, next, cb)
+
+				getMyProfile(member, req).then(resolve).catch(reject)
 			} else if(req.params.param1 == 'notifications') {
 				if(req.params.param2 != undefined) {
-					getOneNotification(member, req, res, next, cb)
+					getOneNotification(member, req).then(resolve).catch(reject)
 				} else {
-					getNotificationList(member, req, res, next, cb)
+					getNotificationList(member, req).then(resolve).catch(reject)
 				}
 			} else {
-				restError.param1(req, next)
+				restError.param1(req, reject)
 			}
 
 			break
 		case 'PUT':
 			if(req.params.param1 == undefined || req.params.param1 == 'profile') {
-				put(member, req, res, next, cb)
+				put(member, req).then(resolve).catch(reject)
 			} else {
-				restError.param1(req, next)
+				restError.param1(req, reject)
 			}
 
 			break
 		default:
-			restError.method(req, next)
+			restError.method(req, reject)
 			break
 	}
-}
+})
 
 
-function getMyProfile(member, req, res, next, cb) {
-	db.members.findOne({ _id: member._id },(err, doc) => {
-		if(dberr(err, next)) {
-			if(dbnull(doc, next)) {
-				let obj=doc.toJSON()
-				if(obj.db && obj.db.integrationCode!=''){
-					obj.approved=true
-				}else{
-					obj.approved=false
+function getMyProfile(member, req) {
+	return new Promise((resolve, reject) => {
+		db.members.findOne({ _id: member._id }).then(doc => {
+			if(dbnull(doc, reject)) {
+				let obj = doc.toJSON()
+				if(obj.db && obj.db.integrationCode != '') {
+					obj.approved = true
+				} else {
+					obj.approved = false
 				}
-				cb(obj)
+				resolve(obj)
 			}
-		}
+		}).catch(reject)
 	})
 }
 
 
-function put(member, req, res, next, cb) {
-	db.members.findOne({ _id: member._id }, (err, doc) => {
-		if(dberr(err, next)) {
-			if(dbnull(doc, next)) {
-				let data = req.body || {}
-				doc.name = data.name || ''
-				doc.lastName = data.lastName || ''
-				doc.gender = data.gender || doc.gender
-				if(data.db){
-					doc.db.integrationCode=data.db.integrationCode || ''
-					doc.db.partyName=data.db.partyName || ''
-					doc.db.taxNumber=data.db.taxNumber || ''
-				}
-				doc.save((err,doc2)=>{
-					if(dberr(err, next)) {
-						cb(doc2)
+function put(member, req) {
+	return new Promise((resolve, reject) => {
+		db.members.findOne({ _id: member._id }).then(doc => {
+				if(dbnull(doc, reject)) {
+					let data = req.body || {}
+					doc.name = data.name || ''
+					doc.lastName = data.lastName || ''
+					doc.gender = data.gender || doc.gender
+					if(data.db) {
+						doc.db.integrationCode = data.db.integrationCode || ''
+						doc.db.partyName = data.db.partyName || ''
+						doc.db.taxNumber = data.db.taxNumber || ''
 					}
-				})
-			}
-		}
+					doc.save()
+						.then(resolve)
+						.catch(reject)
+				}
+			})
+			.catch(reject)
 	})
 }
 
-function getNotificationList(member, req, res, next, cb) {
-	let options = {
-		page: (req.query.page || 1)
-	}
-
-	if((req.query.pageSize || req.query.limit))
-		options['limit'] = req.query.pageSize || req.query.limit
-
-	let filter = { member: member._id }
-
-	if((req.query.isRead || '') != '')
-		filter['isRead'] = req.query.isRead
-
-	db.notifications.paginate(filter, options, (err, resp) => {
-		if(dberr(err, next)) {
-			cb(resp)
+function getNotificationList(member, req) {
+	return new Promise((resolve, reject) => {
+		let options = {
+			page: (req.query.page || 1)
 		}
+
+		if((req.query.pageSize || req.query.limit))
+			options['limit'] = req.query.pageSize || req.query.limit
+
+		let filter = { member: member._id }
+
+		if((req.query.isRead || '') != '')
+			filter['isRead'] = req.query.isRead
+
+		db.notifications.paginate(filter, options).then(resolve).catch(reject)
 	})
 }
 
-function getOneNotification(member, req, res, next, cb) {
-
-	db.notifications.findOne({ _id: req.params.param2, member: member._id }, (err, doc) => {
-		if(dberr(err, next)) {
-			cb(doc)
-		}
+function getOneNotification(member, req) {
+	return new Promise((resolve, reject) => {
+		db.notifications.findOne({ _id: req.params.param2, member: member._id }).then(resolve).catch(reject)
 	})
 }

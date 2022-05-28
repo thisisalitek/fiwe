@@ -22,7 +22,7 @@ module.exports=function(dbModel){
 	schema.plugin(mongooseAggregatePaginate)
 
 	let model=dbModel.conn.model(collectionName, schema, collectionName)
-	model.removeOne=(member, filter,cb)=>{ sendToTrash(dbModel,collectionName,member,filter,cb) }
+	model.removeOne=(member, filter)=>sendToTrash(dbModel,collectionName,member,filter)
 
 	return model
 }

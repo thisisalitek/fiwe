@@ -31,39 +31,38 @@ let loginInfo = {
 
 let pages = {
 	index: `
-			<h2 class="mb-3 text-center">Login</h2>
-					<div class="d-flex g-input  pb-3">
-						<input type="text" class="form-control" id="username" name="username" placeholder=" " autocomplete="username" autocapitalize="none" value="${q.username || ''}">
-						<label for="username">Phone or email</label>
-					</div>
-				<div class="d-flex mt-4 justify-content-between align-items-center">
-					<a class="skip-enter-next" href="#signup">Sign Up</a>
-					<a class="btn btn-primary px-3" href="javascript:nextToPassword()">Next</a>
-				</div>
+		<div class="title">Login</div>
+			<div class="d-flex form-floating  pb-3">
+				<input type="text" class="form-control" id="username" name="username" placeholder=" " autocomplete="username" autocapitalize="none" value="${q.username || ''}">
+				<label for="username">Phone or email</label>
+			</div>
+		<div class="d-flex mt-4 justify-content-between align-items-center">
+			<a class="skip-enter-next" href="#signup">Sign Up</a>
+			<a class="btn btn-primary px-3" href="javascript:nextToPassword()">Next</a>
+		</div>
 	`,
 	password: `
-		<h3 class="text-center" >${q.username || ''}</h3>
-	<div class="d-flex g-input ps-1 pb-3">
+	<div class="title">${q.username || ''}</div>
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="password" class="form-control" id="password" name="password" autocomplete="off" placeholder=" ">
 		<label for="password">Password</label>
 	</div>
-<a class="skip-enter-next" href="#forgot">Forgot your password?</a>
-<div class="d-flex mt-4 justify-content-between ">
-	
-	<a class="skip-enter-next" href="#">Back</a>
-	<a class="btn btn-primary" href="javascript:login()">Login</a>
-</div>`,
+	<a class="skip-enter-next" href="#forgot">Forgot your password?</a>
+	<div class="d-flex mt-4 justify-content-between ">
+		<a class="skip-enter-next" href="#">Back</a>
+		<a class="btn btn-primary" href="javascript:login()">Login</a>
+	</div>`,
 	signup: `
-	<h3 class="text-center" >Sign up</h3>
-<div class="d-flex g-input ps-1 pb-3">
+	<div class="title" >Sign up</div>
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="text" class="form-control" id="username" name="username" placeholder=" " autocomplete="off" autocapitalize="none" value="">
 		<label for="username">Phone or email</label>
 	</div>
-	<div class="d-flex g-input ps-1 pb-3">
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="password" class="form-control" id="password" name="password" placeholder=" " autocomplete="off" autocapitalize="none" value="">
 		<label for="password">Password</label>
 	</div>
-	<div class="d-flex g-input ps-1 pb-3">
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="password" class="form-control" id="rePassword" name="rePassword" placeholder=" " autocomplete="off" autocapitalize="none" value="">
 		<label for="rePassword">Re-password</label>
 	</div>
@@ -74,45 +73,42 @@ let pages = {
 </div>
 	`,
 	verify: `
-	<h2 class="mb-3 text-center">Verify</h2>
-	<h3 class="text-center" >${q.username || ''}</h3>
-<div class="d-flex g-input ps-1 pb-3">
+	<div class="title">Verify</div>
+	<div class="text-center" >${q.username || ''}</div>
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="text" class="form-control auth-code-input" id="authCode" name="authCode" placeholder=" " autocomplete="off" autocapitalize="none" value="">
 		<label for="authCode">Auth Code</label>
 	</div>
-	
-
-<div class="d-flex mt-4 justify-content-between align-items-center">
-	<a class="skip-enter-next" href="">Back</a>
-	<a id="btnVerify" class="btn btn-primary" href="javascript:verify()">Verify</a>
-</div>
+	<div class="d-flex mt-4 justify-content-between align-items-center">
+		<a class="skip-enter-next" href="">Back</a>
+		<a id="btnVerify" class="btn btn-primary" href="javascript:verify()">Verify</a>
+	</div>
 	`,
 	forgot: `
-			<h3 class="mb-3 text-center">Forgot Password</h3>
-					<div class="d-flex g-input  pb-3">
-						<input type="text" class="form-control" id="forgotUsername" name="forgotUsername" placeholder=" " autocomplete="forgotUsername" autocapitalize="none" value="${q.username || ''}">
-						<label for="forgotUsername">Phone or email</label>
-					</div>
-				<div class="d-flex mt-4 justify-content-between align-items-center">
-					<a class="skip-enter-next" href="">Back</a>
-					<a class="btn btn-primary px-3" href="javascript:forgotPass()">Send Reset Link</a>
-				</div>
+	<div class="title">Forgot Password</div>
+		<div class="d-flex form-floating  pb-3">
+			<input type="text" class="form-control" id="forgotUsername" name="forgotUsername" placeholder=" " autocomplete="forgotUsername" autocapitalize="none" value="${q.username || ''}">
+			<label for="forgotUsername">Phone or email</label>
+		</div>
+	<div class="d-flex mt-4 justify-content-between align-items-center">
+		<a class="skip-enter-next" href="">Back</a>
+		<a class="btn btn-primary px-3" href="javascript:forgotPass()">Send Reset Link</a>
+	</div>
 	`,
 	reset: `
-	<h3 class="text-center" >Reset Password</h3>
-	<div class="d-flex g-input ps-1 pb-3">
+	<div class="title" >Reset Password</div>
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="password" class="form-control" id="password" name="password" placeholder=" " autocomplete="off" autocapitalize="none" value="">
 		<label for="password">Parola</label>
 	</div>
-	<div class="d-flex g-input ps-1 pb-3">
+	<div class="d-flex form-floating ps-1 pb-3">
 		<input type="password" class="form-control" id="rePassword" name="rePassword" placeholder=" " autocomplete="off" autocapitalize="none" value="">
 		<label for="rePassword">Tekrar parola</label>
 	</div>
-
-<div class="d-flex mt-4 justify-content-between align-items-center">
-	<a class="skip-enter-next" href="">Back</a>
-	<a id="btnCreate" class="btn btn-primary" href="javascript:resetPass()">Reset</a>
-</div>
+	<div class="d-flex mt-4 justify-content-between align-items-center">
+		<a class="skip-enter-next" href="">Back</a>
+		<a id="btnCreate" class="btn btn-primary" href="javascript:resetPass()">Reset</a>
+	</div>
 	`,
 }
 

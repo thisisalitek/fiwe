@@ -24,37 +24,29 @@ if(config.senderTemplates) {
 	senderTemplates = Object.assign({}, senderTemplates, config.senderTemplates)
 }
 
-exports.sendAuthCode = (username, authCode, next, cb) => {
+exports.sendAuthCode = (username, authCode) => new Promise((resolve, reject) => {
 	let data = { username: username, authCode: authCode }
 	if(util.validEmail(username)) {
-		sendMail(username, htmlEval(senderTemplates.sendAuthCode.mail.subject, data), htmlEval(senderTemplates.sendAuthCode.mail.body, data), next, (data) => {
-			cb(data)
-		})
+		sendMail(username, htmlEval(senderTemplates.sendAuthCode.mail.subject, data), htmlEval(senderTemplates.sendAuthCode.mail.body, data), reject, resolve)
 	} else if(util.validTelephone(username)) {
-		sendSms(username, htmlEval(senderTemplates.sendAuthCode.sms.body, data), next, (data) => {
-			cb(data)
-		})
+		sendSms(username, htmlEval(senderTemplates.sendAuthCode.sms.body, data), reject, resolve)
 	} else {
-		return next({ code: 'USERNAME_WRONG', message: 'Kullanici adi hatali.' })
+		return reject({ code: 'USERNAME_WRONG', message: 'Kullanici adi hatali.' })
 	}
-}
+})
 
-exports.sendForgotPassword = (username, password, resetPassCode, next, cb) => {
+exports.sendForgotPassword = (username, password, resetPassCode) => new Promise((resolve, reject) => {
 	let data = { username: username, password: password, resetPassCode: resetPassCode, base_uri: config.base_uri }
 	if(util.validEmail(username)) {
-		let subject= htmlEval(senderTemplates.sendForgotPassword.mail.subject, data)
-		let body= htmlEval(senderTemplates.sendForgotPassword.mail.body, data)
-		sendMail(username, subject, body, next, (data) => {
-			cb(data)
-		})
+		let subject = htmlEval(senderTemplates.sendForgotPassword.mail.subject, data)
+		let body = htmlEval(senderTemplates.sendForgotPassword.mail.body, data)
+		sendMail(username, subject, body, reject, resolve)
 	} else if(util.validTelephone(username)) {
-		sendSms(username, htmlEval(senderTemplates.sendForgotPassword.sms.body, data), next, (data) => {
-			cb(data)
-		})
+		sendSms(username, htmlEval(senderTemplates.sendForgotPassword.sms.body, data), reject, resolve)
 	} else {
-		return next({ code: 'USERNAME_WRONG', message: 'Kullanici adi hatali.' })
+		return reject({ code: 'USERNAME_WRONG', message: 'Kullanici adi hatali.' })
 	}
-}
+})
 
 function sendSms(phonenumber, message, next, callback) {
 	var options = {
@@ -119,7 +111,7 @@ function sendMail(email, subject, body, next, callback) {
 		if(!err) {
 			callback(data)
 		} else {
-			
+
 			next(err)
 		}
 	})

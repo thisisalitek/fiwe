@@ -13,16 +13,17 @@ let maxVersion = ''
 
 module.exports = ()=>new Promise((resolve, reject) => {
 
-	portalConstants.clientMenu = loadJSONFile(path.join(__dirname, '/client/client-menu.json'))
+	portalConstants.clientMenu = loadJSONFile(path.join(__dirname, '/client-menu.json'))
 	repairMenu(portalConstants.clientMenu)
 
-	portalConstants.adminMenu = loadJSONFile(path.join(__dirname, '/admin/admin-menu.json'))
+	portalConstants.adminMenu = loadJSONFile(path.join(__dirname, '/admin-menu.json'))
 	repairMenu(portalConstants.adminMenu)
 
 	portalConstants.staticValues = loadJSONFile(path.join(__dirname, '/static-values.json'))
 
-	portalConstants.clientPages = getJSONPages(path.join(__dirname, '/client/forms'), '.json', 'page')
-	portalConstants.adminPages = getJSONPages(path.join(__dirname, '/admin/forms'), '.json', 'page')
+	portalConstants.pages = getJSONPages(path.join(__dirname, '/forms'), '.json', 'page')
+	// portalConstants.clientPages = getJSONPages(path.join(__dirname, '/client/forms'), '.json', 'page')
+	// portalConstants.adminPages = getJSONPages(path.join(__dirname, '/admin/forms'), '.json', 'page')
 	portalConstants.widgets = getJSONPages(path.join(__dirname, '/widgets'), '.json', 'widget')
 	portalConstants.javascripts = getJSFiles(path.join(__dirname, '/javascripts'), '.js', 'js file')
 	resolve()

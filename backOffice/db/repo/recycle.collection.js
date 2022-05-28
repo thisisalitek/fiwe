@@ -15,6 +15,7 @@ module.exports=function(dbModel){
 	schema.on('init', (model)=>{})
 	schema.plugin(mongoosePaginate)
 	
+	
 	let model=dbModel.conn.model(collectionName, schema, collectionName)
 	return model
 }

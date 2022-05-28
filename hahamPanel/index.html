@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="tr" class="dark">
-
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<title config-ui="title"></title>
+	<title config-ui="title">BrandName</title>
 	<link id="favicon" href="img/webicon.png" rel="shortcut icon" type="image/png">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
-	<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
-	<script src="//cdn.socket.io/4.5.0/socket.io.min.js"></script>
-	<script src="//cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
+	<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
 	<script src="js/FileSaver.js"></script>
 	<script src="config.js"></script>
 	<script src="js/hahamjs/utils.js"></script>
@@ -25,21 +25,25 @@
 		if (!global.token)
 			location.href = 'login.html'
 	</script>
+	<style>
+		.dark #headerButtons .btn-outline-dark {
+			color: var(--bs-light);
+			border-color: var(--bs-gray-900);
+			background-color: var(--bs-gray-900);
+		}
+	</style>
 </head>
-
 <body class="">
 	<header id="top-panel" class="d-flex">
 		<div class="d-flex align-items-center">
-			<a class="menu-toggle-button border rounded ms-3 me-2 d-none d-md-block"
-				href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars"></i></a>
+			<a class="menu-toggle-button border rounded ms-3 me-2 d-none d-md-block" href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars"></i></a>
 			<div config-ui="logo" class="">Business Logo</div>
 		</div>
 		<div class="flex-fill d-flex align-items-center justify-content-end">
 			<ul class="nav">
-				
+
 				<li class="nav-item dropdown" id="alertsDropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="alertsDropdownBtn" role="button"
-						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a class="nav-link dropdown-toggle" href="#" id="alertsDropdownBtn" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						<i class="fas fa-bell"></i>
 						<span id="unread-notification-count" class="badge badge-danger badge-counter"></span>
 					</a>
@@ -53,8 +57,7 @@
 					</div>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" id="databasesDropdown" href="#" role="button"
-						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Veri Ambarları">
+					<a class="nav-link dropdown-toggle" id="databasesDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Veri Ambarları">
 						<i class="fas fa-database"></i>
 					</a>
 					<div id="dbList" class="dropdown-menu dropdown-menu-end" aria-labelledby="databasesDropdown">
@@ -62,15 +65,15 @@
 
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link d-light-none" href="javascript:changeColorScheme('light')" title="Light Theme"><i
-							class="fas fa-sun"></i></a>
-					<a class="nav-link d-dark-none" href="javascript:changeColorScheme('dark')" title="Dark Theme"><i
-							class="fas fa-moon"></i></a>
+					<a class="nav-link d-light-none" href="javascript:changeColorScheme('light')" title="Light Theme">
+						<svg xmlns="http://www.w3.org/2000/svg" width="1.5rem" height="1.5rem" fill="currentColor" class="" viewBox="0 0 16 16">
+							<path d="M12 8a4 4 0 1 1-8 0 4 4 0 0 1 8 0zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"></path>
+						</svg>
+					</a>
+					<a class="nav-link d-dark-none" href="javascript:changeColorScheme('dark')" title="Dark Theme"><i class="fas fa-moon"></i></a>
 				</li>
 				<li class="nav-item d-none d-md-flex dropdown">
-					<a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button"
-						data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-						title="Kullanıcı işlemleri">
+					<a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title="Kullanıcı işlemleri">
 						<i class="fas fa-user"></i>
 					</a>
 					<div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
@@ -85,17 +88,14 @@
 					</div>
 				</li>
 			</ul>
-			<a class="menu-toggle-button  border rounded ms-3 me-2 d-block d-md-none"
-				href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars fs-150"></i></a>
+			<a class="menu-toggle-button  border rounded ms-3 me-2 d-block d-md-none" href="javascript:toggleMenu('show')" title="Menü göster/gizle"><i class="fas fa-bars fs-150"></i></a>
 		</div>
 	</header>
 	<div id="main-content">
 		<div id="side-menu" class="collapse show" style="">
 			<nav class="nav nav-pills flex-column w-100">
 				<div id="leftMenu"></div>
-				<a id="support-link" class="nav-link d-flex align-items-center"
-					href="https://api.whatsapp.com/send/?phone=905533521042&text=destek+almak+istiyorum"
-					target="_blank">
+				<a id="support-link" class="nav-link d-flex align-items-center" href="https://api.whatsapp.com/send/?phone=905533521042&text=destek+almak+istiyorum" target="_blank">
 					<i class="fab fa-whatsapp"></i> Support
 				</a>
 				<a class="nav-link d-md-none align-items-center" href="#/me/profile">
@@ -105,8 +105,7 @@
 					</div>
 				</a>
 
-				<a class="nav-link d-flex d-md-none align-items-center" href="javascript:logout();"><i
-						class="fas fa-right-from-bracket"></i> Çıkış</a>
+				<a class="nav-link d-flex d-md-none align-items-center" href="javascript:logout();"><i class="fas fa-right-from-bracket"></i> Çıkış</a>
 			</nav>
 		</div>
 		<div id="right-side" class="">
@@ -124,16 +123,14 @@
 			<footer class="d-flex justify-content-between align-items-center px-1">
 				<div class="d-flex flex-md-fill justify-content-md-start align-items-center">
 					<div class="ms-2 d-flex">
-						<a href="javascript:reloadHaham()" class="btn btn-success ms-2 px-2"
-							title="Reload Haham Engine"><i class="fas fa-sync"></i></a>
+						<a href="javascript:reloadHaham()" class="btn btn-success ms-2 p-1 px-2" title="Reload Haham Engine"><i class="fas fa-sync"></i></a>
 					</div>
 					<div class="mt-1 mx-3 text-nowrap d-flex">
 						<div id="copy-right">&copy;</div> <span id="innerWidth" class="ms-2 d-none d-md-block"></span>
 					</div>
 				</div>
 				<div class="d-md-flex ms-2 justify-content-end text-end align-items-center">
-					<div id="dbLabel" class="mx-0 mx-md-3 d-flex justify-content-end align-items-center"
-						title="Aktif veri ambarı">
+					<div id="dbLabel" class="mx-0 mx-md-3 d-flex justify-content-end align-items-center" title="Aktif veri ambarı">
 						<i class="fas fa-database me-1" title=""></i> qwertyDB
 					</div>
 				</div>
@@ -143,8 +140,7 @@
 	<a class="scroll-to-top rounded" href="javascript:scrollToTop()">
 		<i class="fas fa-angle-up"></i>
 	</a>
-	<script src="//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="js/script.js"></script>
 </body>
-
 </html>

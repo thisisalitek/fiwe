@@ -232,14 +232,12 @@ function fazlaliklariTemizleDuzelt(data) {
 	return data
 }
 
-function deleteItem(dbModel, member, req, res, next, cb) {
-	if(req.params.param1 == undefined)
-		return restError.param1(req, next)
-	let data = req.body || {}
-	data._id = req.params.param1
-	dbModel.programs.removeOne(member, { _id: data._id }, (err, doc) => {
-		if(dberr(err, next)) {
-			cb(null)
-		}
+function deleteItem(dbModel, member, req) {
+	return new Promise((resolve, reject) => {
+		if (req.params.param1 == undefined)
+			return restError.param1(req, next)
+		let data = req.body || {}
+		data._id = req.params.param1
+		dbModel.projects.removeOne(member, { _id: data._id }).then(resolve).catch(reject)
 	})
 }

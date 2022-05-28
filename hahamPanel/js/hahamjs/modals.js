@@ -2,9 +2,9 @@ addModalsToDocument()
 
 function openUrl(url, _id, target, popup) {
 	url = url.replaceAll('{_id}', _id)
-	if(target == '_blank' && popup != true) {
+	if (target == '_blank' && popup != true) {
 		window.open(url, target)
-	} else if(popup) {
+	} else if (popup) {
 		popupCenter(url, 'Goster', '900', '600')
 	} else {
 		localStorage.setItem('returnUrl', window.location.href)
@@ -29,13 +29,13 @@ function popupCenter(url, title, w, h, isDialog = false) {
 	let systemZoom = width / window.screen.availWidth
 	let left = (width - w) / 2 / systemZoom + dualScreenLeft
 	let top = (height - h) / 2 / systemZoom + dualScreenTop
-	if(!isDialog) {
+	if (!isDialog) {
 		let newWindow = window.open(url, title, 'scrollbars=yes, width=' + w / systemZoom + ', height=' + h / systemZoom + ', top=' + top + ', left=' + left)
-		if(window.focus)
+		if (window.focus)
 			newWindow.focus()
 	} else {
 		let newWindow = openDialog(url, title, 'scrollbars=yes, width=' + w / systemZoom + ', height=' + h / systemZoom + ', top=' + top + ', left=' + left)
-		if(window.focus)
+		if (window.focus)
 			newWindow.focus()
 	}
 
@@ -54,7 +54,7 @@ function copyX(fields, title, cb = null) {
 		let field = fields[key]
 		s += `<div class="form-group">
 		<label class="m-0 p-0">${field.title || ''}</label>
-		<input type="text" class="form-control ${field.class || ''}" id="modalCopyField-${generateFormId(key)}" placeholder="${ field.placeholder || field.title || ''}" ${field.readonly==true?'readonly':''} autocomplete="off" autofill="off" spellcheck="false" value="${field.value}">
+		<input type="text" class="form-control ${field.class || ''}" id="modalCopyField-${generateFormId(key)}" placeholder="${field.placeholder || field.title || ''}" ${field.readonly == true ? 'readonly' : ''} autocomplete="off" autofill="off" spellcheck="false" value="${field.value}">
 		</div>`
 	})
 	$('#modalCopy .modal-body').html(s)
@@ -65,7 +65,7 @@ function copyX(fields, title, cb = null) {
 
 function modalCopyOk() {
 	$('#modalCopy').modal('hide')
-	if(copyX_cb) {
+	if (copyX_cb) {
 		let formData = {}
 		Object.keys(copyX_fields).forEach((key) => {
 			let field = copyX_fields[key]
@@ -83,7 +83,7 @@ function modalCopyOk() {
 
 function logout() {
 	confirmX('Programdan çıkmak istiyor musunuz?', (resp) => {
-		if(resp) {
+		if (resp) {
 			localStorage.removeItem('global')
 			window.location.href = `login.html`
 		}
@@ -95,7 +95,7 @@ var confirmX_response = false
 
 function confirmX(message, type = 'info', cb) {
 	confirmX_response = false
-	if(typeof type == 'function') {
+	if (typeof type == 'function') {
 		cb = type
 		type = 'info'
 	}
@@ -111,14 +111,14 @@ function confirmX(message, type = 'info', cb) {
 
 	$('#modalConfirm').modal('show')
 
-	$('#modalConfirm').on('hidden.bs.modal', function(e) {
+	$('#modalConfirm').on('hidden.bs.modal', function (e) {
 		$('#modalConfirm').unbind('hidden.bs.modal')
-		if(cb) {
+		if (cb) {
 			cb(confirmX_response)
 		}
 	})
 
-	$('#modalConfirmOk').on('click', function(e) {
+	$('#modalConfirmOk').on('click', function (e) {
 		$('#modalConfirmOk').unbind('click')
 		confirmX_response = true
 		$('#modalConfirm').modal('hide')
@@ -130,11 +130,11 @@ function confirmX(message, type = 'info', cb) {
 function alertX(message, title = '', type = 'info', cb) {
 	let icon = 'fas fa-exclamation-triangle'
 
-	if(typeof title == 'function') {
+	if (typeof title == 'function') {
 		cb = title
 		title = ''
 		type = 'info'
-	} else if(typeof type == 'function') {
+	} else if (typeof type == 'function') {
 		cb = type
 		type = 'info'
 	}
@@ -159,40 +159,40 @@ function alertX(message, title = '', type = 'info', cb) {
 	title = `<i class="${icon}"></i> ${title}`
 	$('#modalMessageLabel').html(title)
 
-	$('#modalMessage .modal-body').html(`${(message || '').replaceAll('\n','<br>')}`)
+	$('#modalMessage .modal-body').html(`${(message || '').replaceAll('\n', '<br>')}`)
 
 	$('#modalMessage').modal('show')
-	$('#modalMessage').on('hidden.bs.modal', function(e) {
-		if(cb)	cb('ok')
+	$('#modalMessage').on('hidden.bs.modal', function (e) {
+		if (cb) cb('ok')
 	})
 }
 
-function showError(err,cb) {
-	alertX(`<small class="text-muted">${err.code || err.name || ''}</small><br>${err.message || err.name || ''}`, 'Hata', 'danger',cb)
+function showError(err, cb) {
+	alertX(`<small class="text-muted">${err.code || err.name || ''}</small><br>${err.message || err.name || ''}`, 'Hata', 'danger', cb)
 }
 
 
 function modalFormOptions() {
-	if((global.formOptionsLink || '')==''){
+	if ((global.formOptionsLink || '') == '') {
 		console.log('global.formOptionsLink bos olamaz.')
 		return
 	}
-	let title=document.title.split(' - ')[0]
+	let title = document.title.split(' - ')[0]
 	let s = global.formOptionsLink
-	if(s.indexOf('?') > -1) {
+	if (s.indexOf('?') > -1) {
 		s += '&'
 	} else {
 		s += '?'
 	}
 	s += `&module=${hashObj.module}`
 	// popupCenter(s+'&view=plain',title,'900','600')
-	window.location.hash=s
+	window.location.hash = s
 }
 
-function reloadHaham(){
-	postMan('/session', { method: 'POST', data: {token:global.token} })
+function reloadHaham() {
+	postMan('/session', { method: 'POST', data: { token: global.token } })
 		.then(result => {
-			global=Object.assign({},global,result)
+			global = Object.assign({}, global, result)
 			localStorage.setItem('global', JSON.stringify(global || {}))
 			location.reload()
 		})
@@ -204,7 +204,7 @@ function reloadHaham(){
 
 function addModalsToDocument(parentId = 'body') {
 	$(document).ready(() => {
-		if(!document.querySelector(`${parentId} #modalFormOptions`)) {
+		if (!document.querySelector(`${parentId} #modalFormOptions`)) {
 			document.querySelector(parentId).insertAdjacentHTML('beforeend', `
 		<div class="modal" id="modalFormOptions" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true" aria-labelledby="modalFormOptionsLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
@@ -235,7 +235,7 @@ function addModalsToDocument(parentId = 'body') {
 		</div>
 		`)
 		}
-		if(!document.querySelector(`${parentId} #modalMessage`)) {
+		if (!document.querySelector(`${parentId} #modalMessage`)) {
 			document.querySelector(parentId).insertAdjacentHTML('beforeend', `
 		<div class="modal" id="modalMessage" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true" aria-labelledby="modalMessageLabel" aria-hidden="true" style="z-index: 1051">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
@@ -255,7 +255,7 @@ function addModalsToDocument(parentId = 'body') {
 		</div>
 	`)
 		}
-		if(!document.querySelector(`${parentId} #modalConfirm`)) {
+		if (!document.querySelector(`${parentId} #modalConfirm`)) {
 			document.querySelector(parentId).insertAdjacentHTML('beforeend', `
 		<div class="modal" id="modalConfirm" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true" aria-labelledby="modalConfirmLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
@@ -277,7 +277,7 @@ function addModalsToDocument(parentId = 'body') {
 	`)
 		}
 
-		if(!document.querySelector(`${parentId} #modalCopy`)) {
+		if (!document.querySelector(`${parentId} #modalCopy`)) {
 			document.querySelector(parentId).insertAdjacentHTML('beforeend', `
 		<div class="modal" id="modalCopy" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="true" aria-labelledby="modalCopyLabel" aria-hidden="true">
 			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
@@ -300,7 +300,7 @@ function addModalsToDocument(parentId = 'body') {
 		}
 
 
-		if(!document.querySelector(`${parentId} #modalRow`)) {
+		if (!document.querySelector(`${parentId} #modalRow`)) {
 			document.querySelector(parentId).insertAdjacentHTML('beforeend', `
 		<div class="modal" id="modalRow" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="modalRowLabel" aria-hidden="true">
 			<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">

@@ -1,4 +1,4 @@
-module.exports=(doc,next,cb)=>{
+module.exports=(doc)=>new Promise((resolve, reject) => { 
 	if(doc.suspended){
 		if((new Date())<doc.suspended){
 			return next( {code:'SUSPENDED',message:`Hesap geçici olarak askıya alınmıştır. ${moment(doc.suspended).fromNow(true)} sonra tekrar kullanabilirsiniz.`})
@@ -16,5 +16,5 @@ module.exports=(doc,next,cb)=>{
 		doc.suspended.setMinutes(doc.suspended.getMinutes()+20)
 		doc.suspendedCount=(doc.suspendedCount || 0) + 1
 	}
-	cb(doc)
-}
+	resolve(doc)
+})

@@ -12,6 +12,7 @@ const readSheetNames = require('read-excel-file/node').readSheetNames
 	}
 */
 
+
 exports.convertXlsxToJSON = (fileName, options = {}) => new Promise((resolve, reject) => {
 	try {
 		let obj = {}

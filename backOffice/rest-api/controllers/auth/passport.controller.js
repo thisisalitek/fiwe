@@ -1,32 +1,34 @@
-module.exports = function(req, res, next, cb) {
+module.exports = (req) => new Promise((resolve, reject) => {
 	let token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['token']
 	if(token) {
 		auth.verify(token)
 			.then(decoded => {
-				db.members.findOne({ _id: decoded._id }, (err, doc) => {
-					if(dberr(err, next)) {
+				db.members.findOne({ _id: decoded._id })
+					.then(doc => {
 						if(doc == null)
-							return next({ code: 'LOGIN_FAILED', message: 'Login failed' })
+							return reject({ code: 'LOGIN_FAILED', message: 'Login failed' })
 						if(doc.passive)
-							return next({ code: 'USER_PASSIVE', message: 'User has been passive' })
+							return reject({ code: 'USER_PASSIVE', message: 'User has been passive' })
 						if(!doc.verified)
-							return next({ code: 'USER_NOT_VERIFIED', message: 'User was not verified' })
+							return reject({ code: 'USER_NOT_VERIFIED', message: 'User was not verified' })
 
-						spamCheck(doc, next, (doc) => {
-							doc.save((err, doc2) => {
-								if(dberr(err, next)) {
-									let obj = doc2.toJSON()
-									obj.token = token
-									cb(obj)
-								}
+						spamCheck(doc)
+							.then(doc => {
+								doc.save()
+									.then(doc2 => {
+										let obj = doc2.toJSON()
+										obj.token = token
+										resolve(obj)
+									})
+									.catch(reject)
 							})
-						})
-					}
-				})
+							.catch(reject)
+					})
+					.catch(reject)
 			})
-			.catch(next)
+			.catch(reject)
 
 	} else {
-		restError.auth(req, next)
+		restError.auth(req, reject)
 	}
-}
+})
