@@ -13,10 +13,16 @@ module.exports = (dbModel, member, req) => new Promise((resolve, reject) => {
 			}
 			break
 		case 'POST':
-			if (req.params.param1 == 'copy') {
-				copy(dbModel, member, req).then(resolve).catch(reject)
-			} else {
-				post(dbModel, member, req).then(resolve).catch(reject)
+			switch (req.params.param1) {
+				case 'copy':
+					copy(dbModel, member, req).then(resolve).catch(reject)
+					break
+				case 'uploadTest':
+					uploadTest(dbModel, member, req).then(resolve).catch(reject)
+					break
+				default:
+					post(dbModel, member, req).then(resolve).catch(reject)
+					break
 			}
 
 			break
@@ -32,6 +38,43 @@ module.exports = (dbModel, member, req) => new Promise((resolve, reject) => {
 	}
 
 })
+
+
+function uploadTest(dbModel, member, req) {
+	return new Promise((resolve, reject) => {
+		let data = req.body || {}
+		data._id = undefined
+		let newDoc = new dbModel.importers(data)
+		if (!epValidateSync(newDoc, reject))
+			return
+		excelImport(newDoc, data.testFileUpload).then(resolve).catch(reject)
+		//resolve({isim:newDoc.name,turu:newDoc.type, data:data.testFileUpload})
+		//newDoc.save().then(resolve).catch(reject)
+
+	})
+}
+
+
+function excelImport(importerDoc, dosya) {
+	return new Promise((resolve, reject) => {
+		util.saveTempFolder(dosya.fileName, dosya.data)
+			.then(tempFileName => {
+				let options = {
+					sheetName: (s) => s.toUpperCase(),
+					rows: (rows) => {
+						rows.forEach(e => {
+							e[0] = (e[0] || '').toUpperCase()
+						})
+						return rows
+					}
+				}
+				excelHelper.convertXlsxToJSON(tempFileName, options)
+					.then(resolve)
+					.catch(reject)
+			})
+			.catch(reject)
+	})
+}
 
 function copy(dbModel, member, req) {
 	return new Promise((resolve, reject) => {

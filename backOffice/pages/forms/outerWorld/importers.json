@@ -29,14 +29,25 @@
 		{
 			"type":"form",
 			"fields": {
-				"name":{"text":"Name", "type":"string", "col":6},
-				"type":{"text":"Type", "type":"lookup", "staticValues":"importerTypes","onchange":"importerTypeChange(this.value)", "col":6},
+				"name":{"text":"Name", "type":"string", "col":4},
+				"type":{"text":"Type", "type":"lookup", "staticValues":"importerTypes","onchange":"importerTypeChange(this.value)", "col":4},
+				"viaLocalConnector":{"text":"via Local Connector","type":"boolean", "onchange":"importerTypeChange()", "visible":false, "col":4},
+				"localConnectorGroup1":{
+					"text":"Local Connector",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"localConnector.id":{"text":"ID", "type":"string", "col":3},
+						"localConnector.password":{"text":"Password", "type":"string", "col":3},
+						"btnTestConnector":{"text":"Test Connector", "type":"button", "href":"javascript:uploadTest()", "col":3}
+					}
+				},
 				"fileGroup1":{
 					"text":"File Upload",
 					"collapsed":false,
 					"visible":false,
 					"fields":{
-						"fileUpload.type":{"text":"File Upload Type", "type":"lookup", "staticValues":"fileUploadTypes","onchange":"fileUploadTypeChange(this.value)", "col":4},
+						"fileUpload.type":{"text":"File Upload Type", "type":"lookup", "staticValues":"fileUploadTypes","onchange":"fileUploadTypeChange(this.value)", "col":3},
 						"csvGroup1":{
 							"visible":false,
 							"showHeader":false,
@@ -54,7 +65,9 @@
 								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
 								"fileUpload.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
 							}
-						}
+						},
+						"testFileUpload":{"text":"Upload File", "type":"file", "col":6},
+						"btnTestUpload":{"text":"Upload Test", "type":"button", "href":"javascript:uploadTest()", "col":3}
 					}
 				},
 				"fileSystem1":{
@@ -137,14 +150,31 @@
 						"warn1":{"text":"Rest API is not ready yet.", "type":"label", "class":"alert-warning"}
 					}
 				},
-				"passive":{"text":"Passive?","type":"boolean", "visible":false}
+				"passive":{"text":"Passive?","type":"boolean", "visible":false},
+				"resultGroup1":{
+					"text":"Test Results",
+					"collapsed":true,
+					"visible":true,
+					"fields":{
+						"testResult":{"text":"Output", "type":"code", "col":12, "rows":20}
+					}
+				}
 			},
 			"dataSource": {
 				"url":"/db/importers"
 			},
 			"script":[
+				"function uploadTest(){",
+				"let formData=bulkFormData('#mainCtrl')",
+				"postMan('/db/importers/uploadTest',{type:'POST',data:formData})",
+				".then(result=>{document.querySelector('#testResult-textarea').value=JSON.stringify(result,null,2)})",
+				".catch(err=>{document.querySelector('#testResult-textarea').value=JSON.stringify(err,null,2)})",
+				"",
+				"}",
 				"function importerTypeChange(){",
 				"var val=document.querySelector('select[data-field=\"type\"]').value",
+				"document.querySelector('#col_viaLocalConnector').classList.add('d-none')",
+				"document.querySelector('#col_card-localConnectorGroup1').classList.add('d-none')",
 				"document.querySelector('#col_card-fileGroup1').classList.add('d-none')",
 				"document.querySelector('#col_card-fileSystem1').classList.add('d-none')",
 				"document.querySelector('#col_card-mongoDbGroup1').classList.add('d-none')",
@@ -182,6 +212,14 @@
 				"document.querySelector('#col_card-restApiGroup1').classList.remove('d-none')",
 				"break",
 				"}",
+				"",
+				"if(!(val=='' || val=='fileUpload')){",
+				"document.querySelector('#col_viaLocalConnector').classList.remove('d-none')",
+				"if(document.querySelector('input[data-field=\"viaLocalConnector\"]').checked){",
+				"document.querySelector('#col_card-localConnectorGroup1').classList.remove('d-none')",
+				"}",
+				"}",
+				"",
 				"}",
 				"",
 				"function sqlServerConnectionTypeChanged(){",

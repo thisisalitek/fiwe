@@ -79,8 +79,8 @@ body {
 
 .scroll-to-top {
 	position: fixed;
-	right: 2.5rem;
-	bottom: 6rem;
+	right: 1.5rem;
+  bottom: 2rem;
 	display: none;
 	width: 2.75rem;
 	height: 2.75rem;
@@ -312,8 +312,11 @@ body {
 		}
 	}
 	.cerceve1.mother{
-		-webkit-box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important;
-		box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important;
+		// -webkit-box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important;
+		// box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important;
+
+		-webkit-box-shadow: none !important;
+		box-shadow: none !important;
 	}
 
 	.shadow {
@@ -847,7 +850,7 @@ header .nav-link>i {
 	position: relative;
 	z-index: 0;
 	height: calc(100% - 40px);
-	overflow-y: scroll;
+	overflow: hidden;
 	padding: 0.25rem;
 	margin-top: 0;
 }
@@ -1399,4 +1402,9 @@ header {
 .form-floating > .form-control:focus, .form-floating > .form-control:not(:placeholder-shown) {
 	padding-top: 0.5rem!important;
 	padding-bottom: 0.5rem!important;
+}
+
+#mainCtrl {
+	overflow-y:scroll;
+  height: calc(100vh - 140px);
 }

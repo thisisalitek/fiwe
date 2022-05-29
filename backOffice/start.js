@@ -38,6 +38,7 @@ function showError(err) {
 var xls = require('./lib/excel-helper')
 function testKod(a) {
 	return new Promise((resolve, reject) => {
+		return resolve()
 		let options = {
 			sheetName: (s) => s.toUpperCase(),
 			rows: (rows) => {

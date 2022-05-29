@@ -13,7 +13,7 @@ exports.verify = (token) => new Promise((resolve, reject) => {
 	if(token) {
 		jwt.verify(token, config.token.phrase, (err, decoded) => {
 			if(err) {
-				reject('Failed or expired token')
+				reject({code:'SESSION_NOT_FOUND',message:'Failed or expired token'})
 			} else {
 				resolve(decoded)
 			}

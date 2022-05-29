@@ -2,7 +2,7 @@ function frm_Card(parentId, item, cb) {
 	//	<a class="btn btn-collapse ${item.collapsed?'collapsed':''}" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}" href="#"><i class="far fa-caret-square-up fa-2x"></i></a>
 
 	let s = `
-	<div  id="col_${item.id}"  class="${item.col || ''} p-1 pb-1 ${item.visible===false?'d-none':''}"">
+	<div  id="col_${item.id}"  class="${item.col || ''} p-1 pb-1 ${item.visible===false?'d-none':''}">
 	<div class="card cerceve1 ${item.level>1?'child':'mother'} ${item.class || ''}  level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" >
 		<div class="card-header ${item.showHeader===false?'d-none':''}"  >
 			<span class="hand-pointer" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}">
@@ -38,7 +38,7 @@ function frm_Tab(parentId, item, cb) {
 	}
 
 	let s = `
-	<div id="col_${item.id}" class="col-12 p-1">
+	<div id="col_${item.id}" class="col-12 p-1 ">
 	<ul class="nav nav-tabs" role="tablist" level="${item.level}">`
 	item.tabs.forEach((tab, tabIndex) => {
 		s += `<li class="nav-item">
@@ -125,7 +125,7 @@ function frm_FormHtml(parentId, item, cb) {
 
 function frm_Label(parentId, item, cb) {
 
-	let s = frm_Group(`<label level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="m-0 p-0  ${item.class || ''}" title="${item.title || item.text || ''}">${itemLabelCaption(item, (item.value || item.text || ''))}</label>`, item)
+	let s = frm_Group(`<label level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="m-0 p-0  ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" title="${item.title || item.text || ''}">${itemLabelCaption(item, (item.value || item.text || ''))}</label>`, item)
 
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 
@@ -137,7 +137,7 @@ function frm_Label(parentId, item, cb) {
 
 function frm_Alert(parentId, item, cb) {
 
-	let s = frm_Group(`<label level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="m-0 alert alert-info alert-${item.type} small w-100 p-1 my-1 ${item.class || ''}" title="${item.title || item.text || ''}">${item.value || item.text || ''}</label>`, item)
+	let s = frm_Group(`<label level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="m-0 alert alert-info alert-${item.type} small w-100 p-1 my-1 ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" title="${item.title || item.text || ''}">${item.value || item.text || ''}</label>`, item)
 
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 
@@ -149,7 +149,7 @@ function frm_Alert(parentId, item, cb) {
 
 
 function frm_TextBox(parentId, item, cb) {
-	let s = frm_GInput(`<input type="text" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="form-control ${item.class || ''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${item.value!=undefined?item.value:''}">`, item)
+	let s = frm_GInput(`<input type="text" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="form-control ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${item.value!=undefined?item.value:''}">`, item)
 
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 
@@ -181,10 +181,10 @@ function frm_Button(parentId, item, cb) {
 			href = global.basePath + href
 		}
 	}
-	let s = `<a class="${item.class || 'btn btn-info'}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id || ''}" href="${href}" target="${item.target || ''}" title="${titleText.replaceAll('"','\'')}">${label}</a>`
+	let s = `<a class="${item.class || 'btn btn-info'} ${item.noGroup === true && item.visible===false?'d-none':''}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id || ''}" href="${href}" target="${item.target || ''}" title="${titleText.replaceAll('"','\'')}">${label}</a>`
 
 	if(item.noGroup !== true) {
-		s = `<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible===false?'hidden':''}">
+		s = `<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 d-flex align-items-center ${item.visible===false?'hidden':''}">
 		${s}
 		</div>
 		`
@@ -197,7 +197,7 @@ function frm_Button(parentId, item, cb) {
 function frm_TextareaBox(parentId, item, cb) {
 
 	let s = `
-	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''}"  style="font-family: courier new;height:auto;"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>
+	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}"  style="font-family: courier new;height:auto;"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>
 	<input type="hidden" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id}" name="${item.name}" >
 	`
 
@@ -234,50 +234,10 @@ function frm_TextareaBox(parentId, item, cb) {
 	cb()
 }
 
-
-function frm_TextareaBox111(parentId, item, cb) {
-
-	let s = `
-	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''}"  style="font-family: courier new;height:auto;"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>
-	<input type="hidden" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id}" name="${item.name}" >
-	`
-
-	s = frm_GInput(s, item)
-	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
-
-	let textAreaValue = item.value != undefined ? item.value : ''
-	if(item.encoding == 'base64') {
-		textAreaValue = b64DecodeUnicode(item.value != undefined ? item.value : '')
-	}
-
-	document.querySelector(`${parentId} #${item.id}-textarea`).onkeydown = function(e) {
-		if(e.keyCode === 9) {
-			let val = this.value
-			let start = this.selectionStart
-			let end = this.selectionEnd
-			this.value = val.substring(0, start) + '\t' + val.substring(end)
-			this.selectionStart = this.selectionEnd = start + 1
-			return false
-		}
-	}
-
-	$(`${parentId} #${item.id}-textarea`).val(textAreaValue)
-	$(`${parentId} #${item.id}`).val(item.value != undefined ? item.value : '')
-
-	$(`${parentId} #${item.id}-textarea`).change(() => {
-		if(item.encoding == 'base64') {
-			$(`${parentId} #${item.id}`).val(b64EncodeUnicode($(`${parentId} #${item.id}-textarea`).val()))
-		} else {
-			$(`${parentId} #${item.id}`).val($(`${parentId} #${item.id}-textarea`).val())
-		}
-	})
-
-	cb()
-}
 
 function frm_ImageBox(parentId, item, cb) {
 	let s = `
-	<div>
+	<div class="${item.noGroup === true && item.visible===false?'d-none':''}">
 	<label for="fileUpload_${item.id}" class="btn btn-primary btn-image-edit" title="${item.title || item.text || ''}"><i class="fas fa-edit"></i></label>
 	<img id="${item.id}-img" class="imageBox-img" src="${item.value.data || '/img/placehold-place.jpg'}" download="${item.value.fileName || ''}">
 	</div>
@@ -315,7 +275,7 @@ function frm_ImageBox(parentId, item, cb) {
 
 function frm_FileBox(parentId, item, cb) {
 	let s = `
-	<div class="">
+	<div class="${item.noGroup === true && item.visible===false?'d-none':''}">
 	<label for="fileUpload_${item.id}" class="btn btn-primary hand-pointer" title="${item.title || item.text || ''}"><i class="fas fa-file-alt"></i> Dosya seçiniz</label>
 	<div class="w-100 my-2"></div>
 	<a id="fileDownload_${item.id}" class="" href="${item.value.data || '#'}" download="${item.value.fileName || ''}">${item.value.fileName?'<i class="fas fa-file-download"></i> ' + item.value.fileName:''}</a>
@@ -356,7 +316,7 @@ function frm_FileBox(parentId, item, cb) {
 }
 
 function frm_NumberBox(parentId, item, cb) {
-	let s = frm_GInput(`<input type="number" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="form-control text-end ${item.class || ''} text-end" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${item.value!=undefined?item.value:0}">`, item)
+	let s = frm_GInput(`<input type="number" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="form-control text-end ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${item.value!=undefined?item.value:0}">`, item)
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 	cb()
 }
@@ -381,7 +341,7 @@ function frm_FormattedNumberBox(parentId, item, cb) {
 
 function frm_MoneyBox(parentId, item, cb, cssId = 'frm-moneybox') {
 	item.round = item.round || 2
-	let input = `<input type="text" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="form-control formatted-number ${cssId} text-end ${item.class || ''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${convertNumber(item.value != undefined ? item.value : 0).formatMoney(item.round)}">`
+	let input = `<input type="text" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="form-control formatted-number ${cssId} text-end ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${convertNumber(item.value != undefined ? item.value : 0).formatMoney(item.round)}">`
 	let s = frm_GInput(input, item)
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 
@@ -428,8 +388,8 @@ function frm_TotalBox(parentId, item, cb) {
 	// } else {
 
 	s = `
-		<div id="col_${item.id}" class="${item.col || 'col-12'} p-1">
-			<div class="table-responsive ${item.visible===false?'d-none':''}">
+		<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible===false?'d-none':''}">
+			<div class="table-responsive">
 				<table class="table align-middle m-0" title="${item.title || item.text || ''}">
 					<tbody>
 						<tr class="totalbox-row">
@@ -453,13 +413,13 @@ function frm_TotalBox(parentId, item, cb) {
 
 
 function frm_DateBox(parentId, item, cb) {
-	let s = frm_GInput(`<input type="date" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" class="form-control ${item.class || ''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${item.value!=undefined?item.value:''}">`, item)
+	let s = frm_GInput(`<input type="date" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" class="form-control ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${item.value!=undefined?item.value:''}">`, item)
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 	cb()
 }
 
 function frm_TimeBox(parentId, item, cb) {
-	let s = frm_GInput(`<input type="time" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" class="form-control ${item.class || ''}" id="${item.id}" name="${item.name}" step="1" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${(item.value!=undefined?item.value:'').substr(0,8)}">`, item)
+	let s = frm_GInput(`<input type="time" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" class="form-control ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}" step="1" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" value="${(item.value!=undefined?item.value:'').substr(0,8)}">`, item)
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 	cb()
 }
@@ -467,7 +427,7 @@ function frm_TimeBox(parentId, item, cb) {
 function frm_Lookup(parentId, item, cb) {
 	// let s = `<select type="text" class="form-control ${item.class || ''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" autocomplete="off" ${item.required?'required="required"':''} ${item.readonly==true?'disabled':''} onchange="${item.onchange || ''}">
 	// <option value="" ${item.value==''?'selected':''}>${item.showAll===true?'*':'-- Seç --'}</option>`
-	let s = `<select level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" class="form-control ${item.class || ''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" autocomplete="off" ${item.required?'required="required"':''} ${item.readonly==true?'disabled':''} onchange="${item.onchange || ''}">
+	let s = `<select level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" class="form-control ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}" placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" autocomplete="off" ${item.required?'required="required"':''} ${item.readonly==true?'disabled':''} onchange="${item.onchange || ''}">
 	<option value="" ${item.value==''?'selected':''}>&#x2315;</option>`
 	if(item.lookup) {
 		if(Array.isArray(item.lookup)) {
@@ -509,7 +469,7 @@ function frm_CheckBoxLookup(parentId, item, cb) {
 	let s = ``
 
 	let input = `
-	<select name="${item.name}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="form-control ${item.class || ''}" title="${item.title || item.text || ''}">
+	<select name="${item.name}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  id="${item.id}" class="form-control ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" title="${item.title || item.text || ''}">
 	<option value="">&#x2315;</option>
 	<option value="true" ${(item.value!=undefined?item.value:'').toString()=='true'?'selected':''}><i class="fas fa-check-square text-primary"></i> Evet</option>
 	<option value="false" ${(item.value!=undefined?item.value:'').toString()=='false'?'selected':''}><i class="far fa-square text-dark"></i> Hayır</option>
@@ -518,7 +478,7 @@ function frm_CheckBoxLookup(parentId, item, cb) {
 	if(item.noGroup === true) {
 		s = input
 	} else {
-		s = `<div class="${item.col || ''} p-1 ${item.visible===false?'hidden':''}">
+		s = `<div id="col_${item.id}" class="${item.col || ''} p-1 ${item.visible===false?'d-none':''}">
 		<div class="form-group">
 		<label>
 		<span class="mb-1" style="display:block;">${item.text || ''}${helpButton(item)}</span>
@@ -560,12 +520,12 @@ function frm_RemoteLookup(parentId, item, cb) {
 
 	}
 
-	input += `<input type="search" level="${item.level || ''}" class="form-control ${item.class || ''}" id="${item.id}-autocomplete-text"  placeholder="${item.noGroup === true?'&#x2315;':''}${item.placeholder || ' '}" value="${item.valueText || ''}" autocomplete="off"  ${item.required?'required="required"':''} ${item.readonly?'readonly':''} title="${item.title || 'Tümünü listelemek için BOŞLUK tuşuna basabilirsiniz.'}" >`
+	input += `<input type="search" level="${item.level || ''}" class="form-control ${item.class || ''} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}-autocomplete-text"  placeholder="${item.noGroup === true?'&#x2315;':''}${item.placeholder || ' '}" value="${item.valueText || ''}" autocomplete="off"  ${item.required?'required="required"':''} ${item.readonly?'readonly':''} title="${item.title || 'Tümünü listelemek için BOŞLUK tuşuna basabilirsiniz.'}" >`
 
 	if(item.noGroup === true) {
 		s = input
 	} else {
-		s = `<div class="${item.col || ''} p-1 ${item.visible===false?'hidden':''}">
+		s = `<div id="col_${item.id}" class="${item.col || ''} p-1 ${item.visible===false?'d-none':''}">
 		<div class="form-floating">
 		${input}
 		<label for="${item.id}-autocomplete-text" class="text-nowrap"><i class="fas fa-search"></i> ${item.text || ''}</label>
@@ -589,14 +549,14 @@ function frm_CheckBox(parentId, item, cb) {
 		sClass = `${item.class || 'form-check-input switch-dark'}`
 	}
 
-	let input = `<input type="checkbox" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="${sClass}" id="${item.id}" name="${item.name}"  value="true" ${item.value==true?'checked':''} ${item.readonly==true?'disabled':''} onchange="${item.onchange || ''}" />`
+	let input = `<input type="checkbox" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="${sClass} ${item.noGroup === true && item.visible===false?'d-none':''}" id="${item.id}" name="${item.name}"  value="true" ${item.value==true?'checked':''} ${item.readonly==true?'disabled':''} onchange="${item.onchange || ''}" />`
 	if(item.noGroup === true) {
 		s = `<div class="form-switch  text-center  m-0  p-0 ms-3 ps-3">
 		${input}
 		</div>`
 	} else {
-		s = `<div class="${item.col || ''} p-1 ${item.visible===false?'hidden':''}">
-		<div class="form-check form-switch ${item.insideOfGrid?'':'mt-1 mt-md-3'}" title="${item.title || item.text || ''}">
+		s = `<div id="col_${item.id}" class="${item.col || ''} p-1 d-flex align-items-center ${item.visible===false?'d-none':''}">
+		<div class="form-check form-switch ${item.insideOfGrid?'':''}" title="${item.title || item.text || ''}">
 		${input}
 		<label class="form-check-label" for="${item.id}">${item.text || ''}${helpButton(item)}</label>
 		
@@ -610,7 +570,7 @@ function frm_CheckBox(parentId, item, cb) {
 
 function frm_DateRangeBox(parentId, item, cb) {
 	let s = `
-	<div class="${item.col || 'col-md-auto'} p-1">
+	<div id="col_${item.id}" class="${item.col || 'col-md-auto'} p-1 ${item.visible===false?'d-none':''}">
 	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  class="d-md-flex m-0 p-0">
 		<div class="form-floating">
 			<select class="form-control ${item.class || ''}" name="cbDate" id="cbDate">
@@ -655,16 +615,6 @@ function frm_DateRangeBox(parentId, item, cb) {
 		}
 		bNoAction = false
 	})
-	// $(`${parentId} #${item.id} #date1, ${parentId} #${item.id} #date2`).on('change', () => {
-	// 	if(bNoAction)
-	// 		return
-	// 	bNoAction=true
-	// 	$(`${parentId} #${item.id} #cbDate`).val('')
-	// 	if(document.querySelector('#filterForm')) {
-	// 		runFilter('#filterForm')
-	// 	}
-	// 	bNoAction=false
-	// })
 
 
 	if((hashObj.query.cbDate || '') != '') {

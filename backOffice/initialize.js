@@ -34,6 +34,7 @@ module.exports = () => new Promise((resolve, reject) => {
 		global.mail = require(path.join(__root, 'lib/mail'))
 		global.sender = require(path.join(__root, 'lib/sender'))
 		global.spamCheck = require(path.join(__root, 'lib/spam-check'))
+		global.excelHelper = require(path.join(__root, 'lib/excel-helper'))
 
 		// Application info
 		console.log('-'.repeat(70))

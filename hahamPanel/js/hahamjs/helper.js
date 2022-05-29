@@ -1542,21 +1542,6 @@ function calculate(formula, values) {
 
 
 
-function scrollToTop() {
-	document.querySelector('#right-side').scrollTop = 0;
-}
-
-if (localStorage.getItem('theme') == null) {
-	if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-		localStorage.setItem('theme', 'dark')
-	} else {
-		localStorage.setItem('theme', 'light')
-	}
-}
-
-
-
-
 
 
 function enterNext(bu) {
@@ -1647,31 +1632,3 @@ function configUI() {
 		i++
 	}
 }
-
-$(document).ready(function () {
-
-	$('body').on('scroll', function () {
-		let scrollDistance = $(this).scrollTop()
-		if (scrollDistance > 100) {
-			$('.scroll-to-top').fadeIn()
-		} else {
-			$('.scroll-to-top').fadeOut()
-		}
-	})
-
-	$('body').on('keydown', 'input, select', function (e) {
-		if (e) {
-			if (e.key) {
-				if (e.key === "Enter") {
-					return enterNext(this)
-				}
-			}
-		}
-	})
-
-	loadCardCollapses()
-
-	//hahamInclude()
-
-	configUI()
-})

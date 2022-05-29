@@ -932,11 +932,25 @@ function formKaydet(dataSource, divId, returnUrl='') {
 		i++
 	}
 
-	let formData = getFormData(`${divId}`)
+	let formData = getFormData(divId)
 	formSave(dataSource, formData, returnUrl)
 
 }
 
+function bulkFormData(divId){
+	let numberInputs = document.querySelectorAll(`${divId} .formatted-number`)
+	let i = 0
+	while(i < numberInputs.length) {
+		let e = numberInputs[i]
+		let sbuf = e.value
+		e.attributes.type = 'number'
+		e.value = convertNumber(sbuf)
+		i++
+	}
+
+	let formData = getFormData(divId)
+	return formData
+}
 function itemLabelCaption(item, text = '') {
 	if(item.required === true) {
 		return `<span class="label-required">*${text || item.text || ''}</span>`
