@@ -146,6 +146,7 @@ function generatePage(divId, pageJson,callback) {
 			}
 		}
 		loadCardCollapses()
+		
 		$(document).trigger('loaded')
 		$(divId).show()
 		if(callback)
@@ -197,9 +198,9 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 
 	if(item.level == 0) item.pageFormId = divId
 
-	if(item.script) {
-		$(divId).append(`<script type="text/javascript">${item.script}</script>`)
-	}
+	// if(item.script) {
+	// 	$(divId).append(`<script type="text/javascript">${item.script}</script>`)
+	// }
 
 	if(item.fields) {
 		Object.keys(item.fields).forEach((key) => {
@@ -237,7 +238,10 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 
 	item.insideOfModal = insideOfModal
 
-	
+	if(item.script) {
+		$(divId).append(`<script type="text/javascript">${item.script}</script>`)
+	}
+
 	switch ((item.type || '').toLowerCase()) {
 
 		case 'hidden':
@@ -544,6 +548,8 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 		if(item.html && !item.insideOfGrid) {
 			document.querySelector(divId).insertAdjacentHTML('beforeend', item.html)
 		}
+		
+	
 		callback()
 	}
 }

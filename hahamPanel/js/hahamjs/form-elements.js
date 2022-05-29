@@ -2,8 +2,8 @@ function frm_Card(parentId, item, cb) {
 	//	<a class="btn btn-collapse ${item.collapsed?'collapsed':''}" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}" href="#"><i class="far fa-caret-square-up fa-2x"></i></a>
 
 	let s = `
-	<div class="${item.col || ''} p-1 pb-1 ">
-	<div class="card cerceve1 ${item.level>1?'child':'mother'} ${item.class || ''} ${item.visible===false?'d-none':''}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" >
+	<div  id="col_${item.id}"  class="${item.col || ''} p-1 pb-1 ${item.visible===false?'d-none':''}"">
+	<div class="card cerceve1 ${item.level>1?'child':'mother'} ${item.class || ''}  level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" >
 		<div class="card-header ${item.showHeader===false?'d-none':''}"  >
 			<span class="hand-pointer" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}">
 			<a class="btn btn-collapse ${item.collapsed?'collapsed':''}" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}" ><i class="fas fa-caret-up fa-2x"></i></a>	
@@ -38,7 +38,7 @@ function frm_Tab(parentId, item, cb) {
 	}
 
 	let s = `
-	<div class="col-12 p-1">
+	<div id="col_${item.id}" class="col-12 p-1">
 	<ul class="nav nav-tabs" role="tablist" level="${item.level}">`
 	item.tabs.forEach((tab, tabIndex) => {
 		s += `<li class="nav-item">
@@ -67,8 +67,8 @@ function frm_GInput(input, item) {
 		return input
 	} else {
 		return `
-		<div class="${item.col || 'col-12'} p-1">
-		<div class="form-floating  ${item.visible===false?'d-none':''}">
+		<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible===false?'d-none':''}">
+		<div class="form-floating ">
 		${input}
 		<label for="${item.id}" class="">${itemLabelCaption(item)}${helpButton(item)}</label>
 		
@@ -85,7 +85,7 @@ function frm_Group(input, item) {
 		return input
 	} else {
 		return `
-		<div class="${item.col || 'col-12'} p-1 ${item.visible===false?'d-none':''}"">
+		<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible===false?'d-none':''}"">
 		${input}
 		</div>
 		`
@@ -184,7 +184,7 @@ function frm_Button(parentId, item, cb) {
 	let s = `<a class="${item.class || 'btn btn-info'}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id || ''}" href="${href}" target="${item.target || ''}" title="${titleText.replaceAll('"','\'')}">${label}</a>`
 
 	if(item.noGroup !== true) {
-		s = `<div class="${item.col || 'col-12'} p-1 ${item.visible===false?'hidden':''}">
+		s = `<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible===false?'hidden':''}">
 		${s}
 		</div>
 		`
@@ -428,7 +428,7 @@ function frm_TotalBox(parentId, item, cb) {
 	// } else {
 
 	s = `
-		<div class="${item.col || 'col-12'} p-1">
+		<div id="col_${item.id}" class="${item.col || 'col-12'} p-1">
 			<div class="table-responsive ${item.visible===false?'d-none':''}">
 				<table class="table align-middle m-0" title="${item.title || item.text || ''}">
 					<tbody>

@@ -18389,7 +18389,7 @@ body {
 
 .console {
   background-color: #35363a;
-  color: #198754;
+  color: green;
   height: 30rem;
   overflow: scroll;
   white-space: nowrap !important; }
@@ -18429,6 +18429,10 @@ body {
   border: 1px solid var(--bs-gray-500);
   border-radius: 3px; }
 
+.cerceve1.mother {
+  -webkit-box-shadow: 0 0.15rem 0.45rem 0 rgba(58, 59, 69, 0.3) !important;
+  box-shadow: 0 0.15rem 0.45rem 0 rgba(58, 59, 69, 0.3) !important; }
+
 .cerceve1 .card-header {
   font-weight: normal;
   background-color: rgba(var(--bs-primary-rgb), 0.2);
@@ -18456,6 +18460,10 @@ body {
   height: 24px;
   font-size: 12px; }
 
+.shadow {
+  -webkit-box-shadow: 0 0.15rem 0.45rem 0 rgba(58, 59, 69, 0.3) !important;
+  box-shadow: 0 0.15rem 0.45rem 0 rgba(58, 59, 69, 0.3) !important; }
+
 .dark .cerceve1 {
   color: var(--bs-gray-200) !important;
   background-color: var(--bs-gray-900) !important;
@@ -18464,9 +18472,13 @@ body {
     color: var(--bs-gray-200) !important;
     background-color: var(--bs-gray-800) !important; }
 
-.shadow {
-  -webkit-box-shadow: 0 0.15rem 0.45rem 0 rgba(58, 59, 69, 0.3) !important;
-  box-shadow: 0 0.15rem 0.45rem 0 rgba(58, 59, 69, 0.3) !important; }
+.dark .cerceve1.mother {
+  -webkit-box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important;
+  box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important; }
+
+.dark .shadow {
+  -webkit-box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important;
+  box-shadow: 0 2px 5px 0 rgba(232, 232, 232, 0.3) !important; }
 
 .card-header-primary {
   background-color: var(--bs-primary);

@@ -90,8 +90,8 @@
 					"collapsed":false,
 					"visible":false,
 					"fields":{
-						"uri":{"text":"Connection URI", "type":"string", "col":12,"value":"mongodb://localhost:27017/databaseName"},
-						"script":{"text":"Mongo Shell Script", "type":"code", "col":12, "rows":20 , "value":"var result=db.collection('testCollection').find({name:{$regex: '.*ali.*', $options: 'i'}})\nreturn result"}
+						"mongoDb.uri":{"text":"Connection URI", "type":"string", "col":12,"value":"mongodb://localhost:27017/databaseName"},
+						"mongoDb.script":{"text":"Mongo Shell Script", "type":"code", "col":12, "rows":20 , "value":"var result=db.collection('testCollection').find({name:{$regex: '.*ali.*', $options: 'i'}})\nreturn result"}
 					}
 				},
 				"sqlServerGroup1":{
@@ -105,7 +105,39 @@
 						"sqlServer.query":{"text":"SQL Query", "type":"code", "col":12, "rows":20 , "value":"SELECT * FROM Table1;"}
 					}
 				},
-				"passive":{"text":"Passive?","type":"boolean"}
+				"mySqlGroup1":{
+					"text":"MySQL",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"warn1":{"text":"MySQL is not ready yet.", "type":"label", "class":"alert-warning"}
+					}
+				},
+				"postgreSQLGroup1":{
+					"text":"PostgreSQL",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"warn1":{"text":"postgreSQL is not ready yet.", "type":"label", "class":"alert-warning"}
+					}
+				},
+				"wcfGroup1":{
+					"text":"Wcf Service",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"warn1":{"text":"Wcf Service is not ready yet.", "type":"label", "class":"alert-warning"}
+					}
+				},
+				"restApiGroup1":{
+					"text":"Rest API",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"warn1":{"text":"Rest API is not ready yet.", "type":"label", "class":"alert-warning"}
+					}
+				},
+				"passive":{"text":"Passive?","type":"boolean", "visible":false}
 			},
 			"dataSource": {
 				"url":"/db/importers"
@@ -113,73 +145,91 @@
 			"script":[
 				"function importerTypeChange(){",
 				"var val=document.querySelector('select[data-field=\"type\"]').value",
-				"document.querySelector('div[data-field=\"fileGroup1\"]').classList.add('d-none')",
-				"document.querySelector('div[data-field=\"fileSystem1\"]').classList.add('d-none')",
-				"document.querySelector('div[data-field=\"mongoDbGroup1\"]').classList.add('d-none')",
-				"document.querySelector('div[data-field=\"sqlServerGroup1\"]').classList.add('d-none')",
+				"document.querySelector('#col_card-fileGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-fileSystem1').classList.add('d-none')",
+				"document.querySelector('#col_card-mongoDbGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-sqlServerGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-mySqlGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-postgreSQLGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-wcfGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-restApiGroup1').classList.add('d-none')",
 				"switch(val){",
 				"case 'fileUpload':",
-				"document.querySelector('div[data-field=\"fileGroup1\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-fileGroup1').classList.remove('d-none')",
 				"fileUploadTypeChange()",
 				"break",
 				"case 'fileSystem':",
-				"document.querySelector('div[data-field=\"fileSystem1\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-fileSystem1').classList.remove('d-none')",
 				"fileSystemTypeChange()",
 				"break",
 				"case 'mongoDb':",
-				"document.querySelector('div[data-field=\"mongoDbGroup1\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-mongoDbGroup1').classList.remove('d-none')",
 				"break",
 				"case 'sqlServer':",
-				"document.querySelector('div[data-field=\"sqlServerGroup1\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-sqlServerGroup1').classList.remove('d-none')",
 				"sqlServerConnectionTypeChanged()",
+				"break",
+				"case 'mySql':",
+				"document.querySelector('#col_card-mySqlGroup1').classList.remove('d-none')",
+				"break",
+				"case 'postgreSQL':",
+				"document.querySelector('#col_card-postgreSQLGroup1').classList.remove('d-none')",
+				"break",
+				"case 'wcf':",
+				"document.querySelector('#col_card-wcfGroup1').classList.remove('d-none')",
+				"break",
+				"case 'restApi':",
+				"document.querySelector('#col_card-restApiGroup1').classList.remove('d-none')",
 				"break",
 				"}",
 				"}",
 				"",
 				"function sqlServerConnectionTypeChanged(){",
 				"var val=document.querySelector('select[data-field=\"sqlServer.connectionType\"]').value",
-				"document.querySelector('input[data-field=\"sqlServer.connectionString\"]').parentElement.classList.add('d-none')",
-				"document.querySelector('input[data-field=\"sqlServer.configObject\"]').parentElement.classList.add('d-none')",
+				"document.querySelector('#col_sqlServer_connectionString').classList.add('d-none')",
+				"document.querySelector('#col_sqlServer_configObject').classList.add('d-none')",
 				"switch(val){",
 				"case 'connectionString':",
-				"document.querySelector('input[data-field=\"sqlServer.connectionString\"]').parentElement.classList.remove('d-none')",
+				"document.querySelector('#col_sqlServer_connectionString').classList.remove('d-none')",
 				"break",
 				"case 'configObject':",
-				"document.querySelector('input[data-field=\"sqlServer.configObject\"]').parentElement.classList.remove('d-none')",
+				"document.querySelector('#col_sqlServer_configObject').classList.remove('d-none')",
 				"break",
 				"}",
 				"}",
 				"",
 				"function fileUploadTypeChange(){",
 				"var val=document.querySelector('select[data-field=\"fileUpload.type\"]').value",
-				"document.querySelector('div[data-field=\"csvGroup1\"]').classList.add('d-none')",
-				"document.querySelector('div[data-field=\"excelGroup1\"]').classList.add('d-none')",
+				"document.querySelector('#col_card-csvGroup1').classList.add('d-none')",
+				"document.querySelector('#col_card-excelGroup1').classList.add('d-none')",
 				"switch(val){",
 				"case 'csv':",
-				"document.querySelector('div[data-field=\"csvGroup1\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-csvGroup1').classList.remove('d-none')",
 				"break",
 				"case 'excel':",
-				"document.querySelector('div[data-field=\"excelGroup1\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-excelGroup1').classList.remove('d-none')",
 				"break",
 				"}",
 				"",
 				"}",
 				"function fileSystemTypeChange(){",
 				"var val=document.querySelector('select[data-field=\"fileSystem.type\"]').value",
-				"document.querySelector('div[data-field=\"csvGroup2\"]').classList.add('d-none')",
-				"document.querySelector('div[data-field=\"excelGroup2\"]').classList.add('d-none')",
+				"document.querySelector('#col_card-csvGroup2').classList.add('d-none')",
+				"document.querySelector('#col_card-excelGroup2').classList.add('d-none')",
 				"switch(val){",
 				"case 'csv':",
-				"document.querySelector('div[data-field=\"csvGroup2\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-csvGroup2').classList.remove('d-none')",
 				"break",
 				"case 'excel':",
-				"document.querySelector('div[data-field=\"excelGroup2\"]').classList.remove('d-none')",
+				"document.querySelector('#col_card-excelGroup2').classList.remove('d-none')",
 				"break",
 				"}",
 				"",
 				"}",
-				"",
-				"$(document).ready(()=>{ setTimeout(()=>{ importerTypeChange() },200) })"
+				"$(document).on('loaded', function (e) {",
+				"importerTypeChange()",
+				"$(this).off(e)",
+				"})"
 			]
 		}
 	]

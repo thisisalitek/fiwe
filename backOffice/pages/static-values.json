@@ -15,7 +15,7 @@
 		"mySql": "MySQL",
 		"postgreSQL": "PostgreSQL",
 		"wcf": "Wcf Service",
-		"restApi": "Rest Api"
+		"restApi": "Rest API"
 	},
 	"fileUploadTypes": {
 		"excel": "Excel",
