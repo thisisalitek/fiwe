@@ -2,8 +2,8 @@ function frm_Card(parentId, item, cb) {
 	//	<a class="btn btn-collapse ${item.collapsed?'collapsed':''}" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}" href="#"><i class="far fa-caret-square-up fa-2x"></i></a>
 
 	let s = `
-	<div class="${item.col || ''} p-1 pb-1 ${item.visible===false?'hidden':''}">
-	<div class="card cerceve1 ${item.level>1?'child':'mother'} ${item.class || ''}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" >
+	<div class="${item.col || ''} p-1 pb-1 ">
+	<div class="card cerceve1 ${item.level>1?'child':'mother'} ${item.class || ''} ${item.visible===false?'d-none':''}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}" >
 		<div class="card-header ${item.showHeader===false?'d-none':''}"  >
 			<span class="hand-pointer" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}">
 			<a class="btn btn-collapse ${item.collapsed?'collapsed':''}" data-bs-toggle="collapse" data-bs-target="#cardCollapse${item.id}" aria-expanded="${!item.collapsed?'false':'true'}" aria-fields="cardCollapse${item.id}" ><i class="fas fa-caret-up fa-2x"></i></a>	
@@ -195,6 +195,47 @@ function frm_Button(parentId, item, cb) {
 }
 
 function frm_TextareaBox(parentId, item, cb) {
+
+	let s = `
+	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''}"  style="font-family: courier new;height:auto;"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>
+	<input type="hidden" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   id="${item.id}" name="${item.name}" >
+	`
+
+	s = frm_GInput(s, item)
+	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
+
+	let textAreaValue = item.value != undefined ? item.value : ''
+	if(item.encoding == 'base64') {
+		textAreaValue = b64DecodeUnicode(item.value != undefined ? item.value : '')
+	}
+
+	document.querySelector(`${parentId} #${item.id}-textarea`).onkeydown = function(e) {
+		if(e.keyCode === 9) {
+			let val = this.value
+			let start = this.selectionStart
+			let end = this.selectionEnd
+			this.value = val.substring(0, start) + '\t' + val.substring(end)
+			this.selectionStart = this.selectionEnd = start + 1
+			return false
+		}
+	}
+
+	$(`${parentId} #${item.id}-textarea`).val(textAreaValue)
+	$(`${parentId} #${item.id}`).val(item.value != undefined ? item.value : '')
+
+	$(`${parentId} #${item.id}-textarea`).change(() => {
+		if(item.encoding == 'base64') {
+			$(`${parentId} #${item.id}`).val(b64EncodeUnicode($(`${parentId} #${item.id}-textarea`).val()))
+		} else {
+			$(`${parentId} #${item.id}`).val($(`${parentId} #${item.id}-textarea`).val())
+		}
+	})
+
+	cb()
+}
+
+
+function frm_TextareaBox111(parentId, item, cb) {
 
 	let s = `
 	<textarea level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"   class="form-control text-nowrap ${item.class || ''}"  style="font-family: courier new;height:auto;"  id="${item.id}-textarea" rows="${item.rows || 4}"  placeholder="${item.placeholder || ' '}" title="${item.title || item.text || ''}" ${item.required?'required="required"':''} ${item.readonly==true?'readonly':''} onchange="${item.onchange || ''}" autocomplete="off" spellcheck="false"></textarea>

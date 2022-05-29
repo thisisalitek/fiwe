@@ -3,7 +3,7 @@ module.exports=function(dbModel){
 	let schema = mongoose.Schema({
 		name:{ type: String, trim:true,default:'',required:[true,'name required'], unique:true},
 		type: {type: String, required: [true,'Importer Type required'],
-			enum:['fileUpload','fileSystem','mongoDb','msSql','mySql','postgreSQL','wcf','restApi']
+			enum:['fileUpload','fileSystem','mongoDb','sqlServer','mySql','postgreSQL','wcf','restApi']
 			, index:true},
 		fileUpload:{
 			type:{type :String, default: ''},

@@ -34,11 +34,11 @@
 				"fileGroup1":{
 					"text":"File Upload",
 					"collapsed":false,
-					"class":"d-none",
+					"visible":false,
 					"fields":{
 						"fileUpload.type":{"text":"File Upload Type", "type":"lookup", "staticValues":"fileUploadTypes","onchange":"fileUploadTypeChange(this.value)", "col":4},
 						"csvGroup1":{
-							"class":"d-none",
+							"visible":false,
 							"showHeader":false,
 							"fields":{
 								"fileUpload.csv.separator":{"text":"Separator", "type":"lookup", "lookup":{";":"Semicolon(;)",",":"Comma(,)","\t":"Tab character(\t)"}, "col":2},
@@ -48,7 +48,7 @@
 							}
 						},
 						"excelGroup1":{
-							"class":"d-none",
+							"visible":false,
 							"showHeader":false,
 							"fields":{
 								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
@@ -60,13 +60,13 @@
 				"fileSystem1":{
 					"text":"File System",
 					"collapsed":false,
-					"class":"d-none",
+					"visible":false,
 					"fields":{
 						"path":{"text":"Path", "type":"string", "col":6},
 						"afterImport":{"text":"After Import", "type":"string", "col":6},
 						"fileSystem.type":{"text":"Read File Type", "type":"lookup", "staticValues":"fileSystemTypes","onchange":"fileSystemTypeChange(this.value)", "col":4},
 						"csvGroup2":{
-							"class":"d-none",
+							"visible":false,
 							"showHeader":false,
 							"fields":{
 								"fileSystem.csv.separator":{"text":"Separator", "type":"lookup", "lookup":{";":"Semicolon(;)",",":"Comma(,)","\t":"Tab character(\t)"}, "col":2},
@@ -76,13 +76,33 @@
 							}
 						},
 						"excelGroup2":{
-							"class":"d-none",
+							"visible":false,
 							"showHeader":false,
 							"fields":{
 								"fileSystem.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
 								"fileSystem.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
 							}
 						}
+					}
+				},
+				"mongoDbGroup1":{
+					"text":"Mongo DB",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"uri":{"text":"Connection URI", "type":"string", "col":12,"value":"mongodb://localhost:27017/databaseName"},
+						"script":{"text":"Mongo Shell Script", "type":"code", "col":12, "rows":20 , "value":"var result=db.collection('testCollection').find({name:{$regex: '.*ali.*', $options: 'i'}})\nreturn result"}
+					}
+				},
+				"sqlServerGroup1":{
+					"text":"SQL Server",
+					"collapsed":false,
+					"visible":false,
+					"fields":{
+						"sqlServer.connectionType":{"text":"Connection Type", "type":"lookup", "lookup":{"connectionString":"Connection String","configObject":"ConfigObject"},"onchange":"sqlServerConnectionTypeChanged(this.value)", "col":4},
+						"sqlServer.connectionString":{"text":"Connection String", "type":"string", "visible":false, "value":"Server=localhost,1433;Database=database;User Id=username;Password=password;Encrypt=true"},
+						"sqlServer.configObject":{"text":"Config Object", "type":"json", "visible": false,"col":12, "rows":10,"value":"{\n\t\"user\":\"sa\"\n\t\"server\":\"localhost\"\n}"},
+						"sqlServer.query":{"text":"SQL Query", "type":"code", "col":12, "rows":20 , "value":"SELECT * FROM Table1;"}
 					}
 				},
 				"passive":{"text":"Passive?","type":"boolean"}
@@ -95,6 +115,8 @@
 				"var val=document.querySelector('select[data-field=\"type\"]').value",
 				"document.querySelector('div[data-field=\"fileGroup1\"]').classList.add('d-none')",
 				"document.querySelector('div[data-field=\"fileSystem1\"]').classList.add('d-none')",
+				"document.querySelector('div[data-field=\"mongoDbGroup1\"]').classList.add('d-none')",
+				"document.querySelector('div[data-field=\"sqlServerGroup1\"]').classList.add('d-none')",
 				"switch(val){",
 				"case 'fileUpload':",
 				"document.querySelector('div[data-field=\"fileGroup1\"]').classList.remove('d-none')",
@@ -104,8 +126,28 @@
 				"document.querySelector('div[data-field=\"fileSystem1\"]').classList.remove('d-none')",
 				"fileSystemTypeChange()",
 				"break",
+				"case 'mongoDb':",
+				"document.querySelector('div[data-field=\"mongoDbGroup1\"]').classList.remove('d-none')",
+				"break",
+				"case 'sqlServer':",
+				"document.querySelector('div[data-field=\"sqlServerGroup1\"]').classList.remove('d-none')",
+				"sqlServerConnectionTypeChanged()",
+				"break",
+				"}",
 				"}",
 				"",
+				"function sqlServerConnectionTypeChanged(){",
+				"var val=document.querySelector('select[data-field=\"sqlServer.connectionType\"]').value",
+				"document.querySelector('input[data-field=\"sqlServer.connectionString\"]').parentElement.classList.add('d-none')",
+				"document.querySelector('input[data-field=\"sqlServer.configObject\"]').parentElement.classList.add('d-none')",
+				"switch(val){",
+				"case 'connectionString':",
+				"document.querySelector('input[data-field=\"sqlServer.connectionString\"]').parentElement.classList.remove('d-none')",
+				"break",
+				"case 'configObject':",
+				"document.querySelector('input[data-field=\"sqlServer.configObject\"]').parentElement.classList.remove('d-none')",
+				"break",
+				"}",
 				"}",
 				"",
 				"function fileUploadTypeChange(){",
