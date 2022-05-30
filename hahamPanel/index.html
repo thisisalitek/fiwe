@@ -20,17 +20,16 @@
 	<script src="js/hahamjs/form-elements.js"></script>
 	<script src="js/hahamjs/grid-elements.js"></script>
 	<script src="js/hahamjs/haham.js"></script>
+	<link rel="stylesheet" data-name="vs/editor/editor.main" href="vendors/monaco-editor/min/vs/editor/editor.main.css" />
 	<link rel="stylesheet" href="css/main.css">
 	<script type="text/javascript">
 		if (!global.token)
 			location.href = 'login.html'
 	</script>
+	
+	
 	<style>
-		.dark #headerButtons .btn-outline-dark {
-			color: var(--bs-light);
-			border-color: var(--bs-gray-900);
-			background-color: var(--bs-gray-900);
-		}
+		
 	</style>
 </head>
 <body class="">
@@ -137,10 +136,23 @@
 			</footer>
 		</div>
 	</div>
-	<a class="scroll-to-top rounded" href="javascript:scrollToTop()">
+	<a class="scroll-to-top rounded" href="javascript:scrollToTop()" title="scroll to top">
 		<i class="fas fa-angle-up"></i>
 	</a>
+	
+
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		// var require = { paths: { vs: 'vendors/monaco-editor/min/vs' } }
+		var require = { paths: { vs: 'vendors/monaco-editor/dev/vs' } }
+	</script>
+	<script src="vendors/monaco-editor/dev/vs/loader.js"></script>
+	<script src="vendors/monaco-editor/dev/vs/editor/editor.main.nls.js"></script>
+	<script src="vendors/monaco-editor/dev/vs/editor/editor.main.js"></script>
+
+	<!-- <script src="vendors/monaco-editor/min/vs/loader.js"></script>
+	<script src="vendors/monaco-editor/min/vs/editor/editor.main.nls.js"></script>
+	<script src="vendors/monaco-editor/min/vs/editor/editor.main.js"></script> -->
 	<script src="js/script.js"></script>
 </body>
 </html>

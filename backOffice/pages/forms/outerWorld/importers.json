@@ -62,7 +62,7 @@
 							"visible":false,
 							"showHeader":false,
 							"fields":{
-								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
+								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "editorOptions":{"language":"python"}, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
 								"fileUpload.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
 							}
 						},
@@ -156,7 +156,14 @@
 					"collapsed":true,
 					"visible":true,
 					"fields":{
-						"testResult":{"text":"Output", "type":"code", "col":12, "rows":20}
+						"testResult":{"text":"Output", "type":"code", "col":12, 
+							"editorOptions":{ 
+								"language":"sql",
+								"contextmenu":false,
+								"readOnly":false,
+								"tabSize":3
+							}
+						}
 					}
 				}
 			},
@@ -167,8 +174,8 @@
 				"function uploadTest(){",
 				"let formData=bulkFormData('#mainCtrl')",
 				"postMan('/db/importers/uploadTest',{type:'POST',data:formData})",
-				".then(result=>{document.querySelector('#testResult-textarea').value=JSON.stringify(result,null,2)})",
-				".catch(err=>{document.querySelector('#testResult-textarea').value=JSON.stringify(err,null,2)})",
+				".then(result=>{document.querySelector('#testResult-code').editor.setValue(JSON.stringify(result,null,2))})",
+				".catch(err=>{document.querySelector('#testResult-code').editor.setValue(JSON.stringify(err,null,2))})",
 				"",
 				"}",
 				"function importerTypeChange(){",

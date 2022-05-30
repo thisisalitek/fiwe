@@ -31,6 +31,44 @@
 		"connectionString": "Connection String",
 		"configObject": "Config Object"
 	},
+	"codeEditorLanguages": {
+		"abap": "Abap",
+		"bat": "Bat",
+		"coffee": "Coffee",
+		"csharp": "Csharp",
+		"css": "Css",
+		"dart": "Dart",
+		"dockerfile": "Dockerfile",
+		"fsharp": "Fsharp",
+		"go": "Go",
+		"html": "Html",
+		"java": "Java",
+		"javascript": "Javascript",
+		"kotlin": "Kotlin",
+		"less": "Less",
+		"markdown": "Markdown",
+		"mysql": "Mysql",
+		"objective-c": "Objective-C",
+		"pgsql": "Pgsql",
+		"php": "Php",
+		"powershell": "Powershell",
+		"pug": "Pug",
+		"python": "Python",
+		"qsharp": "Qsharp",
+		"redis": "Redis",
+		"ruby": "Ruby",
+		"scala": "Scala",
+		"scheme": "Scheme",
+		"scss": "Scss",
+		"shell": "Shell",
+		"solidity": "Solidity",
+		"sql": "Sql",
+		"twig": "Twig",
+		"typescript": "Typescript",
+		"vb": "Vb",
+		"xml": "Xml",
+		"yaml": "Yaml"
+	},
 	"monthList": {
 		"1": "Ocak",
 		"2": "Şubat",
@@ -45,5 +83,17 @@
 		"11": "Kasım",
 		"12": "Aralık"
 	},
-	"yearList": [2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029]
+	"yearList": [
+		2019,
+		2020,
+		2021,
+		2022,
+		2023,
+		2024,
+		2025,
+		2026,
+		2027,
+		2028,
+		2029
+	]
 }

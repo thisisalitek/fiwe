@@ -324,19 +324,15 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 			item.rows = item.rows || 40
 			item.encoding = item.encoding || 'base64'
 			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
-			frm_TextareaBox(divId, item, cb)
+			frm_CodeEditor(divId, item, cb)
 			break
 		case 'json':
 			item.rows = item.rows || 40
 			item.encoding = item.encoding || 'base64'
 			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
-			frm_TextareaBox(divId, item, cb)
+			frm_CodeEditor(divId, item, cb)
 			break
-		case 'object':
-			item.rows = item.rows || 40
-			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
-			frm_TextareaBox(divId, item, cb)
-			break
+	
 		case 'button':
 			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
 			frm_Button(divId, item, cb)

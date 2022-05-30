@@ -1404,6 +1404,12 @@ header {
 	padding-bottom: 0.5rem!important;
 }
 
+.dark #headerButtons .btn-outline-dark {
+	color: var(--bs-light);
+	border-color: var(--bs-gray-900);
+	background-color: var(--bs-gray-900);
+}
+
 #mainCtrl {
 	overflow-y:scroll;
   height: calc(100vh - 140px);
