@@ -148,13 +148,20 @@ document.querySelector('#leftMenu').innerHTML = generateMenu(global.menu,null,'#
 function changeColorScheme(theme) {
 	if (theme)
 		localStorage.setItem('theme', theme)
-
-	if (localStorage.getItem('theme') == 'dark') {
-		document.documentElement.classList.remove('light')
-		document.documentElement.classList.add('dark')
-	} else {
+	let codeTheme='vs-dark'
+	if (localStorage.getItem('theme') == 'light') {
+		codeTheme='vs'
 		document.documentElement.classList.remove('dark')
 		document.documentElement.classList.add('light')
+	} else {
+		document.documentElement.classList.remove('light')
+		document.documentElement.classList.add('dark')
+	}
+	let codeDivList=document.querySelectorAll('div[data-type=code]')
+	let i=0
+	while(i<codeDivList.length){
+		codeDivList[i].editor.updateOptions({theme:codeTheme})
+		i++
 	}
 }
 

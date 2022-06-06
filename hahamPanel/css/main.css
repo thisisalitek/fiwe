@@ -19231,6 +19231,19 @@ header .nav-link {
   font-size: calc(1.325rem + 0.5vw);
   margin-bottom: 1rem; }
 
+a:hover {
+  opacity: 0.8; }
+
+.btn-toolbox {
+  font-size: 0.775rem !important;
+  padding: 0.1rem 0.5rem;
+  color: var(--bs-dark);
+  border-color: var(--bs-dark); }
+
+.dark .btn-toolbox {
+  color: var(--bs-light);
+  border-color: var(--bs-light); }
+
 .dark #filterRow > th.border-start {
   border-left: none !important; }
 
@@ -19241,7 +19254,11 @@ header .nav-link {
   -webkit-box-shadow: 0 0.15rem 0.45rem 0 #121212 !important;
   box-shadow: 0 0.15rem 0.45rem 0 #121212 !important; }
 
+.dark a {
+  color: var(--bs-cyan); }
+
 .dark a:hover {
+  color: var(--bs-cyan);
   opacity: 0.8; }
 
 .dark #side-menu {

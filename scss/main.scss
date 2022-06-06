@@ -1284,8 +1284,23 @@ header {
 	margin-bottom: 1rem;
 }
 
+a:hover {
+	opacity: 0.8;
+}
+
+.btn-toolbox {
+	font-size: 0.775rem !important;
+  padding: 0.1rem 0.5rem;
+	color: var(--bs-dark);
+  border-color: var(--bs-dark);
+}
 
 .dark {
+	.btn-toolbox {
+		color: var(--bs-light);
+    border-color: var(--bs-light);
+	}
+
 	#filterRow>th.border-start {
 		border-left: none !important;
 	}
@@ -1299,11 +1314,13 @@ header {
 		box-shadow: 0 0.15rem 0.45rem 0 #121212 !important;
 	}
 
-	a:hover {
-		// color: ;
+	a{
+		color:var(--bs-cyan);
+	}
+	a:hover{
+		color:var(--bs-cyan);
 		opacity: 0.8;
 	}
-
 	#side-menu {
 		color: var(--bs-gray-200);
 		background-color: var(--bs-gray-900);

@@ -380,7 +380,7 @@ function htmlEval(html, values = {}, bracketDollar = true) {
 				code += `let ${key}=${JSON.stringify(values[key])}\n`
 		})
 		code += `return \`${html}\``
-		
+
 		let f = new Function(code)
 		return f()
 	} catch (tryErr) { }
@@ -489,11 +489,11 @@ function remoteLookupAutocomplete(locals) {
 
 	if ((locals.value || '') != '') {
 		let url = idUrl.replace('{mid}', q.mid)
-		
+
 		postMan(url, { type: 'GET' })
 			.then(result => {
 				if (result) {
-					let label=htmlEval(labelStr,result) || ''
+					let label = htmlEval(labelStr, result) || ''
 					if (valueText == '') {
 						$(`#${locals.id}-autocomplete-text`).val(label)
 					}
@@ -661,25 +661,29 @@ function defaultPropertyValue(subObject, defaultValue) {
 }
 
 function getFormData(divId) {
-	let liste = document.querySelectorAll(`${divId} input, select`)
+	let liste = document.querySelectorAll(`${divId} input, select, div`)
 	let obj = {}
 	let i = 0
 	while (i < liste.length) {
 		let e = liste[i]
-		let key = e.getAttribute('data-field')
-		let dataType = e.getAttribute('data-type') || ''
-		if (key) {
-			if (key.indexOf('.-1.') < 0) {
-				if (['number', 'money', 'total', 'quantity', 'amount', 'price'].includes(dataType)) {
-					obj[key] = Number(e.value)
-				} else if (dataType == 'boolean') {
-					if (e.type == 'checkbox') {
-						obj[key] = e.checked
+		if (e.getAttribute('data-field')) {
+			let key = e.getAttribute('data-field')
+			let dataType = e.getAttribute('data-type') || ''
+			if (key) {
+				if (key.indexOf('.-1.') < 0) {
+					if (['number', 'money', 'total', 'quantity', 'amount', 'price'].includes(dataType)) {
+						obj[key] = Number(e.value)
+					} else if (dataType == 'code') {
+						obj[key]=e.editor.getValue()
+					} else if (dataType == 'boolean') {
+						if (e.type == 'checkbox') {
+							obj[key] = e.checked
+						} else {
+							obj[key] = Boolean(e.value)
+						}
 					} else {
-						obj[key] = Boolean(e.value)
+						obj[key] = e.value
 					}
-				} else {
-					obj[key] = e.value
 				}
 			}
 		}
@@ -943,42 +947,42 @@ function refreshRemoteList(remoteList) {
 		})
 
 		let url = `${remoteList[e].dataSource.url.split('?')[0]}/${idList.join(',')}`
-		let labelStr=remoteList[e].dataSource.label || '${name}'
-		postMan(url,{type:'GET'})
-		.then(result=>{
-			let dizi = []
-			if(result) {
-				if(result.docs != undefined) {
-					result.docs.forEach((e) => {
-						let text = htmlEval(labelStr, e)
-						dizi.push({ label: text, value: text, obj: e })
-					})
-				} else {
-					if(Array.isArray(result)) {
-						result.forEach((e) => {
+		let labelStr = remoteList[e].dataSource.label || '${name}'
+		postMan(url, { type: 'GET' })
+			.then(result => {
+				let dizi = []
+				if (result) {
+					if (result.docs != undefined) {
+						result.docs.forEach((e) => {
 							let text = htmlEval(labelStr, e)
 							dizi.push({ label: text, value: text, obj: e })
 						})
 					} else {
-						let text = htmlEval(labelStr, result)
-						dizi.push({ label: text, value: text, obj: result })
-					}
-				}
-			}
-			Object.keys(remoteList[e].list).forEach((key) => {
-				dizi.forEach((d) => {
-					if (d.obj._id == key) {
-						remoteList[e].list[key].text = htmlEval((remoteList[e].html || remoteList[e].dataSource.label || '${name}'), d.obj)
-						remoteList[e].list[key].label = htmlEval((remoteList[e].dataSource.label || '${name}'), d.obj)
-						$(remoteList[e].list[key].cellId).html(remoteList[e].list[key].text)
-						if (remoteList[e].list[key].lookupTextField) {
-							$(`input[name="${remoteList[e].list[key].lookupTextField}"]`).val(d.value)
+						if (Array.isArray(result)) {
+							result.forEach((e) => {
+								let text = htmlEval(labelStr, e)
+								dizi.push({ label: text, value: text, obj: e })
+							})
+						} else {
+							let text = htmlEval(labelStr, result)
+							dizi.push({ label: text, value: text, obj: result })
 						}
 					}
+				}
+				Object.keys(remoteList[e].list).forEach((key) => {
+					dizi.forEach((d) => {
+						if (d.obj._id == key) {
+							remoteList[e].list[key].text = htmlEval((remoteList[e].html || remoteList[e].dataSource.label || '${name}'), d.obj)
+							remoteList[e].list[key].label = htmlEval((remoteList[e].dataSource.label || '${name}'), d.obj)
+							$(remoteList[e].list[key].cellId).html(remoteList[e].list[key].text)
+							if (remoteList[e].list[key].lookupTextField) {
+								$(`input[name="${remoteList[e].list[key].lookupTextField}"]`).val(d.value)
+							}
+						}
+					})
 				})
 			})
-		})
-		.catch(console.error)
+			.catch(console.error)
 	})
 }
 

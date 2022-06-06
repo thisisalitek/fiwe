@@ -35,25 +35,13 @@ function showError(err) {
 	console.log('initialize error:', err)
 }
 
-var xls = require('./lib/excel-helper')
 function testKod(a) {
 	return new Promise((resolve, reject) => {
-		return resolve()
-		let options = {
-			sheetName: (s) => s.toUpperCase(),
-			rows: (rows) => {
-				rows.forEach(e => {
-					e[0]=(e[0] || '').toUpperCase()
-				})
-				return rows
-			}
-		}
-		xls.convertXlsxToJSON(path.join(__dirname, 'resources', 't1.xlsx'),options)
-			.then(result => {
-				tempLog('t1.json',JSON.stringify(result,null,2))
-				resolve()
-			})
-			.catch(reject)
+		let s= '(s) => s.toUpperCase()'
+		var f=eval(s)
+		console.log(f('merhaba dunya'))
+		resolve()
+		
 
 	})
 }

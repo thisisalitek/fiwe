@@ -48,6 +48,7 @@
 					"visible":false,
 					"fields":{
 						"fileUpload.type":{"text":"File Upload Type", "type":"lookup", "staticValues":"fileUploadTypes","onchange":"fileUploadTypeChange(this.value)", "col":3},
+						"divider2":{"type":"w-100"},
 						"csvGroup1":{
 							"visible":false,
 							"showHeader":false,
@@ -62,7 +63,7 @@
 							"visible":false,
 							"showHeader":false,
 							"fields":{
-								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "editorOptions":{"language":"python"}, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
+								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "editorOptions":{"language":"python"}, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
 								"fileUpload.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
 							}
 						},
@@ -160,7 +161,7 @@
 							"editorOptions":{ 
 								"language":"sql",
 								"contextmenu":false,
-								"readOnly":false,
+								"readOnly":true,
 								"tabSize":3
 							}
 						}
@@ -174,8 +175,11 @@
 				"function uploadTest(){",
 				"let formData=bulkFormData('#mainCtrl')",
 				"postMan('/db/importers/uploadTest',{type:'POST',data:formData})",
-				".then(result=>{document.querySelector('#testResult-code').editor.setValue(JSON.stringify(result,null,2))})",
-				".catch(err=>{document.querySelector('#testResult-code').editor.setValue(JSON.stringify(err,null,2))})",
+				".then(result=>{ ",
+				"console.log('result:', result)",
+				" document.querySelector('#testResult').editor.setValue(JSON.stringify(result,null,2))",
+				"})",
+				".catch(err=>{document.querySelector('#testResult').editor.setValue(JSON.stringify(err,null,2))})",
 				"",
 				"}",
 				"function importerTypeChange(){",

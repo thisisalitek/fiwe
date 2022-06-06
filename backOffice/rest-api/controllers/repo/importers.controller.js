@@ -44,36 +44,72 @@ function uploadTest(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
 		let data = req.body || {}
 		data._id = undefined
+		if(!data.testFileUpload.data)
+			return reject('Please upload a file')
 		let newDoc = new dbModel.importers(data)
 		if (!epValidateSync(newDoc, reject))
 			return
-		excelImport(newDoc, data.testFileUpload).then(resolve).catch(reject)
-		//resolve({isim:newDoc.name,turu:newDoc.type, data:data.testFileUpload})
-		//newDoc.save().then(resolve).catch(reject)
-
+		switch(newDoc.type){
+			case 'fileUpload':
+				switch(newDoc.fileUpload.type){
+					case 'excel':
+						excelImport(newDoc, data.testFileUpload).then(resolve).catch(reject)
+					break
+					default:
+					reject(`${newDoc.type} / ${newDoc.fileUpload.type} module is not ready yet`)
+					break
+				}
+			break
+			default:
+			reject(`${newDoc.type} module is not ready yet`)
+			break
+		}
+	
 	})
 }
 
 
+// let options = {
+// 	sheetName: (s) => s.toUpperCase(),
+// 	rows: (rows) => {
+// 		rows.forEach(e => {
+// 			e[0] = (e[0] || '').toUpperCase()
+// 		})
+// 		return rows
+// 	}
+// }
+
 function excelImport(importerDoc, dosya) {
-	return new Promise((resolve, reject) => {
-		util.saveTempFolder(dosya.fileName, dosya.data)
-			.then(tempFileName => {
-				let options = {
-					sheetName: (s) => s.toUpperCase(),
-					rows: (rows) => {
-						rows.forEach(e => {
-							e[0] = (e[0] || '').toUpperCase()
-						})
-						return rows
+	
+		return new Promise((resolve, reject) => {
+
+			util.saveTempFolder(dosya.fileName, dosya.data)
+				.then(tempFileName => {
+					let options = {
+						sheetName: (s) => s,
+						rows: (rows,sheetName) =>rows
 					}
-				}
-				excelHelper.convertXlsxToJSON(tempFileName, options)
-					.then(resolve)
-					.catch(reject)
-			})
-			.catch(reject)
-	})
+					if(importerDoc.fileUpload.excel.sheetNameFunc){
+						try{
+							options.sheetName=eval(importerDoc.fileUpload.excel.sheetNameFunc)
+						}catch(err){
+							return reject(`(fileUpload.excel.sheetNameFunc) ${err.message}`)
+						}
+					}
+					if(importerDoc.fileUpload.excel.rowsFunc){
+						try{
+							options.rows=eval(importerDoc.fileUpload.excel.rowsFunc)
+						}catch(err){
+							return reject(`(fileUpload.excel.rowsFunc) ${err.message}`)
+						}
+					}
+					excelHelper.convertXlsxToJSON(tempFileName, options)
+						.then(resolve)
+						.catch(reject)
+				})
+				.catch(reject)
+		})
+	
 }
 
 function copy(dbModel, member, req) {

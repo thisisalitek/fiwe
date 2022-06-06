@@ -321,8 +321,8 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 			frm_TextareaBox(divId, item, cb)
 			break
 		case 'code':
-			item.rows = item.rows || 40
-			item.encoding = item.encoding || 'base64'
+			// item.rows = item.rows || 40
+			// item.encoding = item.encoding || 'base64'
 			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
 			frm_CodeEditor(divId, item, cb)
 			break

@@ -1144,7 +1144,7 @@ function buttonRowCell(listItem, rowIndex, item) {
 	Object.keys(item.options.buttons).forEach((key) => {
 		if (key != 'add' && grpButtons.includes(key) == false) {
 			if (item.options.buttons[key][0]) {
-			
+
 				s += htmlEval(item.options.buttons[key][1], listItem)
 			}
 
