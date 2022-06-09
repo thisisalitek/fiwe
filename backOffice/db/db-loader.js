@@ -42,10 +42,8 @@ global.sendToTrash = (dbModel, collectionName, member, filter) => new Promise((r
 	let conn = dbModel.conn
 	dbModel[collectionName].findOne(filter)
 		.then(doc => {
-
-
-			if (conn.model(collectionName).relations) {
-				let relations = conn.model(collectionName).relations
+			if (dbModel.relations) {
+				let relations = dbModel.relations
 				let keys = Object.keys(relations)
 				let index = 0
 				let errorList = []

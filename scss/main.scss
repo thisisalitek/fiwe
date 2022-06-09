@@ -1295,6 +1295,10 @@ a:hover {
   border-color: var(--bs-dark);
 }
 
+.code-label {
+	opacity: 0.65;
+}
+
 .dark {
 	.btn-toolbox {
 		color: var(--bs-light);

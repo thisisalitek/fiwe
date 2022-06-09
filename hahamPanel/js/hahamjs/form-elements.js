@@ -274,7 +274,10 @@ function frm_CodeEditor(parentId, item, cb) {
 	let s = `
 	<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
 	<div class="row m-0">
-		<div class="col-6 p-0 d-none">
+		<div class="col-6 p-0">
+			<label class="code-label">${item.text}</label>
+		</div>
+		<div class="col p-0 d-none">
 			<select id="${item.id}-language" class="form-control" onchange="changeEditorLanguage('#${item.id}',this.value)">
 				<option value="javascript">javascript/json</option>
 				<option value="python">python</option>
@@ -312,12 +315,13 @@ function frm_CodeEditor(parentId, item, cb) {
 				value: textAreaValue,
 				language: item.editorOptions.language || 'javascript',
 				theme: localStorage.getItem('theme') == 'dark' ? 'vs-dark' : 'vs',
-				automaticLayout: true,
+				automaticLayout: false,
 				autoIndent: true,
 				contextmenu: true,
 				formatOnType: true,
 				codeLens: true,
 				scrollBeyondLastLine: true,
+				
 				minimap: {
 					enabled: false
 				}

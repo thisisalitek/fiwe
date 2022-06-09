@@ -71,6 +71,8 @@ module.exports = function (dbModel) {
 	let model = dbModel.conn.model(collectionName, schema, collectionName)
 
 	model.removeOne = (member, filter) => sendToTrash(dbModel, collectionName, member, filter)
-
+	model.relations={
+    repositories:{field:'importerId', message:'This document depended on Projects'},
+  }
 	return model
 }

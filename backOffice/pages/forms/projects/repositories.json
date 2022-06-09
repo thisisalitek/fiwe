@@ -3,9 +3,8 @@
 		{
 			"type": "grid",
 			"fields": {
-				"projectId":{"text":"Project", "type":"remoteLookup","dataSource":{"url":"/db/projects"}},
 				"name":{"text":"Name", "type":"string"},
-				"description":{"text":"Description", "type":"string"},
+				"importer":{"text":"Importer", "type":"remoteLookup", "dataSource":{"url":"/db/importers"}},
 				"passive":{"text":"Passive?","type":"boolean"}
 			},
 			"options": {
@@ -21,8 +20,6 @@
 				}
 			},
 			"dataSource": {
-				"type":"remote",
-				"method":"GET",
 				"url":"/db/repositories"
 			}
 
@@ -32,13 +29,22 @@
 		{
 			"type":"form",
 			"fields": {
-				"projectId":{"text":"Project", "type":"remoteLookup","dataSource":{"url":"/db/projects"}},
-				"name":{"text":"Name", "type":"string"},
-				"description":{"text":"Description", "type":"string"},
-				"passive":{"text":"Passive?","type":"boolean"}
+				"name":{"text":"Name", "type":"string","col":3},
+				"description":{"text":"Description", "type":"string","col":4},
+				"passive":{"text":"Passive?","type":"boolean","col":2},
+				"divisor1":{"type":"w-100"},
+				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "dataSource":{"url":"/db/importers"}},
+				"btnFileUpload":{"text":"Upload File", "type":"file", "col":4},
+				"btnRunImporter":{"text":"Run Import", "type":"button", "href":"javascript:alertX('Import sun')", "col":4},
+				"testResult":{"text":"New Data", "type":"code", "col":12, 
+					"editorOptions":{ 
+						"language":"javascript",
+						"contextmenu":true,
+						"tabSize":3
+					}
+				}
 			},
 			"dataSource": {
-				"method":"GET",
 				"url":"/db/repositories"
 			}
 		}

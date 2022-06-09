@@ -85,8 +85,8 @@ function getList(dbModel, member, req) {
 			'name': 1
 		}
 
-		if ((req.query.projectId || '') != '')
-			filter['projectId'] = req.query.projectId
+		if ((req.query.importer || '') != '')
+			filter['importer'] = req.query.importer
 
 		if ((req.query.passive || '') != '')
 			filter['passive'] = req.query.passive
