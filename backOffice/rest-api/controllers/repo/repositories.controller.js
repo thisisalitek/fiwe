@@ -73,8 +73,8 @@ function copy(dbModel, member, req) {
 function getList(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
 		let options = {
-			page: (req.query.page || 1)
-
+			page: (req.query.page || 1),
+			select:'-data.data'
 		}
 
 		if ((req.query.pageSize || req.query.limit))

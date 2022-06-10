@@ -159,10 +159,10 @@
 					"fields":{
 						"testResult":{"text":"Output", "type":"code", "col":12, 
 							"editorOptions":{ 
-								"language":"sql",
+								"language":"json",
 								"contextmenu":false,
 								"readOnly":true,
-								"tabSize":3
+								"tabSize":4
 							}
 						}
 					}

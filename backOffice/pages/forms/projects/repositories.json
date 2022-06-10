@@ -4,6 +4,7 @@
 			"type": "grid",
 			"fields": {
 				"name":{"text":"Name", "type":"string"},
+				"docCount":{"text":"Document Count", "type":"string", "html":"${data.length}"},
 				"importer":{"text":"Importer", "type":"remoteLookup", "dataSource":{"url":"/db/importers"}},
 				"passive":{"text":"Passive?","type":"boolean"}
 			},
@@ -34,19 +35,49 @@
 				"passive":{"text":"Passive?","type":"boolean","col":2},
 				"divisor1":{"type":"w-100"},
 				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "dataSource":{"url":"/db/importers"}},
-				"btnFileUpload":{"text":"Upload File", "type":"file", "col":4},
-				"btnRunImporter":{"text":"Run Import", "type":"button", "href":"javascript:alertX('Import sun')", "col":4},
-				"testResult":{"text":"New Data", "type":"code", "col":12, 
-					"editorOptions":{ 
-						"language":"javascript",
-						"contextmenu":true,
-						"tabSize":3
+				"group1":{
+					"text":"Data Import",
+					"visible":false,
+					"fields":{
+						"newData":{"text":"Upload File", "type":"file", "col":4},
+						"btnRunImporter":{"text":"Run Import", "type":"button", "href":"javascript:upload()", "col":4},
+						"testResult":{"text":"New Data", "type":"code", "col":12, 
+							"editorOptions":{ 
+								"language":"json",
+								"contextmenu":true,
+								"tabSize":4
+							}
+						}
 					}
 				}
 			},
 			"dataSource": {
 				"url":"/db/repositories"
-			}
+			},
+			"script":[
+				"function upload(){",
+				"let formData=bulkFormData('#mainCtrl #col_newData')",
+				"if(formData.newData.data==''){",
+				"return showError('Please upload a file.\\nhello world')",
+				"}",
+				"let data={",
+				"repositoryId:hashObj.id || '',",
+				"newData:formData.newData,",
+				"}",
+				"postMan('/db/importers/uploadFile',{type:'POST',data:data})",
+				".then(result=>{ ",
+				"document.querySelector('#testResult').editor.setValue(JSON.stringify(result,null,2))",
+				"})",
+				".catch(err=>{document.querySelector('#testResult').editor.setValue(JSON.stringify(err,null,2))})",
+				"",
+				"}",
+				"$(document).on('loaded', function (e) {",
+				"if(hashObj && hashObj.func=='edit'){",
+				"document.querySelector('#col_card-group1').classList.remove('d-none')",
+				"}",
+				"$(this).off(e)",
+				"})"
+			]
 		}
 	]
 }

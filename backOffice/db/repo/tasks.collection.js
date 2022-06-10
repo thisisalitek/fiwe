@@ -12,7 +12,7 @@ module.exports=function(dbModel){
 		status:{type: String, required: true, default:'pending', enum:['running','pending','completed','cancelled','error'], index:true},
 		attemptCount:{type:Number,default:1, index:true},
 		error:[]
-	})
+	}, { versionKey: false })
 
 	schema.pre('save', (next)=>next())
 	schema.pre('remove', (next)=>next())

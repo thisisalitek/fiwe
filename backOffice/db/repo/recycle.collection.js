@@ -7,7 +7,7 @@ module.exports=function(dbModel){
 		deletedBy: {type: String, required: true, default: '', index:true},
 		deletedById: {type: mongoose.Schema.Types.ObjectId, default: null, index:true},
 		deletedDate: { type: Date,required: true, default: Date.now, index:true}
-	})
+	}, { versionKey: false })
 
 	schema.pre('save', (next)=>next())
 	schema.pre('remove', (next)=>next())

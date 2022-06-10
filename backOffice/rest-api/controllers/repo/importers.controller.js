@@ -20,6 +20,9 @@ module.exports = (dbModel, member, req) => new Promise((resolve, reject) => {
 				case 'uploadTest':
 					uploadTest(dbModel, member, req).then(resolve).catch(reject)
 					break
+				case 'uploadFile':
+					uploadFile(dbModel, member, req).then(resolve).catch(reject)
+					break
 				default:
 					post(dbModel, member, req).then(resolve).catch(reject)
 					break
@@ -40,76 +43,121 @@ module.exports = (dbModel, member, req) => new Promise((resolve, reject) => {
 })
 
 
+function uploadFile(dbModel, member, req) {
+	return new Promise((resolve, reject) => {
+		let data = req.body || {}
+		if (!data.repositoryId)
+			return reject('repositoryId required')
+		if (!data.newData)
+			return reject('Please upload a file')
+		dbModel.repositories.findOne({ _id: data.repositoryId })
+			.then(repoDoc => {
+				dbModel.importers.findOne({ _id: repoDoc.importer })
+					.then(importerDoc => {
+						if (dbnull(importerDoc, reject)) {
+							switch (importerDoc.type) {
+								case 'fileUpload':
+									switch (importerDoc.fileUpload.type) {
+										case 'excel':
+											excelImport(importerDoc, data.newData)
+												.then(result => {
+													// let newId=new ObjectId()
+													let obj = {
+														importerType:importerDoc.type,
+														fileName:data.newData.fileName,
+														sourceType:importerDoc.fileUpload.type,
+														contentType:data.newData.type,
+														createdDate:new Date(),
+														createdBy: member.username,
+														data: result
+													}
+													repoDoc.data.push(obj)
+													repoDoc.save()
+														.then(() => resolve('OK'))
+														.catch(reject)
+												})
+												.catch(reject)
+											break
+										default:
+											reject(`${importerDoc.type} / ${importerDoc.fileUpload.type} module is not ready yet`)
+											break
+									}
+									break
+								default:
+									reject(`${importerDoc.type} module is not ready yet`)
+									break
+							}
+						}
+					})
+					.catch(reject)
+			})
+			.catch(reject)
+
+
+	})
+}
+
 function uploadTest(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
 		let data = req.body || {}
 		data._id = undefined
-		if(!data.testFileUpload.data)
+		if (!data.testFileUpload.data)
 			return reject('Please upload a file')
 		let newDoc = new dbModel.importers(data)
 		if (!epValidateSync(newDoc, reject))
 			return
-		switch(newDoc.type){
+		switch (newDoc.type) {
 			case 'fileUpload':
-				switch(newDoc.fileUpload.type){
+				switch (newDoc.fileUpload.type) {
 					case 'excel':
 						excelImport(newDoc, data.testFileUpload).then(resolve).catch(reject)
-					break
+						break
 					default:
-					reject(`${newDoc.type} / ${newDoc.fileUpload.type} module is not ready yet`)
-					break
+						reject(`${newDoc.type} / ${newDoc.fileUpload.type} module is not ready yet`)
+						break
 				}
-			break
+				break
 			default:
-			reject(`${newDoc.type} module is not ready yet`)
-			break
+				reject(`${newDoc.type} module is not ready yet`)
+				break
 		}
-	
+
 	})
 }
 
 
-// let options = {
-// 	sheetName: (s) => s.toUpperCase(),
-// 	rows: (rows) => {
-// 		rows.forEach(e => {
-// 			e[0] = (e[0] || '').toUpperCase()
-// 		})
-// 		return rows
-// 	}
-// }
 
 function excelImport(importerDoc, dosya) {
-	
-		return new Promise((resolve, reject) => {
 
-			util.saveTempFolder(dosya.fileName, dosya.data)
-				.then(tempFileName => {
-					let options = {
-						sheetName: (s) => s,
-						rows: (rows,sheetName) =>rows
+	return new Promise((resolve, reject) => {
+
+		util.saveTempFolder(dosya.fileName, dosya.data)
+			.then(tempFileName => {
+				let options = {
+					sheetName: (s) => s,
+					rows: (rows, sheetName) => rows
+				}
+				if (importerDoc.fileUpload.excel.sheetNameFunc) {
+					try {
+						options.sheetName = eval(importerDoc.fileUpload.excel.sheetNameFunc)
+					} catch (err) {
+						return reject(`(fileUpload.excel.sheetNameFunc) ${err.message}`)
 					}
-					if(importerDoc.fileUpload.excel.sheetNameFunc){
-						try{
-							options.sheetName=eval(importerDoc.fileUpload.excel.sheetNameFunc)
-						}catch(err){
-							return reject(`(fileUpload.excel.sheetNameFunc) ${err.message}`)
-						}
+				}
+				if (importerDoc.fileUpload.excel.rowsFunc) {
+					try {
+						options.rows = eval(importerDoc.fileUpload.excel.rowsFunc)
+					} catch (err) {
+						return reject(`(fileUpload.excel.rowsFunc) ${err.message}`)
 					}
-					if(importerDoc.fileUpload.excel.rowsFunc){
-						try{
-							options.rows=eval(importerDoc.fileUpload.excel.rowsFunc)
-						}catch(err){
-							return reject(`(fileUpload.excel.rowsFunc) ${err.message}`)
-						}
-					}
-					excelHelper.convertXlsxToJSON(tempFileName, options)
-						.then(resolve)
-						.catch(reject)
-				})
-				.catch(reject)
-		})
-	
+				}
+				excelHelper.convertXlsxToJSON(tempFileName, options)
+					.then(resolve)
+					.catch(reject)
+			})
+			.catch(reject)
+	})
+
 }
 
 function copy(dbModel, member, req) {

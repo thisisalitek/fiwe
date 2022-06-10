@@ -6,11 +6,11 @@ module.exports=function(dbModel){
 		importer: {type: mongoose.Schema.Types.ObjectId, ref:'importers', mdl:dbModel.importers,  index:true},
 		allowSameData: {type: Boolean, default: false, index:true},
 		importLogs:[],
-		data:{type:Object, default:null},
+		data:[],
 		createdDate: { type: Date,default: Date.now, index:true},
 		modifiedDate:{ type: Date,default: Date.now},
 		passive: {type: Boolean, default: false, index:true}
-	})
+	}, { versionKey: false })
 
 	schema.pre('save', (next)=>next())
 	schema.pre('remove', (next)=>next())

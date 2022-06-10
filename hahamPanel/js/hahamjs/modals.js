@@ -168,7 +168,12 @@ function alertX(message, title = '', type = 'info', cb) {
 }
 
 function showError(err, cb) {
-	alertX(`<small class="text-muted">${err.code || err.name || ''}</small><br>${err.message || err.name || ''}`, 'Hata', 'danger', cb)
+	if(typeof err=='string'){
+		alertX(`${err.replace(/\n/g,'<br>')}`, 'Hata', 'danger', cb)
+	}else{
+		alertX(`<small class="text-muted">${err.code || err.name || ''}</small><br>${err.message || err.name || ''}`, 'Hata', 'danger', cb)
+	}
+	
 }
 
 

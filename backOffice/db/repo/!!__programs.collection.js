@@ -50,7 +50,7 @@ module.exports=function(dbModel){
 		createdDate: { type: Date,default: Date.now},
 		modifiedDate:{ type: Date,default: Date.now},
 		passive: {type: Boolean, default: false}
-	})
+	}, { versionKey: false })
 
 	schema.pre('save', (next)=>next())
 	schema.pre('remove', (next)=>next())
