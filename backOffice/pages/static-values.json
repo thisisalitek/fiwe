@@ -5,7 +5,8 @@
 	},
 	"genderList": {
 		"male": "Erkek",
-		"female": "Kadin"
+		"female": "Kadin",
+		"other": "lgbtihgjkfjgf+"
 	},
 	"importerTypes": {
 		"fileUpload": "File Upload",

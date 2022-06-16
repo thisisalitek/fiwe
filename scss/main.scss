@@ -24,7 +24,7 @@ body {
 .form-switch .form-check-input {
 	width: 2.5rem !important;
 	height: 1.25rem !important;
-	margin-left: -2.5em !important;
+	margin-left: -1.5em !important;
 	margin-top: 0 !important;
 	margin-right: 0.5rem !important;
 }
@@ -942,16 +942,16 @@ footer .btn {
 	padding: 2px;
 }
 
-table {
-	.btn {
-		text-shadow: 1px 0 0 rgba(var(--bs-dark-rgb), 0.2), -1px 0 0 rgba(var(--bs-dark-rgb), 0.2), 0 1px 0 rgba(var(--bs-dark-rgb), 0.2), 0 -1px 0 rgba(var(--bs-dark-rgb), 0.2), 1px 1px rgba(var(--bs-dark-rgb), 0.2), -1px -1px 0 rgba(var(--bs-dark-rgb), 0.2), 1px -1px 0 rgba(var(--bs-dark-rgb), 0.2), -1px 1px 0 rgba(var(--bs-dark-rgb), 0.2);
-	}
+// table {
+// 	.btn {
+// 		text-shadow: 1px 0 0 rgba(var(--bs-dark-rgb), 0.2), -1px 0 0 rgba(var(--bs-dark-rgb), 0.2), 0 1px 0 rgba(var(--bs-dark-rgb), 0.2), 0 -1px 0 rgba(var(--bs-dark-rgb), 0.2), 1px 1px rgba(var(--bs-dark-rgb), 0.2), -1px -1px 0 rgba(var(--bs-dark-rgb), 0.2), 1px -1px 0 rgba(var(--bs-dark-rgb), 0.2), -1px 1px 0 rgba(var(--bs-dark-rgb), 0.2);
+// 	}
 
-	.btn-info {
-		text-shadow: 1px 0 0 rgba(255, 255, 255, 0.4), -1px 0 0 rgba(255, 255, 255, 0.4), 0 1px 0 rgba(255, 255, 255, 0.4), 0 -1px 0 rgba(255, 255, 255, 0.4), 1px 1px rgba(255, 255, 255, 0.4), -1px -1px 0 rgba(255, 255, 255, 0.4), 1px -1px 0 rgba(255, 255, 255, 0.4), -1px 1px 0 rgba(255, 255, 255, 0.4);
-	}
+// 	.btn-info {
+// 		text-shadow: 1px 0 0 rgba(255, 255, 255, 0.4), -1px 0 0 rgba(255, 255, 255, 0.4), 0 1px 0 rgba(255, 255, 255, 0.4), 0 -1px 0 rgba(255, 255, 255, 0.4), 1px 1px rgba(255, 255, 255, 0.4), -1px -1px 0 rgba(255, 255, 255, 0.4), 1px -1px 0 rgba(255, 255, 255, 0.4), -1px 1px 0 rgba(255, 255, 255, 0.4);
+// 	}
 
-}
+// }
 
 .status,
 .status:hover {

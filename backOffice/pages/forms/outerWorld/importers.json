@@ -63,8 +63,8 @@
 							"visible":false,
 							"showHeader":false,
 							"fields":{
-								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "editorOptions":{"language":"python"}, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
-								"fileUpload.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
+								"fileUpload.excel.sheetNameFunc":{"text":"Sheet Name Function","type":"code", "rows":10, "editorOptions":{"language":"javascript"}, "value":"(s) => {\n\treturn s.toUpperCase()\n}", "col":6},
+								"fileUpload.excel.rowsFunc":{"text":"Rows Function", "type":"code", "rows":10, "editorOptions":{"language":"javascript"}, "value":"(rows,sheetName) => {\n\trows.forEach(e => {\n\t\te[0]=(e[0] || \"\").toUpperCase()\n\t})\n\treturn rows\n}", "col":6}
 							}
 						},
 						"testFileUpload":{"text":"Upload File", "type":"file", "col":6},

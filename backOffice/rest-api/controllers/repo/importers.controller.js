@@ -50,7 +50,7 @@ function uploadFile(dbModel, member, req) {
 			return reject('repositoryId required')
 		if (!data.newData)
 			return reject('Please upload a file')
-		dbModel.repositories.findOne({ _id: data.repositoryId })
+		dbModel.workspace.findOne({ _id: data.repositoryId })
 			.then(repoDoc => {
 				dbModel.importers.findOne({ _id: repoDoc.importer })
 					.then(importerDoc => {

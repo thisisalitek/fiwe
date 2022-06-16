@@ -33,7 +33,7 @@ function grid(parentId, item, insideOfModal, cb) {
 	}
 	s += `
 	<div class="table-responsive">
-	<table id="table${item.id}" class="table table-striped border m-0 haham-table ${item.level > 0 ? 'table-bordered' : ''}"  cellspacing="0">
+	<table id="table${item.id}" class="table table-striped border m-0 align-middle haham-table ${item.level > 0 ? 'table-bordered' : ''}"  cellspacing="0">
 	<tbody></tbody>
 	</table>
 	</div>
@@ -57,7 +57,6 @@ function grid(parentId, item, insideOfModal, cb) {
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 
 	document.querySelector(`${parentId} #${item.id}`).item = item
-
 
 
 
@@ -217,7 +216,7 @@ function gridBody(parentId, item, insideOfModal, cb) {
 				listItem = {}
 
 			listItem.rowIndex = index
-			s += `<tr>`
+			s += `<tr rowIndex="${listItem.rowIndex }" >`
 			if (item.options.selection) {
 				s += `<td><input class="grid-checkbox checkSingle" type="checkbox" value="${listItem._id || ''}" /></td>`
 			}
@@ -226,6 +225,7 @@ function gridBody(parentId, item, insideOfModal, cb) {
 				field.field = key
 				field.parentField = item.parentField || ''
 				field.class = htmlEval(field.class, listItem)
+				field.level= item.level
 				s += gridBody_Cell(field, listItem, insideOfModal)
 			})
 			if (item.options.buttonCount > 0) {
@@ -235,7 +235,20 @@ function gridBody(parentId, item, insideOfModal, cb) {
 		})
 
 		document.querySelector(`${parentId} table tbody`).insertAdjacentHTML('beforeend', htmlEval(s))
-
+		if(item.options.buttons.edit[0]){
+			$(`${parentId} table tbody tr`).dblclick(function(){
+				let r = $(this).attr('rowIndex')
+				if(r!=undefined) {
+					if(item.level>0){
+						gridSatirDuzenle(`#${item.id}`, r, false)
+					}else if(list[r]._id){
+						location.href=menuLink(hashObj.path + '/edit/' + list[r]._id, hashObj.query)
+					}
+					
+				}
+			})
+		}
+	
 		refreshRemoteList(remoteList)
 	}
 
@@ -259,6 +272,37 @@ function gridBody(parentId, item, insideOfModal, cb) {
 	if (cb) {
 		cb()
 	}
+}
+
+
+function buttonRowCell(listItem, rowIndex, item) {
+	let s = `<div class="d-flex align-items-center">`
+	let grpButtons = []
+
+	//grpButtons= Object.keys(item.options.groupedButtons) || []
+	listItem['rowIndex'] = rowIndex
+	Object.keys(item.options.buttons).forEach((key) => {
+		if (key != 'add' && grpButtons.includes(key) == false) {
+			if (item.options.buttons[key][0]) {
+
+				s += htmlEval(item.options.buttons[key][1], listItem)
+			}
+
+		}
+	})
+	if (grpButtons.length > 0) {
+		s += `
+			<div class="dropdown grid-dropdown">
+				<a class="btn btn-secondary btn-grid-row dropdown-toggle" id="dropBtn${rowIndex}" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
+			  <ul class="dropdown-menu" aria-labelledby="dropBtn${rowIndex}">`
+		grpButtons.forEach((key) => {
+			s += '<li>' + htmlEval(item.options.groupedButtons[key], listItem) + '</li>'
+		})
+		s += `</ul></div>`
+	}
+
+	s += `</div>`
+	return s
 }
 
 function gridPagerButtons(item) {
@@ -528,15 +572,26 @@ function gridSatirDuzenle(tableId, rowIndex, insideOfModal) {
 				td.classList.add('hidden')
 			}
 
+			// if (field.type == 'boolean') {
+			// 	if (editRow.detail.cells[cellIndex].querySelector(`input[type="checkbox"]`)) {
+			// 		field.value = editRow.detail.cells[cellIndex].querySelector(`input[type="checkbox"]`).checked == true ? true : false
+			// 	}
+			// 	field.value = field.value.toString() === 'true' ? true : false
+			// } else {
+			// 	if (editRow.detail.cells[cellIndex].querySelector(`input`)) {
+			// 		field.value = editRow.detail.cells[cellIndex].querySelector(`input[name="${field.name}"]`).value
+			// 	}
+			// }
+
 			if (field.type == 'boolean') {
-				//field.class='grid-checkbox'
-				if (editRow.detail.cells[cellIndex].querySelector(`input[type="checkbox"]`)) {
-					field.value = editRow.detail.cells[cellIndex].querySelector(`input[type="checkbox"]`).checked == true ? true : false
+				if (editRow.detail.cells[cellIndex].querySelector(`input`)) {
+					// field.value = editRow.detail.cells[cellIndex].querySelector(`input[type="checkbox"]`).checked == true ? true : false
+					field.value = parseBool(editRow.detail.cells[cellIndex].querySelector(`input[data-field="${field.field}"]`).value) == true ? true : false
 				}
 				field.value = field.value.toString() === 'true' ? true : false
 			} else {
 				if (editRow.detail.cells[cellIndex].querySelector(`input`)) {
-					field.value = editRow.detail.cells[cellIndex].querySelector(`input[name="${field.name}"]`).value
+					field.value = editRow.detail.cells[cellIndex].querySelector(`input[data-field="${field.field}"]`).value
 				}
 			}
 
@@ -569,6 +624,9 @@ function gridSatirDuzenle(tableId, rowIndex, insideOfModal) {
 }
 
 function gridBody_Cell(field, listItem, insideOfModal) {
+	if(field.class=='undefined')
+		field.class=''
+
 	let s = ''
 	let td = ''
 	let tdClass = `${field.class || 'ms-1'} `
@@ -649,14 +707,16 @@ function gridBody_Cell(field, listItem, insideOfModal) {
 		case 'fromnow':
 			td = moment((new Date(itemValue))).fromNow()
 			break
+		
 		case 'boolean':
 			// let swClass = `${field.class || 'form-check-input grid-checkbox'}`
 			// if((field.name || '').toLowerCase().indexOf('passive') > -1) {
 			// 	swClass = `${field.class || 'form-check-input grid-checkbox switch-dark'}`
 			// }
+			
 			tdClass = field.class || 'text-center'
 			itemValue = (itemValue || '').toString() === 'true' ? true : false
-			td = itemValue ? '<i class="fas fa-check-square text-light font-size-150 align-middle"></i>' : '<i class="far fa-square font-size-150 align-middle"></i>'
+			td = itemValue ? '<i class="fas fa-check-square font-size-150 align-middle"></i>' : '<i class="far fa-square font-size-150 align-middle"></i>'
 			// td = `
 			// <div class="form-switch  m-0  p-0 ms-3 ps-3">
 			// 	<input type="checkbox" class="${swClass}" value="true" ${itemValue?'checked':''} disabled />
@@ -1135,35 +1195,6 @@ function gridButtonOptions(item, insideOfModal) {
 }
 
 
-function buttonRowCell(listItem, rowIndex, item) {
-	let s = `<div class="d-flex align-items-center">`
-	let grpButtons = []
-
-	//grpButtons= Object.keys(item.options.groupedButtons) || []
-	listItem['rowIndex'] = rowIndex
-	Object.keys(item.options.buttons).forEach((key) => {
-		if (key != 'add' && grpButtons.includes(key) == false) {
-			if (item.options.buttons[key][0]) {
-
-				s += htmlEval(item.options.buttons[key][1], listItem)
-			}
-
-		}
-	})
-	if (grpButtons.length > 0) {
-		s += `
-			<div class="dropdown grid-dropdown">
-				<a class="btn btn-secondary btn-grid-row dropdown-toggle" id="dropBtn${rowIndex}" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i></a>
-			  <ul class="dropdown-menu" aria-labelledby="dropBtn${rowIndex}">`
-		grpButtons.forEach((key) => {
-			s += '<li>' + htmlEval(item.options.groupedButtons[key], listItem) + '</li>'
-		})
-		s += `</ul></div>`
-	}
-
-	s += `</div>`
-	return s
-}
 
 function filterControl(parentId, filterRowDivId, field, cb) {
 	switch (field.type.toLowerCase()) {

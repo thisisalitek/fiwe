@@ -25,6 +25,104 @@ function frm_Card(parentId, item, cb) {
 	cb()
 }
 
+
+function frm_Excel(parentId, item, cb) {
+	item.firstRowIsHeader=true
+	let s = `
+<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
+<ul class="nav nav-tabs" id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" class=""></ul>
+<div class="tab-content p-1" id="${item.id}-tabContent"></div>
+</div>
+`
+
+	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
+
+
+	if (Array.isArray(item.value)) {
+		item.value = {
+			Sheet1: item.value
+		}
+	}
+
+	Object.keys(item.value).forEach((sheetName, sheetIndex) => {
+		let tabId = `${item.id}-sheet${sheetIndex + 1}`
+		let sheet = item.value[sheetName]
+		document.querySelector(`${parentId} #${item.id}`).insertAdjacentHTML('beforeend', `
+		<li class="nav-item" role="presentation">
+	    <button class="nav-link ${sheetIndex == 0 ? 'active' : ''}" id="${tabId}-tab" data-bs-toggle="tab" data-bs-target="#${tabId}" type="button" role="tab" aria-controls="${tabId}" aria-selected="${sheetIndex == 0 ? 'true' : 'false'}">${sheetName}</button>
+	  </li>
+		`)
+		document.querySelector(`${parentId} #${item.id}-tabContent`).insertAdjacentHTML('beforeend', `
+		<div class="tab-pane fade ${sheetIndex == 0 ? 'show active' : ''}" id="${tabId}" role="tabpanel" aria-labelledby="${tabId}-tab">
+		</div>`)
+		let fields = {}
+		let fieldList=[]
+		let data=[]
+		if (Array.isArray(sheet) && Array.isArray(sheet[0])) {
+			sheet[0].forEach((e, colIndex) => {
+				if(item.firstRowIsHeader){
+					fields[`col_${colIndex+1}`]={text:e, type:''}
+				}else{
+					fields[`col_${colIndex+1}`]={text:`col_${colIndex+1}`,type:''}
+				}
+			})
+			fieldList=Object.keys(fields)
+			sheet.forEach((row,rowIndex)=>{
+				let obj={}
+				fieldList.forEach((fieldName,colIndex)=>{ 
+					obj[fieldName]=row[colIndex]
+					if((item.firstRowIsHeader && rowIndex>0 || !item.firstRowIsHeader && rowIndex>=0 ) && fields[fieldName].type==''){
+						if(!isNaN(obj[fieldName])){
+							fields[fieldName].type='number'
+							fields[fieldName].width='150px'
+						}else if(obj[fieldName]==null){
+							fields[fieldName].type=''
+							fields[fieldName].width='150px'
+						}else{
+							fields[fieldName].type='string'
+							fields[fieldName].width='280px'
+						}
+					}
+					
+					
+				})
+				if(!item.firstRowIsHeader || rowIndex>0){
+					data.push(obj)
+				}
+			})
+		}
+
+		let gridItem = {
+			id: `${tabId}-grid`,
+			type: 'grid',
+			text: sheetName,
+			parentField: item.field,
+			field: item.field,
+			fields: fields,
+			value: data,
+			level: item.level + 1,
+			options: {
+				buttons: {
+					add: true,
+					edit: true,
+					delete: true,
+				}
+			}
+		}
+		grid(`#${tabId}`, gridItem, false, () => { })
+	})
+
+
+	$(document).on('loaded', (e) => {
+
+		$(this).off(e)
+	})
+
+
+
+	cb()
+}
+
 function frm_Tab(parentId, item, cb) {
 	let bActive = false
 	item.tabs.forEach((tab) => {
@@ -254,7 +352,7 @@ function copyClipboardEditor(divId) {
 function clearEditor(divId) {
 
 	let editor = document.querySelector(divId).editor
-	editor.executeEdits('',[{range: new monaco.Range(1,1,editor.getModel().getLineCount(),9999), text:null}])
+	editor.executeEdits('', [{ range: new monaco.Range(1, 1, editor.getModel().getLineCount(), 9999), text: null }])
 	editor.focus()
 }
 
@@ -273,26 +371,25 @@ function redoEditor(divId) {
 function frm_CodeEditor(parentId, item, cb) {
 	let s = `
 	<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
-	<div class="row m-0">
-		<div class="col-6 p-0">
+	<div class="d-flex justify-content-between">
+		<div class="">
 			<label class="code-label">${item.text}</label>
 		</div>
-		<div class="col p-0 d-none">
-			<select id="${item.id}-language" class="form-control" onchange="changeEditorLanguage('#${item.id}',this.value)">
-				<option value="javascript">javascript/json</option>
+		<div class="d-flex">
+			<select id="${item.id}-language" class="form-control px-2 me-1" onchange="changeEditorLanguage('#${item.id}',this.value)">
+				<option value="json">json</option>
+				<option value="javascript">javascript</option>
 				<option value="python">python</option>
 				<option value="sql">SQL</option>
 				<option value="html">Html</option>
 			</select>
-		</div>
-		<div class="col p-0 text-end">
 			<button type="button" id="${item.id}-undobtn" class="btn btn-toolbox" onclick="undoEditor('#${item.id}')" title="Undo"><i class="fas fa-rotate-left"></i></button>
 			<button type="button" id="${item.id}-redobtn" class="btn btn-toolbox" onclick="redoEditor('#${item.id}')" title="Redo"><i class="fas fa-rotate-right"></i></button>
 			<a class="btn btn-toolbox" onclick="clearEditor('#${item.id}')" title="Clear editor"><i class="fas fa-eraser"></i></a>
 			<a class="btn btn-toolbox" href="javascript:copyClipboardEditor('#${item.id}')" title="Copy code"><i class="fas fa-copy"></i></a>
 		</div>
 	</div>
-	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" style="width: 100%; height: ${(item.rows || 10)*19}px; border: 1px solid grey" class=""></div>
+	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" style="width: 100%; height: ${(item.rows || 10) * 19}px; border: 1px solid grey" class=""></div>
 	</div>
 	`
 
@@ -304,9 +401,9 @@ function frm_CodeEditor(parentId, item, cb) {
 		textAreaValue = b64DecodeUnicode(item.value != undefined ? item.value : '')
 	}
 
-	if(!item.editorOptions){
-		item.editorOptions={
-			language:'javascript'
+	if (!item.editorOptions) {
+		item.editorOptions = {
+			language: 'javascript'
 		}
 	}
 	$(document).on('loaded', (e) => {
@@ -315,13 +412,16 @@ function frm_CodeEditor(parentId, item, cb) {
 				value: textAreaValue,
 				language: item.editorOptions.language || 'javascript',
 				theme: localStorage.getItem('theme') == 'dark' ? 'vs-dark' : 'vs',
-				automaticLayout: false,
+				automaticLayout: true,
 				autoIndent: true,
 				contextmenu: true,
 				formatOnType: true,
 				codeLens: true,
 				scrollBeyondLastLine: true,
-				
+				lineNumbers: 'on',
+				lineNumbersMinChars: 3,
+				lineDecorationsWidth: 0,
+				renderLineHighlight: 'none',
 				minimap: {
 					enabled: false
 				}
@@ -361,8 +461,8 @@ function frm_CodeEditor(parentId, item, cb) {
 				currentVersion = versionId
 			})
 
-			$(`#${item.id}-langugage`).val(item.editorOptions.language)
-			
+			$(`#${item.id}-language`).val(item.editorOptions.language)
+
 		}, 500)
 		$(this).off(e)
 	})

@@ -5,8 +5,7 @@
 			"fields": {
 				"name":{"text":"Name", "type":"string"},
 				"docCount":{"text":"Document Count", "type":"string", "html":"${data.length}"},
-				"importer":{"text":"Importer", "type":"remoteLookup", "dataSource":{"url":"/db/importers"}},
-				"passive":{"text":"Passive?","type":"boolean"}
+				"importer":{"text":"Importer", "type":"remoteLookup", "dataSource":{"url":"/db/importers"}}
 			},
 			"options": {
 				"selection": true,
@@ -21,7 +20,7 @@
 				}
 			},
 			"dataSource": {
-				"url":"/db/repositories"
+				"url":"/db/workspace"
 			}
 
 		}
@@ -30,11 +29,9 @@
 		{
 			"type":"form",
 			"fields": {
-				"name":{"text":"Name", "type":"string","col":3},
-				"description":{"text":"Description", "type":"string","col":4},
-				"passive":{"text":"Passive?","type":"boolean","col":2},
-				"divisor1":{"type":"w-100"},
+				"name":{"text":"Name", "type":"string","col":4},
 				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "dataSource":{"url":"/db/importers"}},
+				
 				"group1":{
 					"text":"Data Import",
 					"visible":false,
@@ -52,7 +49,7 @@
 				}
 			},
 			"dataSource": {
-				"url":"/db/repositories"
+				"url":"/db/workspace"
 			},
 			"script":[
 				"function upload(){",
@@ -85,8 +82,6 @@
 			"type":"form",
 			"fields": {
 				"name":{"text":"Name", "type":"string","col":3},
-				"description":{"text":"Description", "type":"string","col":4},
-				"passive":{"text":"Passive?","type":"boolean","col":2},
 				"divisor1":{"type":"w-100"},
 				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "dataSource":{"url":"/db/importers"}},
 				"group1":{
@@ -106,7 +101,7 @@
 				}
 			},
 			"dataSource": {
-				"url":"/db/repositories"
+				"url":"/db/workspace"
 			},
 			"script":[
 				"function upload(){",

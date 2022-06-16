@@ -1,6 +1,6 @@
 {
 	"dashboard": { "text": "Dashboard", "path": "/dashboard/main", "icon": "fas fa-tachometer-alt" },
-	"repositories": { "text": "Repositories", "path": "/projects/repositories", "icon": "fas fa-database" },
+	"workspaces": { "text": "Workspaces", "path": "/projects/workspace", "icon": "fas fa-database" },
 	"outerWorld": {
 		"text": "Outer World",
 		"icon": "fas fa-cloud",

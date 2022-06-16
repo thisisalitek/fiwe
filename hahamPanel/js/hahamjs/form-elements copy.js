@@ -234,49 +234,67 @@ function frm_TextareaBox(parentId, item, cb) {
 	cb()
 }
 
-function changeEditorOptions(divId,options){
-	let editor=document.querySelector(divId).editor
+function changeEditorOptions(divId, options) {
+	let editor = document.querySelector(divId).editor
 	editor.updateOptions(options)
 
 }
 
-function changeEditorLanguage(divId,langugage){
-	let editor=document.querySelector(divId).editor
-	let model=editor.getModel()
-	monaco.editor.setModelLanguage(model,langugage)
+function changeEditorLanguage(divId, langugage) {
+	let editor = document.querySelector(divId).editor
+	let model = editor.getModel()
+	monaco.editor.setModelLanguage(model, langugage)
 }
 
-function copyEditor(divId){
-	let editor=document.querySelector(divId).editor
+function copyClipboardEditor(divId) {
+	let editor = document.querySelector(divId).editor
 	navigator.clipboard.writeText(editor.getValue())
 }
 
+function clearEditor(divId) {
 
+	let editor = document.querySelector(divId).editor
+	editor.executeEdits('',[{range: new monaco.Range(1,1,editor.getModel().getLineCount(),9999), text:null}])
+	editor.focus()
+}
+
+function undoEditor(divId) {
+	let editor = document.querySelector(divId).editor
+	editor.trigger('aaaa', 'undo', 'aaaa')
+	editor.focus()
+}
+
+function redoEditor(divId) {
+	let editor = document.querySelector(divId).editor
+	editor.trigger('aaaa', 'redo', 'aaaa')
+	editor.focus()
+}
 
 function frm_CodeEditor(parentId, item, cb) {
-
-
-
 	let s = `
 	<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
-	<div class="row m-0">
-		<div class="col-6 p-0">
-			<select id="${item.id}-language" class="form-control" onchange="changeEditorLanguage('#${item.id}-code',this.value)">
-				<option value="javascript" selected>javascript/json</option>
+	<div class="d-flex justify-content-between">
+		<div class="">
+			<label class="code-label">${item.text}</label>
+		</div>
+		<div class="d-flex">
+			<select id="${item.id}-language" class="form-control px-2 me-1" onchange="changeEditorLanguage('#${item.id}',this.value)">
+				<option value="json">json</option>
+				<option value="javascript">javascript</option>
 				<option value="python">python</option>
 				<option value="sql">SQL</option>
 				<option value="html">Html</option>
 			</select>
-		</div>
-		<div class="col-6 p-0 text-end">
-			<a class="btn btn-outline-light btn-sm" href="javascript:copyEditor('#${item.id}-code')" title="Copy code"><i class="fas fa-copy"></i></a>
+			<button type="button" id="${item.id}-undobtn" class="btn btn-toolbox" onclick="undoEditor('#${item.id}')" title="Undo"><i class="fas fa-rotate-left"></i></button>
+			<button type="button" id="${item.id}-redobtn" class="btn btn-toolbox" onclick="redoEditor('#${item.id}')" title="Redo"><i class="fas fa-rotate-right"></i></button>
+			<a class="btn btn-toolbox" onclick="clearEditor('#${item.id}')" title="Clear editor"><i class="fas fa-eraser"></i></a>
+			<a class="btn btn-toolbox" href="javascript:copyClipboardEditor('#${item.id}')" title="Copy code"><i class="fas fa-copy"></i></a>
 		</div>
 	</div>
-	<div id="${item.id}-code" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  style="width: 100%; height: 400px; border: 1px solid grey" class=""></div>
-	<input type="hidden"   id="${item.id}" name="${item.name}" >
+	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" style="width: 100%; height: ${(item.rows || 10)*19}px; border: 1px solid grey" class=""></div>
 	</div>
 	`
-	//	s = frm_GInput(s, item)
+
 	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
 
 
@@ -285,33 +303,65 @@ function frm_CodeEditor(parentId, item, cb) {
 		textAreaValue = b64DecodeUnicode(item.value != undefined ? item.value : '')
 	}
 
-	// $(`#${item.id}-code`).change(function(){
-	// 	changeEditorOptions(`#${item.id}-code`,{theme:$(this).find(":selected").val()})
-	// })
-	
+	if(!item.editorOptions){
+		item.editorOptions={
+			language:'javascript'
+		}
+	}
 	$(document).on('loaded', (e) => {
 		setTimeout(() => {
-			let options={
+			let options = {
 				value: textAreaValue,
-				language: 'javascript',
-				theme: localStorage.getItem('theme')=='dark'?'vs-dark':'vs',
+				language: item.editorOptions.language || 'javascript',
+				theme: localStorage.getItem('theme') == 'dark' ? 'vs-dark' : 'vs',
 				automaticLayout: true,
 				autoIndent: true,
 				contextmenu: true,
 				formatOnType: true,
-				codeLens:true,
-				scrollBeyondLastLine: false,
+				codeLens: true,
+				scrollBeyondLastLine: true,
+				
 				minimap: {
 					enabled: false
 				}
 			}
-			if(item.editorOptions){
-				options=Object.assign({},options,item.editorOptions)
+			if (item.editorOptions) {
+				options = Object.assign({}, options, item.editorOptions)
 			}
-			var editor1 = monaco.editor.create(document.getElementById(`${item.id}-code`), options)
+			var editor1 = monaco.editor.create(document.getElementById(`${item.id}`), options)
+
+			document.getElementById(`${item.id}`).editor = editor1
+
+
+			const initialVersion = editor1.getModel().getAlternativeVersionId()
+			let currentVersion = initialVersion
+			let lastVersion = initialVersion
+
+			editor1.onDidChangeModelContent(e => {
+				const versionId = editor1.getModel().getAlternativeVersionId()
+				if (versionId < currentVersion) {
+					document.getElementById(`${item.id}-redobtn`).disabled = false
+					if (versionId === initialVersion) {
+						document.getElementById(`${item.id}-undobtn`).disabled = true
+					}
+				} else {
+					if (versionId <= lastVersion) {
+						if (versionId == lastVersion) {
+							document.getElementById(`${item.id}-redobtn`).disabled = true
+						}
+					} else {
+						document.getElementById(`${item.id}-redobtn`).disabled = true
+						if (currentVersion > lastVersion) {
+							lastVersion = currentVersion
+						}
+					}
+					document.getElementById(`${item.id}-undobtn`).disabled = false
+				}
+				currentVersion = versionId
+			})
+
+			$(`#${item.id}-langugage`).val(item.editorOptions.language)
 			
-			document.getElementById(`${item.id}-code`).editor = editor1
-		
 		}, 500)
 		$(this).off(e)
 	})

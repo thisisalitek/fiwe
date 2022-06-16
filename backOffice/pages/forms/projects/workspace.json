@@ -1,0 +1,97 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"name":{"text":"Name", "type":"string"},
+				"docCount":{"text":"Document Count", "type":"string", "html":"${data.length}"},
+				"importer":{"text":"Importer", "type":"remoteLookup", "dataSource":{"url":"/db/importers"}},
+				"btnImport":{"text":"Import Data", "type":"string", "html":"<a class=\"btn btn-primary\" href=\"#${hashObj.path}/import/${_id}?mid=${hashObj.query.mid}\" >Import</a> "}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": true
+					
+					
+				}
+			},
+			"dataSource": {
+				"url":"/db/workspace"
+			}
+
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"name":{"text":"Name", "type":"string","col":4},
+				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "dataSource":{"url":"/db/importers"}}
+			},
+			"dataSource": {
+				"url":"/db/workspace"
+			}
+		}
+	],
+	"import": [
+		{
+			"type":"form",
+			"fields": {
+				"name":{"text":"Name", "type":"string","col":4, "readonly":true},
+				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "readonly":true, "dataSource":{"url":"/db/importers"}},
+				"div1":{"type":"w-100"},
+				"newData":{"text":"Upload File", "type":"file", "col":4},
+				"btnRunImporter":{"text":"Run Import", "type":"button", "href":"javascript:upload()", "col":4},
+				"testResult":{"text":"New Data", "type":"code", "col":12, "rows":5,
+					"editorOptions":{ 
+						"language":"json",
+						"contextmenu":true,
+						"tabSize":4
+					}
+				},
+				"group1":{
+					"text":"Data Import",
+					"fields":{
+						"data.0.fileName":{"text":"FileName","type":"string","col":6},
+						"data.0.createdDate":{"text":"createdDate","type":"datetime","col":6},
+						"data.0.data":{"text":"Data","type":"excel","col":12}
+					}
+				}
+			},
+			"dataSource": {
+				"url":"/db/workspace"
+			},
+			"script":[
+				"function upload(){",
+				"let formData=bulkFormData('#mainCtrl #col_newData')",
+				"if(formData.newData.data==''){",
+				"return showError('Please upload a file')",
+				"}",
+				"let data={",
+				"repositoryId:hashObj.id || '',",
+				"newData:formData.newData,",
+				"}",
+				"postMan('/db/importers/uploadFile',{type:'POST',data:data})",
+				".then(result=>{ ",
+				"document.querySelector('#testResult').editor.setValue(JSON.stringify(result,null,2))",
+				"})",
+				".catch(err=>{document.querySelector('#testResult').editor.setValue(JSON.stringify(err,null,2))})",
+				"",
+				"}",
+				"$(document).on('loaded', function (e) {",
+				"//if(hashObj && hashObj.func=='edit'){",
+				"//document.querySelector('#col_card-group1').classList.remove('d-none')",
+				"//}",
+				"$(this).off(e)",
+				"})"
+			]
+		}
+	]
+}

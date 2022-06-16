@@ -429,3 +429,7 @@ function trimNumbers(text) {
 
 
 
+function parseBool(val) { 
+	return val === true || val === 'true'
+}
+

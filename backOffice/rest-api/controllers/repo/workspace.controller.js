@@ -41,7 +41,7 @@ function copy(dbModel, member, req) {
 		if (id == '')
 			restError.param2(req, reject)
 
-		dbModel.repositories.findOne({ _id: id }).then(doc => {
+		dbModel.workspace.findOne({ _id: id }).then(doc => {
 			if (dbnull(doc, reject)) {
 				let data = doc.toJSON()
 				data._id = undefined
@@ -54,7 +54,7 @@ function copy(dbModel, member, req) {
 				data.createdDate = new Date()
 				data.modifiedDate = new Date()
 
-				let newDoc = new dbModel.repositories(data)
+				let newDoc = new dbModel.workspace(data)
 				if (!epValidateSync(newDoc, reject))
 					return
 				newDoc.save()
@@ -94,18 +94,15 @@ function getList(dbModel, member, req) {
 		if ((req.query.name || '') != '')
 			filter['name'] = { $regex: '.*' + req.query.name + '.*', $options: 'i' }
 
-		if ((req.query.description || '') != '')
-			filter['description'] = { $regex: '.*' + req.query.description + '.*', $options: 'i' }
 
 
 		if ((req.query.search || '').trim() != '') {
 			filter['$or'] = [
-				{ 'name': { $regex: '.*' + req.query.search + '.*', $options: 'i' } },
-				{ 'description': { $regex: '.*' + req.query.search + '.*', $options: 'i' } }
+				{ 'name': { $regex: '.*' + req.query.search + '.*', $options: 'i' } }
 			]
 		}
 
-		dbModel.repositories.paginate(filter, options).then(resolve).catch(reject)
+		dbModel.workspace.paginate(filter, options).then(resolve).catch(reject)
 	})
 }
 
@@ -116,7 +113,7 @@ function getIdList(dbModel, member, req) {
 
 		filter['_id'] = { $in: idList }
 
-		dbModel.repositories.find(filter)
+		dbModel.workspace.find(filter)
 			.then(resolve)
 			.catch(reject)
 	})
@@ -125,7 +122,7 @@ function getIdList(dbModel, member, req) {
 
 function getOne(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
-		dbModel.repositories.findOne({ _id: req.params.param1 })
+		dbModel.workspace.findOne({ _id: req.params.param1 })
 			.then(doc => {
 				if (dbnull(doc, reject)) {
 					resolve(doc)
@@ -139,7 +136,7 @@ function post(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
 		let data = req.body || {}
 		data._id = undefined
-		let newDoc = new dbModel.repositories(data)
+		let newDoc = new dbModel.workspace(data)
 		if (!epValidateSync(newDoc, reject))
 			return
 		newDoc.save().then(resolve).catch(reject)
@@ -154,11 +151,11 @@ function put(dbModel, member, req) {
 		data._id = req.params.param1
 		data.modifiedDate = new Date()
 
-		dbModel.repositories.findOne({ _id: data._id })
+		dbModel.workspace.findOne({ _id: data._id })
 			.then(doc => {
 				if (dbnull(doc, reject)) {
 					let doc2 = Object.assign(doc, data)
-					let newDoc = new dbModel.repositories(doc2)
+					let newDoc = new dbModel.workspace(doc2)
 
 					if (!epValidateSync(newDoc, reject))
 						return
@@ -175,6 +172,6 @@ function deleteItem(dbModel, member, req) {
 			return restError.param1(req, next)
 		let data = req.body || {}
 		data._id = req.params.param1
-		dbModel.repositories.removeOne(member, { _id: data._id }).then(resolve).catch(reject)
+		dbModel.workspace.removeOne(member, { _id: data._id }).then(resolve).catch(reject)
 	})
 }
