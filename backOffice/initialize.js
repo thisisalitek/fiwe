@@ -40,7 +40,7 @@ module.exports = () => new Promise((resolve, reject) => {
 		console.log('-'.repeat(70))
 		console.log('Application Name:'.padding(25), config.name.brightYellow)
 		console.log('Version:'.padding(25), config.version.yellow)
-		console.log('Redis:'.padding(25), config.redis.url.yellow)
+		// console.log('Redis:'.padding(25), config.redis.url.yellow)
 		console.log('Http Port:'.padding(25), config.httpserver.port.toString().yellow)
 		console.log('MongoDB:'.padding(25), config.mongodb.master.brightYellow)
 		console.log('Temp Folder:'.padding(25), config.tmpDir.yellow)
@@ -50,12 +50,13 @@ module.exports = () => new Promise((resolve, reject) => {
 
 		// ./Application info
 		
-		require(path.join(__root, 'lib/redis'))()
-			.then(redis => {
-				global.redis = redis
-				resolve()
-			})
-			.catch(reject)
+		// require(path.join(__root, 'lib/redis'))()
+		// 	.then(redis => {
+		// 		global.redis = redis
+		// 		resolve()
+		// 	})
+		// 	.catch(reject)
+		resolve()
 	} catch (err) {
 		reject(err)
 	}

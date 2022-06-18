@@ -1,6 +1,7 @@
 {
 	"dashboard": { "text": "Dashboard", "path": "/dashboard/main", "icon": "fas fa-tachometer-alt" },
 	"workspaces": { "text": "Workspaces", "path": "/projects/workspace", "icon": "fas fa-database" },
+	"pythonModules": { "text": "Python Modules", "path": "/projects/pythonModules", "icon": "fab fa-python" },
 	"outerWorld": {
 		"text": "Outer World",
 		"icon": "fas fa-cloud",

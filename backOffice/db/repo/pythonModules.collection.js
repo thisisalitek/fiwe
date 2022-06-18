@@ -1,12 +1,10 @@
 module.exports=function(dbModel){
 	let collectionName=path.basename(__filename,'.collection.js')
 	let schema = mongoose.Schema({
-		name:{ type: String, trim:true,required:[true,'Isim giriniz'], unique:true},
-		description:{ type: String, trim:true,default:'', index:true},
-		gender:{ type: String, trim:true,default:'', index:true},
+		name:{ type: String, trim:true,required:[true,'name required'], unique:true},
+		mainCode:{type:String, default:''},
 		createdDate: { type: Date,default: Date.now, index:true},
-		modifiedDate:{ type: Date,default: Date.now},
-		passive: {type: Boolean, default: false, index:true}
+		modifiedDate:{ type: Date,default: Date.now}
 	}, { versionKey: false })
 
 	schema.pre('save', (next)=>next())
@@ -23,3 +21,4 @@ module.exports=function(dbModel){
 	
 	return model
 }
+

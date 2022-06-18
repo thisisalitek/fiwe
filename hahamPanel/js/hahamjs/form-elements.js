@@ -45,14 +45,14 @@ function frm_ExcelData(parentId, item, cb) {
 	if(Array.isArray(item.value)){
 		item.value.forEach((e,index)=>{
 			excelDataItem.lookup[index]={
-				text:`${e.fileName} ${(new Date(e.createdDate)).yyyymmddhhmmss()}`,
+				text:`${(new Date(e.createdDate)).yyyymmddhhmmss()} ${e.fileName}`,
 				value:encodeURIComponent2(JSON.stringify(e.data))
 			}
 		})
 	}
 	
 	frm_Lookup(parentId,excelDataItem,()=>{
-		let s=`<div id="${excelDataItem.id}-excel" class="w-100"></div>`
+		let s=`<div id="${excelDataItem.id}-excel" class="w-100 p-0"></div>`
 		document.querySelector(`${parentId}`).insertAdjacentHTML('beforeend', htmlEval(s))
 		cb()
 	})
@@ -438,6 +438,7 @@ function frm_CodeEditor(parentId, item, cb) {
 				<option value="python">python</option>
 				<option value="sql">SQL</option>
 				<option value="html">Html</option>
+				<option value="shell">shell</option>
 			</select>
 			<button type="button" id="${item.id}-undobtn" class="btn btn-toolbox" onclick="undoEditor('#${item.id}')" title="Undo"><i class="fas fa-rotate-left"></i></button>
 			<button type="button" id="${item.id}-redobtn" class="btn btn-toolbox" onclick="redoEditor('#${item.id}')" title="Redo"><i class="fas fa-rotate-right"></i></button>

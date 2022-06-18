@@ -561,7 +561,7 @@ exports.fileVersion = (fullFileName) => {
 	return (new Date(stats.mtime)).yyyymmddhhmmss().replaceAll('-', '').replaceAll(' ', '').replaceAll(':', '')
 }
 
-exports.saveTempFolder = (fileName, base64Data) => new Promise((resolve, reject) => {
+exports.saveTempFolderBase64 = (fileName, base64Data) => new Promise((resolve, reject) => {
 	let s =base64Data.indexOf('base64,') > -1 ? base64Data.split('base64,')[1] : base64Data
 	try {
 
@@ -569,7 +569,23 @@ exports.saveTempFolder = (fileName, base64Data) => new Promise((resolve, reject)
 		dosyaAdi = `${dosyaAdi.substr(0, 30)}_${uuid.v4()}${path.extname(fileName)}`
 		let newFileName = path.join(config.tmpDir, `${(new Date()).yyyymmddhhmmss().replaceAll(' ', '_').replaceAll(':', '')}_${dosyaAdi}`)
 		const fileContents = Buffer.from(s, 'base64')
-		fs.writeFileSync(newFileName, fileContents)
+		fs.writeFileSync(newFileName, fileContents,'utf8')
+		resolve(newFileName)
+	} catch (err) {
+		reject(err)
+	}
+
+})
+
+exports.saveTempFolderTextFile = (fileName, data) => new Promise((resolve, reject) => {
+	let fileContent =data
+	try {
+
+		let dosyaAdi = fileName.substr(0, fileName.length - path.extname(fileName).length)
+		dosyaAdi = `${dosyaAdi.substr(0, 30)}_${uuid.v4()}${path.extname(fileName)}`
+		let newFileName = path.join(config.tmpDir, `${(new Date()).yyyymmddhhmmss().replaceAll(' ', '_').replaceAll(':', '')}_${dosyaAdi}`)
+	
+		fs.writeFileSync(newFileName, fileContent,'utf8')
 		resolve(newFileName)
 	} catch (err) {
 		reject(err)

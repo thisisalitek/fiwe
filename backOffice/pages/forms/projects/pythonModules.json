@@ -1,0 +1,76 @@
+{
+	"index":[
+		{
+			"type": "grid",
+			"fields": {
+				"name":{"text":"Name", "type":"string"}
+			},
+			"options": {
+				"selection": true,
+				"filter": true,
+				"buttons": {
+					"add": true,
+					"edit": true,
+					"delete": true,
+					"view": false,
+					"print": false,
+					"copy": true
+				}
+			},
+			"dataSource": {
+				"url":"/db/pythonModules"
+			}
+
+		}
+	],
+	"form": [
+		{
+			"type":"form",
+			"fields": {
+				"name":{"text":"Name", "type":"string", "col":4},
+				"divisor1":{"type":"w-100"},
+				"btnRunCode":{"text":"Run","type":"button", "href":"javascript:runCode()", "col":3},
+				"divisor2":{"type":"w-100"},
+				"mainCode":{"text":"main.py","type":"code", "rows":30, "editorOptions":{"language":"python"}, "value":"for i in range(5):\n\tprint('hello world',i)", "col":6},				
+				"testResult":{"text":"Output","type":"code", "rows":30, 
+					"editorOptions":{
+						"language":"shell",
+						"contextmenu":false,
+						"readOnly":false,
+						"tabSize":4,
+						"lineNumbers":"off"
+					}, 
+					"col":6
+				}
+			},
+			"dataSource": {
+				"url":"/db/pythonModules"
+			},
+			"script":[
+				"function runCode(){",
+				"let formData=bulkFormData('#mainCtrl')",
+				"postMan('/db/pythonModules/run',{type:'POST',data:formData})",
+				".then(result=>{ ",
+				"if(typeof result=='string'){",
+				"document.querySelector('#testResult').editor.setValue(result)",
+				"}else{",
+				"document.querySelector('#testResult').editor.setValue(JSON.stringify(result,null,2))",
+				"}",
+				"})",
+				".catch(err=>{",
+				"if(typeof err=='string'){",
+				"document.querySelector('#testResult').editor.setValue('hata:' + err)",
+				"}else{",
+				"document.querySelector('#testResult').editor.setValue(JSON.stringify(err,null,2))",
+				"}",
+				"})",
+				"}",
+				"",
+				"$(document).on('loaded', function (e) {",
+				"",
+				"$(this).off(e)",
+				"})"
+			]
+		}
+	]
+}
