@@ -9,6 +9,7 @@ logs
 * - Copy.*
 !!__*
 !!__*/
+.vscode/
 *private*
 *temp*
 *-lock.json

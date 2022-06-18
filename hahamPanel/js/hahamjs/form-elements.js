@@ -26,6 +26,62 @@ function frm_Card(parentId, item, cb) {
 }
 
 
+function frm_ExcelData(parentId, item, cb) {
+	item.firstRowIsHeader=true
+// 	let s = `
+// <div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
+// <select class="form-control" id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" class="">
+// </select>
+// </div>
+// `
+	let excelDataItem={}
+	Object.keys(item).forEach(key=>{  
+		if(key!='value'){
+			excelDataItem[key]=item[key]
+		}
+	})
+	excelDataItem.lookup={}
+	
+	if(Array.isArray(item.value)){
+		item.value.forEach((e,index)=>{
+			excelDataItem.lookup[index]={
+				text:`${e.fileName} ${(new Date(e.createdDate)).yyyymmddhhmmss()}`,
+				value:encodeURIComponent2(JSON.stringify(e.data))
+			}
+		})
+	}
+	
+	frm_Lookup(parentId,excelDataItem,()=>{
+		let s=`<div id="${excelDataItem.id}-excel" class="w-100"></div>`
+		document.querySelector(`${parentId}`).insertAdjacentHTML('beforeend', htmlEval(s))
+		cb()
+	})
+
+	$(`${parentId} #${excelDataItem.id}`).change(function(){
+		document.querySelector(`${parentId} #${excelDataItem.id}-excel`).innerHTML=''
+		let excelCtrlItem={
+			id:`${excelDataItem.id}-excel-item`,
+			name:`${excelDataItem.name}.excel.item`,
+			type:'excel',
+			field:'denememe',
+			value:JSON.parse(decodeURIComponent($(this).val()))
+		}
+		frm_Excel(`${parentId} #${excelDataItem.id}-excel`,excelCtrlItem,()=>{
+
+		})
+		
+	})
+
+	$(document).on('loaded', (e) => {
+
+		$(this).off(e)
+	})
+
+
+
+	cb()
+}
+
 function frm_Excel(parentId, item, cb) {
 	item.firstRowIsHeader=true
 	let s = `
@@ -672,11 +728,15 @@ function frm_Lookup(parentId, item, cb) {
 	if (item.lookup) {
 		if (Array.isArray(item.lookup)) {
 			item.lookup.forEach((e) => {
-				s += `<option value="${e}" ${e == item.value ? 'selected' : ''}>${e}</option>`
+				let text=e.text?e.text:e
+				let value=e.value?e.value:e
+				s += `<option value="${value}" ${value == item.value ? 'selected' : ''}>${text}</option>`
 			})
 		} else {
 			Object.keys(item.lookup).forEach((key) => {
-				s += `<option value="${key}" ${key == item.value ? 'selected' : ''}>${item.lookup[key]}</option>`
+				let text=item.lookup[key].text?item.lookup[key].text:item.lookup[key]
+				let value=item.lookup[key].value?item.lookup[key].value:key
+				s += `<option value="${value}" ${value == item.value ? 'selected' : ''}>${text}</option>`
 			})
 		}
 

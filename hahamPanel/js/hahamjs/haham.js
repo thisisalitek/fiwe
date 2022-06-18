@@ -396,7 +396,10 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 			item.value = getPropertyByKeyPath(data, item.field, [])
 			frm_Excel(divId, item, cb)
 			break
-
+		case 'exceldata':
+			item.value = getPropertyByKeyPath(data, item.field, [])
+			frm_ExcelData(divId, item, cb)
+			break
 		case 'filter':
 
 			if (item.fields) {

@@ -47,21 +47,12 @@
 				"name":{"text":"Name", "type":"string","col":4, "readonly":true},
 				"importer":{"text":"Importer", "type":"remoteLookup","col":4, "readonly":true, "dataSource":{"url":"/db/importers"}},
 				"div1":{"type":"w-100"},
-				"newData":{"text":"Upload File", "type":"file", "col":4},
+				"newData":{"text":"Upload File", "type":"file", "col":4, "onchange":"alertX('upload onchange')"},
 				"btnRunImporter":{"text":"Run Import", "type":"button", "href":"javascript:upload()", "col":4},
-				"testResult":{"text":"New Data", "type":"code", "col":12, "rows":5,
-					"editorOptions":{ 
-						"language":"json",
-						"contextmenu":true,
-						"tabSize":4
-					}
-				},
 				"group1":{
-					"text":"Data Import",
+					"text":"Data",
 					"fields":{
-						"data.0.fileName":{"text":"FileName","type":"string","col":6},
-						"data.0.createdDate":{"text":"createdDate","type":"datetime","col":6},
-						"data.0.data":{"text":"Data","type":"excel","col":12}
+						"data":{"text":"Data","type":"excelData","col":12}
 					}
 				}
 			},
@@ -80,9 +71,9 @@
 				"}",
 				"postMan('/db/importers/uploadFile',{type:'POST',data:data})",
 				".then(result=>{ ",
-				"document.querySelector('#testResult').editor.setValue(JSON.stringify(result,null,2))",
+				"notifyMe(formData.newData.fileName + '<br>Upload was successful')",
 				"})",
-				".catch(err=>{document.querySelector('#testResult').editor.setValue(JSON.stringify(err,null,2))})",
+				".catch(showError)",
 				"",
 				"}",
 				"$(document).on('loaded', function (e) {",

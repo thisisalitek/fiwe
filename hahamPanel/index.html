@@ -12,9 +12,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.3/moment.min.js"></script>
 	<script src="https://cdn.socket.io/4.5.0/socket.io.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-	<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+	<link href="vendors/js-snackbar/js-snackbar.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="vendors/js-snackbar/js-snackbar.js"></script>
 
 	<script src="js/FileSaver.js"></script>
 	<script src="config.js"></script>
@@ -25,7 +24,7 @@
 	<script src="js/hahamjs/grid-elements.js"></script>
 	<script src="js/hahamjs/haham.js"></script>
 	<link rel="stylesheet" data-name="vs/editor/editor.main" href="vendors/monaco-editor/min/vs/editor/editor.main.css" />
-
+	
 	<link rel="stylesheet" href="css/main.css">
 	<script type="text/javascript">
 		if (!global.token)
@@ -122,7 +121,7 @@
 				</div>
 				<div class="p-2 pe-0">
 					<form class="row m-0 mx-1">
-						<div id="mainCtrl" class="px-0 pt-2">dfdfdf</div>
+						<div id="mainCtrl" class="px-0 pt-2">Loading...</div>
 					</form>
 				</div>
 			</main>
@@ -137,7 +136,7 @@
 				</div>
 				<div class="d-md-flex ms-2 justify-content-end text-end align-items-center">
 					<div id="dbLabel" class="mx-0 mx-md-3 d-flex justify-content-end align-items-center" title="Aktif veri ambarı">
-						<i class="fas fa-database me-1" title=""></i> qwertyDB
+						<i class="fas fa-database me-1" title=""></i> 
 					</div>
 				</div>
 			</footer>
