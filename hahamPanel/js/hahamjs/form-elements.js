@@ -530,6 +530,71 @@ function frm_CodeEditor(parentId, item, cb) {
 	cb()
 }
 
+function frm_CodeFiles(parentId, item, cb) {
+	item.value={
+		'main.py':'for i in range(5):\n\tprint(i)\n',
+		'util.py':'rtytyy',
+		'lib':{
+			'mail.py':'rtyrtyrty',
+			'document.txt':'rtyrtygfhfgh'
+		},
+		'dfdf.csv':'',
+		'dfdfdf.docx':'',
+		'dfdfdf34.xml':'',
+	}
+	let s = `
+	<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
+	
+	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}"  class="codeFiles">
+	</div>
+	</div>
+	`
+
+	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
+
+
+	
+		
+
+	let menuId=0
+	let baseElem=`${parentId} #${item.id}`
+
+	function olustur(divId, obj, parentMenuId){
+		Object.keys(obj).forEach(key=>{ 
+			menuId++
+			if(typeof obj[key]=='string'){
+				let icon=fileIcon(key)
+				let m= `<a class="nav-link ${parentMenuId?'ms-2':''}" href="#"><i class="${icon}"></i> ${key}</a>`
+				
+				document.querySelector(divId).insertAdjacentHTML('beforeend', m)
+			}else{
+				let icon='fas fa-folder'
+				let expanded=false
+				let m= `
+				<a class="nav-link folder" href="#" data-bs-toggle="collapse" data-bs-target="#codeFilesCollapse${item.id+menuId}" aria-expanded="${expanded}" aria-controls="codeFilesCollapse${item.id+menuId}">
+					<i class="${icon}"></i> ${key} <i class="fas fa-angle-down float-end"></i>
+				</a>
+				<div class="collapse ${expanded?'show':''}" id="codeFilesCollapse${item.id+menuId}" data-bs-parent="${parentMenuId!=''?'#codeFilesCollapse'+parentMenuId:baseElem}">
+					<nav class="nav ms-2 accordion" id="navId${item.id+menuId}">
+					</nav>
+				</div>
+				`
+				document.querySelector(divId).insertAdjacentHTML('beforeend', m)
+				olustur(`${baseElem} #navId${item.id+menuId}`,obj[key],`${item.id+menuId}`)
+			}
+		})
+	}
+
+	olustur(`${parentId} #${item.id}`,item.value,'')
+
+	$(document).on('loaded', (e) => {
+	
+		$(this).off(e)
+	})
+
+	cb()
+}
+
 
 
 function frm_ImageBox(parentId, item, cb) {

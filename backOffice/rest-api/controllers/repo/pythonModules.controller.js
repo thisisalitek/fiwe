@@ -45,24 +45,21 @@ function runCode(dbModel, member, req) {
 		data._id = undefined
 		if (!data.mainCode)
 			return reject('mainCode required')
-		
-		util.saveTempFolderTextFile('main.py', data.mainCode)
-			.then(tempFileName => {
-				cmd.run(`python ${tempFileName}`,function(err, data, stderr){
-					
-					if(stderr!=''){
-						console.log(stderr)
-						resolve(stderr)
-					}else{
-						resolve(data)
-					}
-					
-					
-					
-				})
-				
+		util.makeTempDir()
+		.then(folder=>{
+			let fileName=path.join(folder,'main.py')
+			fs.writeFileSync(fileName,data.mainCode,'utf8')
+			cmd.run(`python ${fileName}`,function(err, data, stderr){
+				if(stderr!=''){
+					console.log(stderr)
+					resolve(stderr)
+				}else{
+					resolve(data)
+				}
 			})
-			.catch(reject)
+		})
+		.catch(reject)
+	
 	})
 }
 

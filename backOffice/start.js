@@ -37,9 +37,8 @@ function showError(err) {
 
 function testKod(a) {
 	return new Promise((resolve, reject) => {
-		let s= '(s) => s.toUpperCase()'
-		var f=eval(s)
-		console.log(f('merhaba dunya'))
+		let dir=path.join(config.tmpDir,'deneme','merhaba.py')
+		console.log(`dir`, dir)
 		resolve()
 		
 

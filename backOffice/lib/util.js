@@ -1,3 +1,4 @@
+const { resolve } = require('path')
 const path = require('path')
 
 Number.prototype.toDigit = function (digit) {
@@ -562,14 +563,14 @@ exports.fileVersion = (fullFileName) => {
 }
 
 exports.saveTempFolderBase64 = (fileName, base64Data) => new Promise((resolve, reject) => {
-	let s =base64Data.indexOf('base64,') > -1 ? base64Data.split('base64,')[1] : base64Data
+	let s = base64Data.indexOf('base64,') > -1 ? base64Data.split('base64,')[1] : base64Data
 	try {
 
 		let dosyaAdi = fileName.substr(0, fileName.length - path.extname(fileName).length)
 		dosyaAdi = `${dosyaAdi.substr(0, 30)}_${uuid.v4()}${path.extname(fileName)}`
 		let newFileName = path.join(config.tmpDir, `${(new Date()).yyyymmddhhmmss().replaceAll(' ', '_').replaceAll(':', '')}_${dosyaAdi}`)
 		const fileContents = Buffer.from(s, 'base64')
-		fs.writeFileSync(newFileName, fileContents,'utf8')
+		fs.writeFileSync(newFileName, fileContents, 'utf8')
 		resolve(newFileName)
 	} catch (err) {
 		reject(err)
@@ -577,16 +578,21 @@ exports.saveTempFolderBase64 = (fileName, base64Data) => new Promise((resolve, r
 
 })
 
-exports.saveTempFolderTextFile = (fileName, data) => new Promise((resolve, reject) => {
-	let fileContent =data
+exports.makeTempDir = () => new Promise((resolve, reject) => {
 	try {
+		if (!fs.existsSync(config.tmpDir))
+			fs.mkdirSync(config.tmpDir)
 
-		let dosyaAdi = fileName.substr(0, fileName.length - path.extname(fileName).length)
-		dosyaAdi = `${dosyaAdi.substr(0, 30)}_${uuid.v4()}${path.extname(fileName)}`
-		let newFileName = path.join(config.tmpDir, `${(new Date()).yyyymmddhhmmss().replaceAll(' ', '_').replaceAll(':', '')}_${dosyaAdi}`)
-	
-		fs.writeFileSync(newFileName, fileContent,'utf8')
-		resolve(newFileName)
+		if (!fs.existsSync(path.join(config.tmpDir, config.name)))
+			fs.mkdirSync(path.join(config.tmpDir, config.name))
+
+		let dir = path.join(config.tmpDir, config.name, (new Date()).yyyymmddhhmmss().replaceAll(' ', '_').replaceAll(':', '') + '_' + uuid.v4())
+
+		if (!fs.existsSync(dir)) {
+			fs.mkdirSync(dir)
+		}
+		resolve(dir)
+
 	} catch (err) {
 		reject(err)
 	}

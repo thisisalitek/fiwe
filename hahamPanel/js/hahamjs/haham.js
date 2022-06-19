@@ -326,6 +326,10 @@ function generateControl(divId, item, data, insideOfModal, callback) {
 			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
 			frm_CodeEditor(divId, item, cb)
 			break
+		case 'codefiles':
+			item.value = getPropertyByKeyPath(data, item.field, item.value) || ''
+			frm_CodeFiles(divId, item, cb)
+			break
 		case 'json':
 			item.rows = item.rows || 40
 			item.encoding = item.encoding || 'base64'

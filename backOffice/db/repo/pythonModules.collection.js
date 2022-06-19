@@ -2,6 +2,7 @@ module.exports=function(dbModel){
 	let collectionName=path.basename(__filename,'.collection.js')
 	let schema = mongoose.Schema({
 		name:{ type: String, trim:true,required:[true,'name required'], unique:true},
+		files:{},
 		mainCode:{type:String, default:''},
 		createdDate: { type: Date,default: Date.now, index:true},
 		modifiedDate:{ type: Date,default: Date.now}

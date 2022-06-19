@@ -31,7 +31,8 @@
 				"divisor1":{"type":"w-100"},
 				"btnRunCode":{"text":"Run","type":"button", "href":"javascript:runCode()", "col":3},
 				"divisor2":{"type":"w-100"},
-				"mainCode":{"text":"main.py","type":"code", "rows":30, "editorOptions":{"language":"python"}, "value":"for i in range(5):\n\tprint('hello world',i)", "col":6},				
+				"files":{"text":"Files","type":"codeFiles","col":3},
+				"mainCode":{"text":"main.py","type":"code", "rows":30, "editorOptions":{"language":"python"}, "value":"for i in range(5):\n\tprint('hello world',i)", "col":5},				
 				"testResult":{"text":"Output","type":"code", "rows":30, 
 					"editorOptions":{
 						"language":"shell",
@@ -40,7 +41,7 @@
 						"tabSize":4,
 						"lineNumbers":"off"
 					}, 
-					"col":6
+					"col":4
 				}
 			},
 			"dataSource": {

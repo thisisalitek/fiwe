@@ -674,7 +674,7 @@ function getFormData(divId) {
 					if (['number', 'money', 'total', 'quantity', 'amount', 'price'].includes(dataType)) {
 						obj[key] = Number(e.value)
 					} else if (dataType == 'code') {
-						obj[key]=e.editor.getValue()
+						obj[key] = e.editor.getValue()
 					} else if (dataType == 'boolean') {
 						if (e.type == 'checkbox') {
 							obj[key] = e.checked
@@ -1635,4 +1635,28 @@ function configUI() {
 		}
 		i++
 	}
+}
+
+function fileIcon(fileName) {
+	let ext = ''
+	if (fileName.indexOf('.') > -1) {
+		ext = fileName.split('.')[fileName.split('.').length - 1].toLowerCase()
+	}
+
+	switch (ext) {
+		case 'py':
+			return 'fab fa-python'
+		case 'txt':
+			return 'fas fa-file-lines'
+		case 'doc':
+		case 'docx':
+			return 'fas fa-file-word'
+		case 'xls':
+		case 'xlsx':
+			return 'fas fa-file-excel'
+		case 'csv':
+			return 'fas fa-file-csv'
+	}
+
+	return 'fas fa-file'
 }

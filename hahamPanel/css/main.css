@@ -19237,6 +19237,34 @@ a:hover {
 .code-label {
   opacity: 0.65; }
 
+.codeFiles {
+  flex: 20%;
+  position: relative;
+  z-index: 0;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden; }
+  .codeFiles .nav-link {
+    width: 100%;
+    color: var(--bs-gray-900);
+    padding: 0.25rem 0.5rem; }
+  .codeFiles .nav-link.folder {
+    color: var(--bs-gray-700); }
+  .codeFiles .nav-link .nav.accordion .nav-link {
+    opacity: 50% !important; }
+
+.dark .codeFiles {
+  color: #D1C558;
+  border-left: none; }
+  .dark .codeFiles .nav-link {
+    color: #D1C558; }
+  .dark .codeFiles .nav-link.folder {
+    color: #faebd7; }
+  .dark .codeFiles .nav-pills .nav-link.active,
+  .dark .codeFiles .nav-pills .show > .nav-link {
+    color: var(--bs-gray-200);
+    background-color: var(--bs-primary); }
+
 .dark .btn-toolbox {
   color: var(--bs-light);
   border-color: var(--bs-light); }
