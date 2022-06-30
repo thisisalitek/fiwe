@@ -50,11 +50,11 @@ function copyX(fields, title, cb = null) {
 
 	$('#modalCopyLabel').html(title)
 	let s = ``
-	Object.keys(fields).forEach((key) => {
+	Object.keys(fields).forEach((key,index) => {
 		let field = fields[key]
-		s += `<div class="form-group">
-		<label class="m-0 p-0">${field.title || ''}</label>
+		s += `<div class="form-floating ${index<Object.keys(fields).length-1?'mb-4':''}">
 		<input type="text" class="form-control ${field.class || ''}" id="modalCopyField-${generateFormId(key)}" placeholder="${field.placeholder || field.title || ''}" ${field.readonly == true ? 'readonly' : ''} autocomplete="off" autofill="off" spellcheck="false" value="${field.value}">
+		<label>${field.title || ''}</label>
 		</div>`
 	})
 	$('#modalCopy .modal-body').html(s)

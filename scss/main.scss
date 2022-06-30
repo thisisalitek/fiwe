@@ -1291,10 +1291,11 @@ a:hover {
 }
 
 .btn-toolbox {
-	font-size: 0.775rem !important;
-	padding: 0.1rem 0.5rem;
+	font-size: 0.875rem !important;
+	padding: 0.1rem 0.5rem !important;
 	color: var(--bs-dark);
 	border-color: var(--bs-dark);
+	margin-left: 0.25rem;
 }
 
 .code-label {
@@ -1325,6 +1326,14 @@ a:hover {
 	}
 }
 
+
+.border, .codeFiles .nav-link.active {
+	border: 1px solid #dee2e6 !important;
+	border-color: var(--bs-gray-300) !important;
+	background-color: var(--bs-gray-300);
+
+}
+
 .dark {
 	.codeFiles {
 		// color: var(--bs-gray-200);
@@ -1351,6 +1360,10 @@ a:hover {
 		}
 	}
 
+	.border, .codeFiles .nav-link.active {
+		border-color: var(--bs-gray-800) !important;
+		background-color: var(--bs-gray-800);
+	}
 	.btn-toolbox {
 		color: var(--bs-light);
 		border-color: var(--bs-light);
@@ -1360,9 +1373,6 @@ a:hover {
 		border-left: none !important;
 	}
 
-	.border {
-		border-color: var(--bs-gray-800) !important;
-	}
 
 	.shadow {
 		-webkit-box-shadow: 0 0.15rem 0.45rem 0 #121212 !important;

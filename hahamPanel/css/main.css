@@ -19229,10 +19229,11 @@ a:hover {
   opacity: 0.8; }
 
 .btn-toolbox {
-  font-size: 0.775rem !important;
-  padding: 0.1rem 0.5rem;
+  font-size: 0.875rem !important;
+  padding: 0.1rem 0.5rem !important;
   color: var(--bs-dark);
-  border-color: var(--bs-dark); }
+  border-color: var(--bs-dark);
+  margin-left: 0.25rem; }
 
 .code-label {
   opacity: 0.65; }
@@ -19253,6 +19254,11 @@ a:hover {
   .codeFiles .nav-link .nav.accordion .nav-link {
     opacity: 50% !important; }
 
+.border, .codeFiles .nav-link.active {
+  border: 1px solid #dee2e6 !important;
+  border-color: var(--bs-gray-300) !important;
+  background-color: var(--bs-gray-300); }
+
 .dark .codeFiles {
   color: #D1C558;
   border-left: none; }
@@ -19265,15 +19271,16 @@ a:hover {
     color: var(--bs-gray-200);
     background-color: var(--bs-primary); }
 
+.dark .border, .dark .codeFiles .nav-link.active {
+  border-color: var(--bs-gray-800) !important;
+  background-color: var(--bs-gray-800); }
+
 .dark .btn-toolbox {
   color: var(--bs-light);
   border-color: var(--bs-light); }
 
 .dark #filterRow > th.border-start {
   border-left: none !important; }
-
-.dark .border {
-  border-color: var(--bs-gray-800) !important; }
 
 .dark .shadow {
   -webkit-box-shadow: 0 0.15rem 0.45rem 0 #121212 !important;

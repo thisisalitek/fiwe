@@ -294,7 +294,7 @@ function generateFormName(name) {
 
 function generateFormId(name) {
 	if (typeof name == 'string')
-		return name.replaceAll('.', '_')
+		return name.replaceAll('.', '_').replaceAll('\\', '_')
 	else
 		return ''
 }
@@ -578,39 +578,6 @@ function cboEasyDateChange(value) {
 
 
 
-function htmlEval222(url, item) {
-	if ((url || '') == '')
-		return ''
-	if (!(url.indexOf('{') > -1 && url.indexOf('}') > -1))
-		return url
-	let fieldList = []
-	let dizi = url.split('}')
-	dizi.forEach((e) => {
-		if (e.indexOf('{') > -1) {
-			fieldList.push(e.split('{')[1])
-		}
-	})
-
-
-	fieldList.forEach((e) => {
-		let e2 = e.replace('.toLowerCase()', '').replace('.toUpperCase()', '')
-		let value = getPropertyByKeyPath(item, e2)
-
-		if (value) {
-			if (e.indexOf('.toLowerCase()') > -1) {
-				value = value.toLowerCase()
-			}
-			if (e.indexOf('.toUpperCase()') > -1) {
-				value = value.toUpperCase()
-			}
-		}
-
-		url = url.replaceAll(`{${e}}`, value)
-	})
-
-	return url
-}
-
 
 function getPropertyByKeyPath(targetObj, keyPath, defaultValue) {
 	if (targetObj == undefined || targetObj == null || !keyPath)
@@ -618,8 +585,10 @@ function getPropertyByKeyPath(targetObj, keyPath, defaultValue) {
 
 	if (keyPath.substr(0, 1) == '/')
 		keyPath = keyPath.substr(1)
+
 	if (keyPath.substr(0, 2) == './')
 		keyPath = keyPath.substr(2)
+	
 	keyPath = keyPath.replaceAll('/', '.')
 
 	let keys = keyPath.split('.')
@@ -1656,6 +1625,15 @@ function fileIcon(fileName) {
 			return 'fas fa-file-excel'
 		case 'csv':
 			return 'fas fa-file-csv'
+		case 'xml':
+			return 'far fa-file-excel'
+		case 'js':
+			return 'fab fa-node-js'
+		case 'json':
+			return 'fas fa-file-code'
+		case 'pdf':
+			return 'fas fa-file-pdf'
+			
 	}
 
 	return 'fas fa-file'

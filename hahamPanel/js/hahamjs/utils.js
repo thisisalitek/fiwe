@@ -255,7 +255,7 @@ function uuidv4() {
 }
 
 
-function listObjectToObject(listObj) {
+function listObjectToObject(listObj,seperator='.') {
 	if (typeof listObj != 'object' || listObj == null)
 		return listObj
 	let obj = {}
@@ -270,18 +270,18 @@ function listObjectToObject(listObj) {
 			}
 		}
 		if (keys.length == 1) {
-			anaObj[keys[0]] = listObj[`${(parentKey ? parentKey + '.' : '')}${keys[0]}`]
+			anaObj[keys[0]] = listObj[`${(parentKey ? parentKey + seperator : '')}${keys[0]}`]
 
 		} else {
 			let key = keys[0]
-			parentKey += (parentKey ? '.' : '') + key
+			parentKey += (parentKey ? seperator : '') + key
 			keys.splice(0, 1)
 			calistir(anaObj[key], keys, parentKey)
 		}
 	}
 
 	Object.keys(listObj).forEach((mainKey) => {
-		let a = calistir(obj, mainKey.split('.'))
+		let a = calistir(obj, mainKey.split(seperator))
 		obj = Object.assign({}, obj, a)
 	})
 
@@ -289,7 +289,7 @@ function listObjectToObject(listObj) {
 }
 
 
-function objectToListObject(objOrj, exceptArrays = false) {
+function objectToListObject(objOrj,seperator='.', exceptArrays = false) {
 	let listObj = {}
 	if (objOrj == undefined || objOrj == null)
 		return listObj
@@ -301,7 +301,7 @@ function objectToListObject(objOrj, exceptArrays = false) {
 			}
 		} else if (typeof obj == 'object') {
 			Object.keys(obj || {}).forEach((key) => {
-				let key2 = (parentKey ? parentKey + '.' : '') + key
+				let key2 = (parentKey ? parentKey + seperator : '') + key
 				calistir(obj[key], key2)
 			})
 		} else {
@@ -433,3 +433,7 @@ function parseBool(val) {
 	return val === true || val === 'true'
 }
 
+function isValidFileName(fileName){
+	var reg=/^(?!\.)(?!com[0-9]$)(?!con$)(?!lpt[0-9]$)(?!nul$)(?!prn$)[^\|\*\?\\:<>/$"]*[^\.\|\*\?\\:<>/$"]+$/
+	return reg.test(fileName)
+}
