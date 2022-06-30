@@ -27,49 +27,49 @@ function frm_Card(parentId, item, cb) {
 
 
 function frm_ExcelData(parentId, item, cb) {
-	item.firstRowIsHeader=true
-// 	let s = `
-// <div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
-// <select class="form-control" id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" class="">
-// </select>
-// </div>
-// `
-	let excelDataItem={}
-	Object.keys(item).forEach(key=>{  
-		if(key!='value'){
-			excelDataItem[key]=item[key]
+	item.firstRowIsHeader = true
+	// 	let s = `
+	// <div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
+	// <select class="form-control" id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" class="">
+	// </select>
+	// </div>
+	// `
+	let excelDataItem = {}
+	Object.keys(item).forEach(key => {
+		if (key != 'value') {
+			excelDataItem[key] = item[key]
 		}
 	})
-	excelDataItem.lookup={}
-	
-	if(Array.isArray(item.value)){
-		item.value.forEach((e,index)=>{
-			excelDataItem.lookup[index]={
-				text:`${(new Date(e.createdDate)).yyyymmddhhmmss()} ${e.fileName}`,
-				value:encodeURIComponent2(JSON.stringify(e.data))
+	excelDataItem.lookup = {}
+
+	if (Array.isArray(item.value)) {
+		item.value.forEach((e, index) => {
+			excelDataItem.lookup[index] = {
+				text: `${(new Date(e.createdDate)).yyyymmddhhmmss()} ${e.fileName}`,
+				value: encodeURIComponent2(JSON.stringify(e.data))
 			}
 		})
 	}
-	
-	frm_Lookup(parentId,excelDataItem,()=>{
-		let s=`<div id="${excelDataItem.id}-excel" class="w-100 p-0"></div>`
+
+	frm_Lookup(parentId, excelDataItem, () => {
+		let s = `<div id="${excelDataItem.id}-excel" class="w-100 p-0"></div>`
 		document.querySelector(`${parentId}`).insertAdjacentHTML('beforeend', htmlEval(s))
 		cb()
 	})
 
-	$(`${parentId} #${excelDataItem.id}`).change(function(){
-		document.querySelector(`${parentId} #${excelDataItem.id}-excel`).innerHTML=''
-		let excelCtrlItem={
-			id:`${excelDataItem.id}-excel-item`,
-			name:`${excelDataItem.name}.excel.item`,
-			type:'excel',
-			field:'denememe',
-			value:JSON.parse(decodeURIComponent($(this).val()))
+	$(`${parentId} #${excelDataItem.id}`).change(function () {
+		document.querySelector(`${parentId} #${excelDataItem.id}-excel`).innerHTML = ''
+		let excelCtrlItem = {
+			id: `${excelDataItem.id}-excel-item`,
+			name: `${excelDataItem.name}.excel.item`,
+			type: 'excel',
+			field: 'denememe',
+			value: JSON.parse(decodeURIComponent($(this).val()))
 		}
-		frm_Excel(`${parentId} #${excelDataItem.id}-excel`,excelCtrlItem,()=>{
+		frm_Excel(`${parentId} #${excelDataItem.id}-excel`, excelCtrlItem, () => {
 
 		})
-		
+
 	})
 
 	$(document).on('loaded', (e) => {
@@ -83,7 +83,7 @@ function frm_ExcelData(parentId, item, cb) {
 }
 
 function frm_Excel(parentId, item, cb) {
-	item.firstRowIsHeader=true
+	item.firstRowIsHeader = true
 	let s = `
 <div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
 <ul class="nav nav-tabs" id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}" class=""></ul>
@@ -112,37 +112,37 @@ function frm_Excel(parentId, item, cb) {
 		<div class="tab-pane fade ${sheetIndex == 0 ? 'show active' : ''}" id="${tabId}" role="tabpanel" aria-labelledby="${tabId}-tab">
 		</div>`)
 		let fields = {}
-		let fieldList=[]
-		let data=[]
+		let fieldList = []
+		let data = []
 		if (Array.isArray(sheet) && Array.isArray(sheet[0])) {
 			sheet[0].forEach((e, colIndex) => {
-				if(item.firstRowIsHeader){
-					fields[`col_${colIndex+1}`]={text:e, type:''}
-				}else{
-					fields[`col_${colIndex+1}`]={text:`col_${colIndex+1}`,type:''}
+				if (item.firstRowIsHeader) {
+					fields[`col_${colIndex + 1}`] = { text: e, type: '' }
+				} else {
+					fields[`col_${colIndex + 1}`] = { text: `col_${colIndex + 1}`, type: '' }
 				}
 			})
-			fieldList=Object.keys(fields)
-			sheet.forEach((row,rowIndex)=>{
-				let obj={}
-				fieldList.forEach((fieldName,colIndex)=>{ 
-					obj[fieldName]=row[colIndex]
-					if((item.firstRowIsHeader && rowIndex>0 || !item.firstRowIsHeader && rowIndex>=0 ) && fields[fieldName].type==''){
-						if(!isNaN(obj[fieldName])){
-							fields[fieldName].type='number'
-							fields[fieldName].width='150px'
-						}else if(obj[fieldName]==null){
-							fields[fieldName].type=''
-							fields[fieldName].width='150px'
-						}else{
-							fields[fieldName].type='string'
-							fields[fieldName].width='280px'
+			fieldList = Object.keys(fields)
+			sheet.forEach((row, rowIndex) => {
+				let obj = {}
+				fieldList.forEach((fieldName, colIndex) => {
+					obj[fieldName] = row[colIndex]
+					if ((item.firstRowIsHeader && rowIndex > 0 || !item.firstRowIsHeader && rowIndex >= 0) && fields[fieldName].type == '') {
+						if (!isNaN(obj[fieldName])) {
+							fields[fieldName].type = 'number'
+							fields[fieldName].width = '150px'
+						} else if (obj[fieldName] == null) {
+							fields[fieldName].type = ''
+							fields[fieldName].width = '150px'
+						} else {
+							fields[fieldName].type = 'string'
+							fields[fieldName].width = '280px'
 						}
 					}
-					
-					
+
+
 				})
-				if(!item.firstRowIsHeader || rowIndex>0){
+				if (!item.firstRowIsHeader || rowIndex > 0) {
 					data.push(obj)
 				}
 			})
@@ -405,6 +405,7 @@ function copyClipboardEditor(divId) {
 	navigator.clipboard.writeText(editor.getValue())
 }
 
+
 function clearEditor(divId) {
 
 	let editor = document.querySelector(divId).editor
@@ -427,9 +428,9 @@ function redoEditor(divId) {
 function frm_CodeEditor(parentId, item, cb) {
 	let s = `
 	<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
-	<div class="d-flex justify-content-between">
+	<div class="d-flex justify-content-between align-items-start">
 		<div class="">
-			<label class="code-label">${item.text}</label>
+			<label id="${item.id}-label">${item.text}</label>
 		</div>
 		<div class="d-flex">
 			<select id="${item.id}-language" class="form-control px-2 me-1" onchange="changeEditorLanguage('#${item.id}',this.value)">
@@ -496,6 +497,16 @@ function frm_CodeEditor(parentId, item, cb) {
 			let lastVersion = initialVersion
 
 			editor1.onDidChangeModelContent(e => {
+				if(editor1.activeFileId){
+					let activeFileLink=document.querySelector(editor1.activeFileId)
+					if(activeFileLink && activeFileLink.fileItem){
+						let filesItem=document.querySelector(activeFileLink.fileItem.baseElem).item
+						let temp1=objectToListObject(filesItem.value,'/')
+						temp1[activeFileLink.fileItem.filePath]=editor1.getValue()
+						filesItem.value=listObjectToObject(temp1,'/')
+						document.querySelector(activeFileLink.fileItem.baseElem).item=filesItem
+					}
+				}
 				const versionId = editor1.getModel().getAlternativeVersionId()
 				if (versionId < currentVersion) {
 					document.getElementById(`${item.id}-redobtn`).disabled = false
@@ -530,71 +541,251 @@ function frm_CodeEditor(parentId, item, cb) {
 	cb()
 }
 
-function frm_CodeFiles(parentId, item, cb) {
-	item.value={
-		'main.py':'for i in range(5):\n\tprint(i)\n',
-		'util.py':'rtytyy',
-		'lib':{
-			'mail.py':'rtyrtyrty',
-			'document.txt':'rtyrtygfhfgh'
-		},
-		'dfdf.csv':'',
-		'dfdfdf.docx':'',
-		'dfdfdf34.xml':'',
+function getCodeFilesValue(targetObj, keyPath) {
+
+	if (keyPath.substr(0, 1) == '/')
+		keyPath = keyPath.substr(1)
+
+	if (keyPath.substr(0, 2) == './')
+		keyPath = keyPath.substr(2)
+	
+	let keys = keyPath.split('/')
+	if (keys.length == 0)
+		return ''
+	
+	keys = keys.reverse()
+	let subObject = clone(targetObj)
+	while (keys.length) {
+		let k = keys.pop()
+		subObject = subObject[k]
 	}
-	let s = `
-	<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
-	
-	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}"  class="codeFiles">
-	</div>
-	</div>
-	`
 
-	document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
+	return subObject
+}
 
+function frm_CodeFiles_Show(fileId, parentId,filePath) {
+	let fileLink = document.querySelector(fileId)
 
-	
+	if (fileLink) {
+		let files = document.querySelectorAll(`${parentId} a.nav-link`)
+		let i = 0
+		while (i < files.length) {
+			if (fileLink.id && fileLink.id == files[i].id) {
+				files[i].classList.add('active')
+			} else {
+				files[i].classList.remove('active')
+			}
+
+			i++
+		}
+
+		let item=document.querySelector(parentId).item
+		let fileItem = fileLink.fileItem
+
 		
 
-	let menuId=0
-	let baseElem=`${parentId} #${item.id}`
+		if (fileItem != undefined && fileItem.editorId) {
+			let fileLabel = document.querySelector(fileItem.editorId + '-label')
 
-	function olustur(divId, obj, parentMenuId){
-		Object.keys(obj).forEach(key=>{ 
-			menuId++
-			if(typeof obj[key]=='string'){
-				let icon=fileIcon(key)
-				let m= `<a class="nav-link ${parentMenuId?'ms-2':''}" href="#"><i class="${icon}"></i> ${key}</a>`
+			if (fileLabel) {
+				fileLabel.innerHTML = filePath
+			}
+			if (document.querySelector(fileItem.editorId)) {
+				let editor = document.querySelector(fileItem.editorId).editor
+				if (editor){
+					editor.activeFileId = null
+					editor.setValue(getCodeFilesValue(item.value,filePath))
+					editor.activeFileId = fileId
+				}
 				
+			}
+		}
+	}
+}
+
+function frm_CodeFiles_NewFile(baseElem,parentId){
+	let div=document.querySelector(baseElem)
+	let activeFolder=div.activeFolder
+
+	let fields={
+		path:{title:'path', value:'/' + activeFolder,readonly:true},
+		newFileName:{title:'New file name', value:'newfile.py'},
+	}
+	copyX(fields,'<i class="fas fa-file-circle-plus"></i> New File',(answer,obj)=>{
+		if(answer){
+			if(!isValidFileName(obj.newFileName))
+				return alertX('File name is incorrect')
+			
+			let item=div.item
+			let temp1=objectToListObject(item.value,'/')
+			let key=activeFolder?activeFolder  + '/' + obj.newFileName : obj.newFileName
+			temp1[key ]='## new file content'
+			item.value=listObjectToObject(temp1,'/')
+			div.parentNode.removeChild(div)
+			frm_CodeFiles(parentId,item,()=>{},true)
+		}
+	})
+}
+
+function frm_CodeFiles_NewFolder(baseElem,parentId){
+	let div=document.querySelector(baseElem)
+	let activeFolder=div.activeFolder
+
+	let fields={
+		path:{title:'path', value:'/' + activeFolder,readonly:true},
+		newFolder:{title:'New folder name', value:'newfolder'},
+	}
+	copyX(fields,'<i class="fas fa-folder-plus"></i> New Folder',(answer,obj)=>{
+		if(answer){
+			if(!isValidFileName(obj.newFolder))
+				return alertX('Folder name is incorrect')
+			let item=div.item
+			let temp1=objectToListObject(item.value,'/')
+			let key=activeFolder?activeFolder  + '/' + obj.newFolder : obj.newFolder
+			temp1[key ]={}
+			item.value=listObjectToObject(temp1,'/')
+			div.parentNode.removeChild(div)
+			frm_CodeFiles(parentId,item,()=>{},true)
+		}
+	})
+}
+
+function frm_CodeFiles(parentId, item, cb,bReload=false) {
+	if(!item.value){
+		item.value = {}
+		// item.value = {
+		// 	'bin': {
+		// 		'config.json': 'rtyrtyrty',
+		// 		'report.pdf': 'rtyrtygfhfgh'
+		// 	},
+		// 	'lib': {
+		// 		'deneme': {
+		// 			'config.json': 'rtyrtyrty',
+		// 			'report.pdf': 'rtyrtygfhfgh'
+		// 		}, `
+		// 		'mail.py': 'rtyrtyrty',
+		// 		'document.txt': 'rtyrtygfhfgh'
+		// 	},
+		// 	'main.py': 'for i in range(5):\n\tprint(i)\n',
+		// 	'util.py': 'rtytyy',
+		// 	'dfdf.csv': '',
+		// 	'dfdfdf.docx': '',
+		// 	'dfdfdf34.xml': '',
+		// }
+	}
+
+	if(!item.editorId)
+		item.editorId = 'mainCode'
+
+	let baseElem = `${parentId} #${item.id}`
+	let s = `
+	<div id="${item.id}" level="${item.level || ''}" data-type="${item.dataType}" data-field="${item.field || ''}"  data-encoding="${item.encoding || ''}"  class="codeFiles">
+			<label class="code-label">${item.text}</label>
+			<div class="d-flex justify-content-end align-items-start">
+					<a class="btn btn-toolbox" href="javascript:frm_CodeFiles_NewFolder('${baseElem}','${parentId}')" title="Add new folder"><i class="fas fa-folder-plus"></i></a>
+					<a class="btn btn-toolbox" href="javascript:frm_CodeFiles_NewFile('${baseElem}','${parentId}')" title="Add new file"><i class="fas fa-file-circle-plus"></i></a>
+					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Copy file"><i class="fas fa-copy"></i></a>
+					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Cut file"><i class="fas fa-scissors"></i></a>
+					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Paste file"><i class="fas fa-paste"></i></a>
+					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Delete file"><i class="fas fa-trash-can"></i></a>
+
+				</div>
+			</div>
+		</div>
+	`
+	if(!bReload){
+		s=`<div id="col_${item.id}" class="${item.col || 'col-12'} p-1 ${item.visible === false ? 'd-none' : ''}">
+			${s}
+		</div>
+		`
+		document.querySelector(parentId).insertAdjacentHTML('beforeend', htmlEval(s))
+	}else{
+		document.querySelector(`${parentId} #col_${item.id}`).insertAdjacentHTML('beforeend', htmlEval(s))
+	}
+
+	
+	
+
+	document.querySelector(`${baseElem}`).item = item
+	document.querySelector(`${baseElem}`).activeFolder=''
+
+	let menuId = 0
+	
+
+	function olustur(divId, obj, parentKey) {
+		Object.keys(obj).forEach(key => {
+			menuId++
+			if (typeof obj[key] == 'string') {
+				let icon = fileIcon(key)
+				let m = `<a id="${item.id + menuId}" class="nav-link ${parentKey ? 'ms-2' : ''}" href="javascript:frm_CodeFiles_Show('${divId} #${item.id + menuId}','${baseElem}','${parentKey ? parentKey + '/' + key : key}')"><i class="${icon}"></i> ${key}</a>`
+
 				document.querySelector(divId).insertAdjacentHTML('beforeend', m)
-			}else{
-				let icon='fas fa-folder'
-				let expanded=false
-				let m= `
-				<a class="nav-link folder" href="#" data-bs-toggle="collapse" data-bs-target="#codeFilesCollapse${item.id+menuId}" aria-expanded="${expanded}" aria-controls="codeFilesCollapse${item.id+menuId}">
-					<i class="${icon}"></i> ${key} <i class="fas fa-angle-down float-end"></i>
+				document.querySelector(`${divId} #${item.id + menuId}`).fileItem = {
+					baseElem: baseElem,
+					filePath: parentKey ? parentKey + '/' + key : key,
+					editorId: `${parentId} #${item.editorId}`
+				}
+			} else {
+				let icon = 'fas fa-folder'
+				let expanded = false
+				let folder=parentKey ? parentKey + '/' + key : key
+				let m = `
+				<a class="nav-link folder ${parentKey ? 'ms-2' : ''}" href="#" data-bs-toggle="collapse" data-bs-target="#codeFilesCollapse${item.id + menuId}" aria-expanded="${expanded}" aria-controls="codeFilesCollapse${item.id + menuId}">
+				<i class="fas fa-folder"></i> ${key} 
 				</a>
-				<div class="collapse ${expanded?'show':''}" id="codeFilesCollapse${item.id+menuId}" data-bs-parent="${parentMenuId!=''?'#codeFilesCollapse'+parentMenuId:baseElem}">
-					<nav class="nav ms-2 accordion" id="navId${item.id+menuId}">
+				<div class="collapse ${parentKey ? 'ms-2' : ''} ${expanded ? 'show' : ''}" id="codeFilesCollapse${item.id + menuId}" data-folder="${folder}" data-bs-parent="${parentKey ? generateFormId(parentKey) : baseElem}">
+					<nav class="nav ms-2 accordion" id="navId${item.id + menuId}">
 					</nav>
 				</div>
 				`
 				document.querySelector(divId).insertAdjacentHTML('beforeend', m)
-				olustur(`${baseElem} #navId${item.id+menuId}`,obj[key],`${item.id+menuId}`)
+				$(`#codeFilesCollapse${item.id + menuId}`).on('shown.bs.collapse', (e) => {
+					document.querySelector(`${baseElem}`).activeFolder=document.getElementById(e.target.id).getAttribute('data-folder')
+					console.log(`activeFolder`, document.querySelector(`${baseElem}`).activeFolder)
+				})
+				$(`#codeFilesCollapse${item.id + menuId}`).on('hidden.bs.collapse', (e) => {
+					let folder=document.getElementById(e.target.id).getAttribute('data-folder')
+					if(folder){
+						let list=document.querySelectorAll('div[data-folder]')
+						let i=0
+						while(i<list.length){
+							if(list[i].getAttribute('data-folder').substr(0,folder.length+1)==(folder+'/')){
+								$(`#${list[i].id}`).collapse('hide')
+							}
+							i++
+						}
+
+						// let openedFolders=document.querySelectorAll('div[data-folder].collapse.show')
+						// console.log(`openedFolders`, openedFolders)
+						list=document.querySelectorAll('div[data-folder]')
+						document.querySelector(`${baseElem}`).activeFolder=''
+						i=0
+						while(i<list.length){
+							if(list[i].classList.contains('show')){
+								document.querySelector(`${baseElem}`).activeFolder=list[i].getAttribute('data-folder')
+							}
+							i++
+						}
+
+					}
+					console.log(`activeFolder`, document.querySelector(`${baseElem}`).activeFolder)
+				})
+
+			
+				olustur(`${baseElem} #navId${item.id + menuId}`, obj[key], `${parentKey ? parentKey + '/' + key : key}`)
 			}
 		})
 	}
 
-	olustur(`${parentId} #${item.id}`,item.value,'')
+	olustur(`${parentId} #${item.id}`, item.value, '')
 
 	$(document).on('loaded', (e) => {
-	
+
 		$(this).off(e)
 	})
 
 	cb()
 }
-
 
 
 function frm_ImageBox(parentId, item, cb) {
@@ -794,14 +985,14 @@ function frm_Lookup(parentId, item, cb) {
 	if (item.lookup) {
 		if (Array.isArray(item.lookup)) {
 			item.lookup.forEach((e) => {
-				let text=e.text?e.text:e
-				let value=e.value?e.value:e
+				let text = e.text ? e.text : e
+				let value = e.value ? e.value : e
 				s += `<option value="${value}" ${value == item.value ? 'selected' : ''}>${text}</option>`
 			})
 		} else {
 			Object.keys(item.lookup).forEach((key) => {
-				let text=item.lookup[key].text?item.lookup[key].text:item.lookup[key]
-				let value=item.lookup[key].value?item.lookup[key].value:key
+				let text = item.lookup[key].text ? item.lookup[key].text : item.lookup[key]
+				let value = item.lookup[key].value ? item.lookup[key].value : key
 				s += `<option value="${value}" ${value == item.value ? 'selected' : ''}>${text}</option>`
 			})
 		}
