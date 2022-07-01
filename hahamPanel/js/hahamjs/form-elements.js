@@ -619,6 +619,8 @@ function frm_CodeFiles_NewFile(baseElem,parentId){
 			let item=div.item
 			let temp1=objectToListObject(item.value,'/')
 			let key=activeFolder?activeFolder  + '/' + obj.newFileName : obj.newFileName
+			if(temp1[key]!=undefined)
+				return alertX('There is another folder or file in the directory')
 			temp1[key ]='## new file content'
 			item.value=listObjectToObject(temp1,'/')
 			div.parentNode.removeChild(div)
@@ -642,6 +644,8 @@ function frm_CodeFiles_NewFolder(baseElem,parentId){
 			let item=div.item
 			let temp1=objectToListObject(item.value,'/')
 			let key=activeFolder?activeFolder  + '/' + obj.newFolder : obj.newFolder
+			if(temp1[key]!=undefined)
+				return alertX('There is another folder or file in the directory')
 			temp1[key ]={}
 			item.value=listObjectToObject(temp1,'/')
 			div.parentNode.removeChild(div)
@@ -650,28 +654,66 @@ function frm_CodeFiles_NewFolder(baseElem,parentId){
 	})
 }
 
+function frm_CodeFiles_Rename(baseElem,parentId){
+	let div=document.querySelector(baseElem)
+	let item=div.item
+	let editor=document.querySelector(`${parentId} #${item.editorId}`).editor
+	let fileItem=document.querySelector(editor.activeFileId).fileItem
+
+	let dizi=fileItem.filePath.split('/')
+	let fileName=dizi[dizi.length-1]
+	dizi.splice(-1)
+	let folder=dizi.join('/')
+	let fields={
+		path:{title:'Old', value:'/' + fileItem.filePath,readonly:true},
+		rename:{title:'New', value:fileName},
+	}
+	copyX(fields,'<i class="fas fa-i-cursor"></i> Rename',(answer,obj)=>{
+		if(answer){
+			if(!isValidFileName(obj.rename))
+				return alertX('File name is incorrect')
+			
+			let item=div.item
+			let temp1=objectToListObject(item.value,'/')
+			let key=folder?folder  + '/' + obj.rename : obj.rename
+
+			if(temp1[key]!=undefined)
+			return alertX('There is another folder or file in the directory')
+
+			let backupData=temp1[fileItem.filePath]
+			delete temp1[fileItem.filePath]
+		
+			temp1[key ]=backupData
+			item.value=listObjectToObject(temp1,'/')
+			div.parentNode.removeChild(div)
+			document.querySelector(`${parentId} #${item.editorId}-label`).innerHTML=key
+			frm_CodeFiles(parentId,item,()=>{},true)
+		}
+	})
+}
+
+
 function frm_CodeFiles(parentId, item, cb,bReload=false) {
 	if(!item.value){
-		item.value = {}
-		// item.value = {
-		// 	'bin': {
-		// 		'config.json': 'rtyrtyrty',
-		// 		'report.pdf': 'rtyrtygfhfgh'
-		// 	},
-		// 	'lib': {
-		// 		'deneme': {
-		// 			'config.json': 'rtyrtyrty',
-		// 			'report.pdf': 'rtyrtygfhfgh'
-		// 		}, `
-		// 		'mail.py': 'rtyrtyrty',
-		// 		'document.txt': 'rtyrtygfhfgh'
-		// 	},
-		// 	'main.py': 'for i in range(5):\n\tprint(i)\n',
-		// 	'util.py': 'rtytyy',
-		// 	'dfdf.csv': '',
-		// 	'dfdfdf.docx': '',
-		// 	'dfdfdf34.xml': '',
-		// }
+		item.value = {
+			'bin': {
+				'config.json': 'rtyrtyrty',
+				'report.pdf': 'rtyrtygfhfgh'
+			},
+			'lib': {
+				'deneme': {
+					'config.json': 'rtyrtyrty',
+					'report.pdf': 'rtyrtygfhfgh'
+				},
+				'mail.py': 'rtyrtyrty',
+				'document.txt': 'rtyrtygfhfgh'
+			},
+			'main.py': 'for i in range(5):\n\tprint(i)\n',
+			'util.py': 'rtytyy',
+			'dfdf.csv': '',
+			'dfdfdf.docx': '',
+			'dfdfdf34.xml': '',
+		}
 	}
 
 	if(!item.editorId)
@@ -684,6 +726,7 @@ function frm_CodeFiles(parentId, item, cb,bReload=false) {
 			<div class="d-flex justify-content-end align-items-start">
 					<a class="btn btn-toolbox" href="javascript:frm_CodeFiles_NewFolder('${baseElem}','${parentId}')" title="Add new folder"><i class="fas fa-folder-plus"></i></a>
 					<a class="btn btn-toolbox" href="javascript:frm_CodeFiles_NewFile('${baseElem}','${parentId}')" title="Add new file"><i class="fas fa-file-circle-plus"></i></a>
+					<a class="btn btn-toolbox" href="javascript:frm_CodeFiles_Rename('${baseElem}','${parentId}')" title="Rename"><i class="fas fa-i-cursor"></i></a>
 					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Copy file"><i class="fas fa-copy"></i></a>
 					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Cut file"><i class="fas fa-scissors"></i></a>
 					<a class="btn btn-toolbox" href="javascript:alertX('#${item.id}')" title="Paste file"><i class="fas fa-paste"></i></a>
@@ -724,7 +767,7 @@ function frm_CodeFiles(parentId, item, cb,bReload=false) {
 					baseElem: baseElem,
 					filePath: parentKey ? parentKey + '/' + key : key,
 					editorId: `${parentId} #${item.editorId}`
-				}
+				} 
 			} else {
 				let icon = 'fas fa-folder'
 				let expanded = false
