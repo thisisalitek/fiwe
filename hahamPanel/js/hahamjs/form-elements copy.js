@@ -751,8 +751,6 @@ function frm_CodeFiles(parentId, item, cb,bReload=false) {
 
 	document.querySelector(`${baseElem}`).item = item
 	document.querySelector(`${baseElem}`).activeFolder=''
-	document.querySelector(`${baseElem}`).activeFile=''
-	document.querySelector(`${baseElem}`).editor=document.querySelector(`${parentId} #${item.editorId}`)
 
 	let menuId = 0
 	

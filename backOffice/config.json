@@ -10,8 +10,8 @@
 	},
 	"mongodb": {
 		"newUserDbSyntax":"fw${_id}",
-		"master": "mongodb://localhost:27017/fiweRobo",
-		"server1": "mongodb://localhost:27017/",
+		"master": "mongodb://127.0.0.1:27017/fiweRobo",
+		"server1": "mongodb://127.0.0.1:27017/",
 		"server2": "",
 		"server3": ""
 	},
