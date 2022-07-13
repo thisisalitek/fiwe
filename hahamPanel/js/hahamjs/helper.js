@@ -644,6 +644,8 @@ function getFormData(divId) {
 						obj[key] = Number(e.value)
 					} else if (dataType == 'code') {
 						obj[key] = e.editor.getValue()
+					} else if (dataType == 'codeFiles') {
+						obj[key] = e.item.value
 					} else if (dataType == 'boolean') {
 						if (e.type == 'checkbox') {
 							obj[key] = e.checked

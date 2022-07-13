@@ -696,23 +696,23 @@ function frm_CodeFiles_Rename(baseElem,parentId){
 function frm_CodeFiles(parentId, item, cb,bReload=false) {
 	if(!item.value){
 		item.value = {
-			'bin': {
-				'config.json': 'rtyrtyrty',
-				'report.pdf': 'rtyrtygfhfgh'
-			},
-			'lib': {
-				'deneme': {
-					'config.json': 'rtyrtyrty',
-					'report.pdf': 'rtyrtygfhfgh'
-				},
-				'mail.py': 'rtyrtyrty',
-				'document.txt': 'rtyrtygfhfgh'
-			},
-			'main.py': 'for i in range(5):\n\tprint(i)\n',
-			'util.py': 'rtytyy',
-			'dfdf.csv': '',
-			'dfdfdf.docx': '',
-			'dfdfdf34.xml': '',
+			// 'bin': {
+			// 	'config.json': 'rtyrtyrty',
+			// 	'report.pdf': 'rtyrtygfhfgh'
+			// },
+			// 'lib': {
+			// 	'deneme': {
+			// 		'config.json': 'rtyrtyrty',
+			// 		'report.pdf': 'rtyrtygfhfgh'
+			// 	},
+			// 	'mail.py': 'rtyrtyrty',
+			// 	'document.txt': 'rtyrtygfhfgh'
+			// },
+			'__init__.py': '# python engine startup file\nfor i in range(5):\n\tprint(i)\n',
+			// 'util.py': 'rtytyy',
+			// 'dfdf.csv': '',
+			// 'dfdfdf.docx': '',
+			// 'dfdfdf34.xml': '',
 		}
 	}
 

@@ -29,7 +29,7 @@
 			"fields": {
 				"name":{"text":"Name", "type":"string", "col":4},
 				"divisor1":{"type":"w-100"},
-				"btnRunCode":{"text":"Run","type":"button", "href":"javascript:runCode()", "col":3},
+				"btnRunCode":{"text":"Run","type":"button", "href":"javascript:runCode('files')", "col":3},
 				"divisor2":{"type":"w-100"},
 				"files":{"text":"Files","type":"codeFiles","col":3},
 				"mainCode":{"text":"main.py","type":"code", "rows":30, "editorOptions":{"language":"python"}, "value":"for i in range(5):\n\tprint('hello world',i)", "col":5},				
@@ -48,8 +48,9 @@
 				"url":"/db/pythonModules"
 			},
 			"script":[
-				"function runCode(){",
+				"function runCode(codeFiles){",
 				"let formData=bulkFormData('#mainCtrl')",
+				"formData._codeFiles=codeFiles",
 				"postMan('/db/pythonModules/run',{type:'POST',data:formData})",
 				".then(result=>{ ",
 				"if(typeof result=='string'){",

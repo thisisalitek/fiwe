@@ -38,31 +38,63 @@ module.exports = (dbModel, member, req) => new Promise((resolve, reject) => {
 	}
 
 })
-var cmd=require('node-cmd')
+var cmd = require('node-cmd')
 function runCode(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
 		let data = req.body || {}
 		data._id = undefined
-		if (!data.mainCode)
-			return reject('mainCode required')
+		if (!data._codeFiles)
+			return reject('_codeFiles required')
+		if (Object.keys(data[data._codeFiles] || {}).length == 0)
+			return reject('_codeFiles is empty')
+		let fileList = data[data._codeFiles]
 		util.makeTempDir()
-		.then(folder=>{
-			let fileName=path.join(folder,'main.py')
-			fs.writeFileSync(fileName,data.mainCode,'utf8')
-			cmd.run(`python ${fileName}`,function(err, data, stderr){
-				if(stderr!=''){
-					console.log(stderr)
-					resolve(stderr)
-				}else{
-					resolve(data)
-				}
+			.then(folder => {
+				saveFileList(folder,fileList)
+				.then(startFile=>{
+					if(startFile){
+						cmd.run(`python ${startFile}`, function (err, data, stderr) {
+							if (stderr != '') {
+								resolve(stderr)
+							} else {3333
+								resolve(data)
+							}
+						})
+					}else{
+						reject('Startup file required. Use one of them start.py, main.py, index.py, __init__.py')
+					}
+				})
 			})
-		})
-		.catch(reject)
-	
+			.catch(reject)
+
 	})
 }
 
+function saveFileList(folder, fileList) {
+	return new Promise((resolve, reject) => {
+		let startFile=''
+		Object.keys(fileList).forEach(key => {
+			let file = fileList[key]
+			if (typeof file == 'object') {
+				let yeniFolder=path.join(folder, key)
+				if (!fs.existsSync(yeniFolder)) {
+					fs.mkdirSync(yeniFolder)
+				}
+				saveFileList(yeniFolder,fileList[key])
+				.then(resolve)
+				.catch(reject)
+			} else {
+
+				let fileName = path.join(folder, key)
+				fs.writeFileSync(fileName, file, 'utf8')
+				if(['start.py','main.py','index.py','__init__.py'].includes(key)){
+					startFile=path.join(folder,key)
+				}
+			}
+		})
+		resolve(startFile)
+	})
+}
 
 function copy(dbModel, member, req) {
 	return new Promise((resolve, reject) => {
