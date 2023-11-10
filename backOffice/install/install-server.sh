@@ -35,6 +35,13 @@ log "curl yuklendi"
 
 sudo apt -y install speedtest-cli
 log "speedtest-cli yuklendi"
+
+sudo apt -y install python3.8
+unalias python
+alias python='python3.8'
+python -m pip install pymongo
+python -m pip install mysql-connector-python
+
 ## /BAZI TEMEL UYGULAMALAR
 
 ## DEFAULT FOLDERS
@@ -93,7 +100,7 @@ sudo apt -y upgrade
 
 sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
 
-sudo curl -sL https://deb.nodesource.com/setup_17.x | sudo -E bash -
+sudo curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 sudo apt -y install nodejs
 sudo apt -y  install gcc g++ make
 
@@ -107,7 +114,7 @@ echo "LC_ALL=en_US.UTF-8">>/etc/default/locale
 
 sudo rm /etc/apt/sources.list.d/mongo*.list
 curl -fsSL https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
-echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
 
 sudo apt -y update
 sudo apt -y install mongodb-org
